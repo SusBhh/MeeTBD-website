@@ -1,35 +1,32 @@
-import logo from './logo.svg';
 import { useEffect, useState } from 'react';
 import './App.css';
-import AvailabilityGrid from './components/AvailabilityGrid';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { lightBlue, purple } from '@mui/material/colors';
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import NavBar from './components/NavBar';
+import LoginPage from './pages/LoginPage';
+import GroupsPage from './pages/GroupsPage';
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import ToDoPage from './pages/ToDoPage';
+import TasksPage from './pages/TasksPage';
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            // LightBlue 500
+            main: '#0276aa',
+        },
+        secondary: {
+            // Purple 200
+            main: '#ce93d8'
+        }
+    }
+})
 
 function App() {
-  const session = useSession(); // Contains Tokens
-  const supabase = useSupabaseClient();
-  const { isLoading } = useSessionContext();
-
-  // Prevents flickering when loading session
-  if(isLoading) {
-    return <></>
-  }
-
-  async function googleSignIn() {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        scopes: 'openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar'
-      }
-    });
-    if(error) {
-      alert("Error occurred when logging into Google provider via Supabase");
-      console.log(error);
-    }
-  }
-
-  async function signOut() {
-    await supabase.auth.signOut();
-  }
+    const session = useSession(); // Contains Tokens
 /*
   async function createCalendarEvent() {
     console.log("Creating a calendar event");
@@ -59,27 +56,24 @@ function App() {
     })
   }
 */
-  return (
-    <div className="App">
-      <div style={{width: "400px", margin: "30px auto"}}>
-        {session ? // Ternary - if session exists, user is logged in
-          // User is logged in
-          <>
-            <h2>Logged in as {session.user.email}</h2>
-            <button onClick={() => signOut()}>Sign Out</button>
-          </>
-          :
-          // User is not logged in
-          <>
-            <button onClick={() => googleSignIn()}>Sign In With Google</button>
-          </>
-        }
-      </div>
-      <div id="signInDiv"></div>
-      <header className="App-header">
-        <AvailabilityGrid/>
-      </header>
-    </div>
+    return (
+        <ThemeProvider theme={theme}>
+            <div className="App">
+                <div>
+                    <NavBar />
+                    <Routes>
+                        <Route exact path="/" element={<HomePage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/groups" element={session ? (<GroupsPage />) : (<LoginPage />)} />
+                        <Route path="/todo" element={session ? (<ToDoPage />) : (<LoginPage />)} />
+                        <Route path="/tasks" element={session ? (<TasksPage />) : (<LoginPage />)} />
+                        <Route path="/about" element={<AboutPage />} />
+                    </Routes>
+
+                </div>
+            </div>
+      </ThemeProvider>
+   
   );
 }
 
