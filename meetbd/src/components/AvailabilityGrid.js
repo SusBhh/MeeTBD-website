@@ -1,5 +1,8 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { useState } from "react";
+import TableDragSelect from "react-table-drag-select";
+import "../newstyles.css";
+import hours from "../components/Hours";
 const daysOfMonth = [
     'Sunday, October 15',
     'Monday, October 16',
@@ -16,59 +19,341 @@ const cellStyle = {
     lineHeight: '2', // Adjust line height to make cells thinner
     border: '1px solid #ccc', // Add a border around each cell
 };
-const hours = Array.from({ length: 24 }, (_, i) => (i < 10 ? `0${i}:00` : `${i}:00`));
-const fakeAvailabilityData = [
-    { time: '00:00', Sunday: false, Monday: false, Tuesday: false, Wednesday: true, Thursday: false, Friday: false, Saturday: true },
-    { time: '01:00', Sunday: true, Monday: true, Tuesday: true, Wednesday: true, Thursday: true, Friday: true, Saturday: true },
-    { time: '02:00', Sunday: false, Monday: true, Tuesday: false, Wednesday: false, Thursday: false, Friday: true, Saturday: false },
-    { time: '03:00', Sunday: false, Monday: true, Tuesday: true, Wednesday: false, Thursday: true, Friday: true, Saturday: false },
-    { time: '04:00', Sunday: true, Monday: true, Tuesday: false, Wednesday: false, Thursday: true, Friday: false, Saturday: true },
-    { time: '05:00', Sunday: true, Monday: false, Tuesday: false, Wednesday: false, Thursday: false, Friday: true, Saturday: true },
-    { time: '06:00', Sunday: false, Monday: false, Tuesday: true, Wednesday: true, Thursday: true, Friday: false, Saturday: false },
-    { time: '07:00', Sunday: false, Monday: true, Tuesday: true, Wednesday: false, Thursday: false, Friday: true, Saturday: true },
-    { time: '08:00', Sunday: true, Monday: false, Tuesday: true, Wednesday: false, Thursday: true, Friday: false, Saturday: true },
-    { time: '09:00', Sunday: true, Monday: true, Tuesday: false, Wednesday: true, Thursday: true, Friday: true, Saturday: true },
-    { time: '10:00', Sunday: true, Monday: true, Tuesday: true, Wednesday: true, Thursday: false, Friday: false, Saturday: false },
-    { time: '11:00', Sunday: false, Monday: false, Tuesday: false, Wednesday: true, Thursday: false, Friday: true, Saturday: true },
-    { time: '12:00', Sunday: true, Monday: false, Tuesday: false, Wednesday: true, Thursday: true, Friday: true, Saturday: true },
-    { time: '13:00', Sunday: true, Monday: true, Tuesday: true, Wednesday: true, Thursday: true, Friday: true, Saturday: true },
-    { time: '14:00', Sunday: false, Monday: true, Tuesday: true, Wednesday: false, Thursday: true, Friday: true, Saturday: false },
-    { time: '15:00', Sunday: true, Monday: true, Tuesday: true, Wednesday: false, Thursday: true, Friday: false, Saturday: true },
-    { time: '16:00', Sunday: false, Monday: false, Tuesday: true, Wednesday: false, Thursday: false, Friday: true, Saturday: true },
-    { time: '17:00', Sunday: false, Monday: true, Tuesday: true, Wednesday: true, Thursday: false, Friday: false, Saturday: true },
-    { time: '18:00', Sunday: false, Monday: true, Tuesday: false, Wednesday: true, Thursday: true, Friday: true, Saturday: false },
-    { time: '19:00', Sunday: false, Monday: false, Tuesday: true, Wednesday: true, Thursday: true, Friday: true, Saturday: true },
-    { time: '20:00', Sunday: true, Monday: true, Tuesday: true, Wednesday: false, Thursday: false, Friday: false, Saturday: true },
-    { time: '21:00', Sunday: true, Monday: false, Tuesday: true, Wednesday: false, Thursday: false, Friday: true, Saturday: true },
-    { time: '22:00', Sunday: true, Monday: true, Tuesday: true, Wednesday: true, Thursday: true, Friday: false, Saturday: false },
-    { time: '23:00', Sunday: false, Monday: true, Tuesday: false, Wednesday: true, Thursday: true, Friday: true, Saturday: true },
-];
 
 const AvailabilityGrid = () => {
+    const [curr, changeCurr] = useState({
+        cells: [
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false]
+        ]
+    });
+
+    function handleChange(cells) {
+        changeCurr({ cells });
+        console.log(cells);
+    }
+
+    const handleClick = () => {
+        const cells = [
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false]
+        ];
+        changeCurr({ cells });
+    };
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell></TableCell>
-                            {daysOfMonth.map((day, index) => (
-                                <TableCell key={index}>{day}</TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {fakeAvailabilityData.map((data, index) => (
-                            <TableRow key={index}>
-                                <TableCell style={{ ...cellStyle }}>{hours[index]}</TableCell>
-                                {Object.keys(data).map((day, idx) => (
-                                    <TableCell style={{ ...cellStyle, backgroundColor: data[day] ? '#ff69b4' : '#f0f0f0' }}></TableCell>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+        <div>
+            <TableDragSelect value={curr.cells} onChange={handleChange}>
+                <tr>
+                    <td disabled />
+                    <td disabled>Monday</td>
+                    <td disabled>Tuesday</td>
+                    <td disabled>Wednesday</td>
+                    <td disabled>Thursday</td>
+                    <td disabled>Friday</td>
+                    <td disabled>Saturday</td>
+                    <td disabled>Sunday</td>
+                </tr>
+                <tr>
+                    <td disabled>{hours[0].time}</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>01:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>02:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>03:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>04:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>05:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>06:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>07:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>08:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>09:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>10:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>11:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>12:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>13:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>14:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>15:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>16:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>17:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>18:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>19:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>20:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>21:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>22:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>23:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+                <tr>
+                    <td disabled>24:00</td>
+                    <td className="mon" />
+                    <td className="tue" />
+                    <td className="wed" />
+                    <td className="thu" />
+                    <td className="fri" />
+                    <td className="sat" />
+                    <td className="sun" />
+                </tr>
+            </TableDragSelect>
+            <button onClick={handleClick}>Reset</button>
+            {/* <button onClick={submit}>Submit</button> */}
         </div>
     );
 };
