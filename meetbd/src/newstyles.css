@@ -1,0 +1,161 @@
+
+
+html {
+    font-family: "Muli", sans-serif;
+}
+
+body {
+    max-width: 100%;
+    width: 200rem;
+    background-color: #fffffb;
+    /* Center horizontally */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1,
+h2,
+div,
+pre,
+td {
+    color: #313638;
+    /* Bold headers are unnecessary */
+    font-weight: normal;
+}
+
+a {
+    color: #888;
+}
+
+h2 {
+    margin-top: 2rem;
+}
+
+pre {
+    padding: 0.5rem;
+    background-color: #fbf1e8;
+}
+
+button {
+    float: right;
+    padding: 0.3rem 0.5rem;
+}
+
+.flash {
+    animation-name: flash;
+    animation-duration: 0.5s;
+}
+
+@keyframes flash {
+    from {
+        background-color: #c9fb7e;
+    }
+
+    to {
+        background-color: #fbf1e8;
+    }
+}
+
+.App {
+    font-family: sans-serif;
+    text-align: center;
+}
+
+.table-drag-select {
+    background-color: #ddd;
+    /* Stretch horizontally to fill parent */
+    width: 100%;
+    /* Keep columns same width */
+    table-layout: fixed;
+    /* Disable text selection */
+    user-select: none;
+    /* Center in parent */
+    margin-left: auto;
+    margin-right: auto;
+    /* Remove space between border */
+    border-collapse: collapse;
+}
+
+    /* Table cells */
+    .table-drag-select td {
+        height: 1em;
+        text-align: center;
+        /* Cut off long strings of text with ... */
+        text-overflow: ellipsis;
+        overflow: hidden;
+        /* Make transparent gaps between cells. Better than relying on margin
+     * because clicking an element's margin doesn't trigger events */
+        /* border: 0.7rem solid transparent; */
+        /* border-radius: 5px; */
+        background-clip: padding-box;
+        /* Make cells reasonable size */
+        line-height: 2rem;
+        /* Shows more text when text too big to fit into cell */
+        padding-left: 0rem;
+        padding-right: 0rem;
+    }
+
+        /* Cells that can be interacted with */
+        .table-drag-select td.cell-enabled {
+            background-color: #ddd;
+            border-top: 0.1px solid;
+            border-bottom: 0.1px solid;
+            /* Make the cursor a + symbol */
+            /* cursor: cell; */
+        }
+
+        /* Cells that cannot be interacted with */
+        .table-drag-select td.cell-disabled {
+            /* Put yer css here */
+            background-color: rgb(255, 255, 255);
+        }
+
+        /* Cells that have been selected */
+        .table-drag-select td.cell-selected {
+            background-color: #ff69b4;
+            border-top: 0.1px solid;
+            border-bottom: 0.1px solid;
+        }
+
+        /* Cells that are in the process of being selected */
+        .table-drag-select td.cell-being-selected {
+            /* This is the blue color y//ou see when you select text with the cursor */
+            background-color: #FFB4D9;
+            border-top: 0.1px solid;
+            border-bottom: 0.1px solid;
+        }
+
+        .table-drag-select td.mon {
+            border-left: 0.1px solid grey;
+            border-right: 0.2px solid grey;
+        }
+
+        .table-drag-select td.tue {
+            border-left: 0.1px solid grey;
+            border-right: 0.2px solid grey;
+        }
+
+        .table-drag-select td.wed {
+            border-left: 0.1px solid grey;
+            border-right: 0.2px solid grey;
+        }
+
+        .table-drag-select td.thu {
+            border-left: 0.1px solid grey;
+            border-right: 0.2px solid grey;
+        }
+
+        .table-drag-select td.fri {
+            border-left: 0.1px solid grey;
+            border-right: 0.2px solid grey;
+        }
+
+        .table-drag-select td.sat {
+            border-left: 0.1px solid grey;
+            border-right: 0.2px solid grey;
+        }
+
+        .table-drag-select td.sun {
+            border-left: 0.1px solid grey;
+            border-right: 0.2px solid grey;
+        }
