@@ -43,7 +43,7 @@ const LoginPage = () => {
     return (
         <Container component="main" maxWidth="xs">
             <h2> Welcome to MeeTBD!</h2>
-        <p>Please log in to access the site.</p>
+            <p>Please log in to access the site.</p>
             <Box
                 sx={{
                     marginTop: 2,
