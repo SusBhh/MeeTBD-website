@@ -11,7 +11,7 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ToDoPage from './pages/ToDoPage';
 import TasksPage from './pages/TasksPage';
-
+import SignupPage from './pages/SignupPage';
 const theme = createTheme({
     palette: {
         primary: {
@@ -64,6 +64,7 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<HomePage />} />
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/signup" element={<SignupPage />} />
                         <Route path="/groups" element={session ? (<GroupsPage />) : (<LoginPage />)} />
                         <Route path="/todo" element={session ? (<ToDoPage />) : (<LoginPage />)} />
                         <Route path="/tasks" element={session ? (<TasksPage />) : (<LoginPage />)} />

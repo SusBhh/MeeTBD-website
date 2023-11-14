@@ -13,6 +13,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Logout from '@mui/icons-material/Logout';
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
 const pages = ['Groups', 'Tasks', 'To-Do List', 'About'];
 const routes = ['/groups', '/tasks', '/todo', '/about'];
@@ -175,16 +177,30 @@ function NavBar() {
                             onClose={handleCloseUserMenu}
                         >
                             {session ? (
-                                <MenuItem onClick={handleLogout}>
-                                    <Typography textAlign="center">Logout</Typography>
-                                </MenuItem>
+                                <div>
+                                    <MenuItem >
+                                        <Typography textAlign="center">Welcome</Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={handleLogout}>
+                                        <ListItemIcon>
+                                            <Logout fontSize="small" />
+                                        </ListItemIcon>
+                                        <Typography textAlign="center">Logout</Typography>
+                                    </MenuItem>
+                                </div>
+
                           
                             ) : (
-                                <MenuItem onClick={handleCloseUserMenu}>
-                                    <Link to="/login" style={{ textDecoration: 'none' }}>
-                                        <Typography textAlign="center">Login</Typography>
-                                    </Link>
-                                </MenuItem>
+                                <div>
+                                    <MenuItem onClick={handleCloseUserMenu}>
+                                        <Link to="/login" style={{ textDecoration: 'none' }}>
+                                            <Typography textAlign="center">Login</Typography>
+                                        </Link>
+                                     </MenuItem>
+                                     <MenuItem onClick={googleSignIn}>                        
+                                        <Typography textAlign="center">Google Login</Typography>
+                                    </MenuItem>
+                                </div>
                             )}
                         </Menu>
                     </Box>

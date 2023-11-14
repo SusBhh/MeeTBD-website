@@ -93,7 +93,7 @@ const LoginPage = () => {
                         fullWidth
                         variant="contained"
                         sx={{ mb: 1 }}
-                        img src={"./img/google.png"}
+                       
                         onClick={ () => googleSignIn() }
                     >
                         Sign in with Google
@@ -105,7 +105,7 @@ const LoginPage = () => {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link href="/signup" variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>

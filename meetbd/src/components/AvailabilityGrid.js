@@ -42,7 +42,6 @@ const AvailabilityGrid = (selectedDate) => {
         <div>
             <TableDragSelect value={curr.cells} onChange={handleChange}>
                 <tr>
-                    
                     <td disabled />
                     <td disabled>Monday</td>
                     <td disabled>Tuesday</td>
