@@ -1,55 +1,31 @@
 import React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "../components/Hours";
-const daysOfMonth = [
-    'Sunday, October 15',
-    'Monday, October 16',
-    'Tuesday, October 17',
-    'Wednesday, October 18',
-    'Thursday, October 19',
-    'Friday, October 20',
-    'Saturday, October 21',
-];
-const cellStyle = {
-    backgroundColor: '#f0f0f0', // Default background color
-    padding: '0', // Remove cell padding
-    borderBottom: 'none', // Remove cell borders
-    lineHeight: '2', // Adjust line height to make cells thinner
-    border: '1px solid #ccc', // Add a border around each cell
-};
 
-const AvailabilityGrid = () => {
+const AvailabilityGrid = (selectedDate) => {
+    const [rows, setRows] = useState([new Date()]);
+
+    useEffect(() => {
+        console.log("hi")
+        //console.log(JSON.stringify(selectedDate.selectedDate.startDate))
+        const currentDate = selectedDate.selectedDate.startDate
+        const endDate = selectedDate.selectedDate.endDate
+        //console.log(JSON.stringify(currentDate))
+        //console.log(JSON.stringify(endDate))
+        const array = []
+        while (currentDate <= endDate) {
+            //console.log(JSON.stringify(currentDate))
+            array.push(new Date(currentDate));
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        //setRows(array)
+        console.log(array)
+    });
+
     const [curr, changeCurr] = useState({
-        cells: [
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false]
-        ]
+        cells: Array.from({ length: 28 }, () => Array(7).fill(false)),
     });
 
     function handleChange(cells) {
@@ -58,40 +34,15 @@ const AvailabilityGrid = () => {
     }
 
     const handleClick = () => {
-        const cells = [
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false],
-            [false, false, false, false, false, false, false]
-        ];
+        const cells = Array.from({ length: 28 }, () => Array(7).fill(false));
         changeCurr({ cells });
     };
+
     return (
         <div>
             <TableDragSelect value={curr.cells} onChange={handleChange}>
                 <tr>
+                    
                     <td disabled />
                     <td disabled>Monday</td>
                     <td disabled>Tuesday</td>

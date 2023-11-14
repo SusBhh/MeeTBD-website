@@ -135,7 +135,7 @@ function NavBar() {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        MeeTBD
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page, index) => (
@@ -180,11 +180,10 @@ function NavBar() {
                                 </MenuItem>
                           
                             ) : (
-                                    <MenuItem onClick={handleCloseUserMenu}>
-                                        <Link to="/login" style={{ textDecoration: 'none' }}>
-                                            <Typography textAlign="center">Login</Typography>
-                                        </Link>
-                                   
+                                <MenuItem onClick={handleCloseUserMenu}>
+                                    <Link to="/login" style={{ textDecoration: 'none' }}>
+                                        <Typography textAlign="center">Login</Typography>
+                                    </Link>
                                 </MenuItem>
                             )}
                         </Menu>
