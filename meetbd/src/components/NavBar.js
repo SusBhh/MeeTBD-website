@@ -178,9 +178,7 @@ function NavBar() {
                         >
                             {session ? (
                                 <div>
-                                    <MenuItem >
-                                        <Typography textAlign="center">Welcome</Typography>
-                                    </MenuItem>
+                              
                                     <MenuItem onClick={handleLogout}>
                                         <ListItemIcon>
                                             <Logout fontSize="small" />
@@ -192,13 +190,14 @@ function NavBar() {
                           
                             ) : (
                                 <div>
-                                    <MenuItem onClick={handleCloseUserMenu}>
-                                        <Link to="/login" style={{ textDecoration: 'none' }}>
-                                            <Typography textAlign="center">Login</Typography>
-                                        </Link>
+                                     <MenuItem onClick={event => window.location.href = '/login'}>
+                                       <Typography textAlign="center">Login</Typography>
                                      </MenuItem>
                                      <MenuItem onClick={googleSignIn}>                        
                                         <Typography textAlign="center">Google Login</Typography>
+                                     </MenuItem>
+                                    <MenuItem onClick={event => window.location.href = '/signup'}>
+                                        <Typography textAlign="center">Sign up</Typography>
                                     </MenuItem>
                                 </div>
                             )}

@@ -22,12 +22,14 @@ export default function SignupPage() {
             const { data, error } = await supabase.auth.signUp({
                 email: userData.get("email"),
                 password: userData.get("password"),
-                options: {
-                    first_name: userData.get("firstName"),
-                    last_brown: userData.get("lastName"),
-                }
+     
             })
-            alert('Check your email for verification link')
+            if (error) {
+                alert(error.message);
+            }
+            else {
+                alert('Check your email for verification link')
+            }
         }
         catch (error) {
             alert(error)

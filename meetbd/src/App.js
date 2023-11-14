@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { lightBlue, purple } from '@mui/material/colors';
@@ -28,6 +28,12 @@ const theme = createTheme({
 
 function App() {
     const session = useSession(); // Contains Tokens
+    const { isLoading } = useSessionContext();
+
+    // Prevents flickering when loading session
+    if (isLoading) {
+        return <></>
+    }
 /*
   async function createCalendarEvent() {
     console.log("Creating a calendar event");
