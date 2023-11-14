@@ -21,7 +21,7 @@ const theme = createTheme({
         },
         secondary: {
             // Purple 200
-            main: '#ce93d8'
+            main: '#954bb4'
         }
     }
 })
