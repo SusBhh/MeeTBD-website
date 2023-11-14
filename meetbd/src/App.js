@@ -12,6 +12,7 @@ import AboutPage from './pages/AboutPage';
 import ToDoPage from './pages/ToDoPage';
 import TasksPage from './pages/TasksPage';
 import SignupPage from './pages/SignupPage';
+import WelcomePage from './pages/WelcomePage';
 const theme = createTheme({
     palette: {
         primary: {
@@ -62,7 +63,7 @@ function App() {
                 <div>
                     <NavBar />
                     <Routes>
-                        <Route exact path="/" element={<HomePage />} />
+                        <Route exact path="/" element={session ? (<HomePage />) : (<WelcomePage />)} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/groups" element={session ? (<GroupsPage />) : (<LoginPage />)} />
