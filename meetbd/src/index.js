@@ -6,7 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { createClient } from '@supabase/supabase-js';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { BrowserRouter } from 'react-router-dom';
-const supabase = createClient(
+
+export const supabase = createClient(
   "https://cvuzjcfzjclsjryzmhan.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2dXpqY2Z6amNsc2pyeXptaGFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkxNTk5NzAsImV4cCI6MjAxNDczNTk3MH0.lr-sz_wGX6amNtK44jKZF464ST616GmXcaMQ8OcG7lA"
 );
