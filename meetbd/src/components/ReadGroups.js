@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const ReadGroups = () => {
@@ -48,27 +48,41 @@ const ReadGroups = () => {
   //     }
   //   };
 
-  async function readGroups() {
+  const readGroups = async () => {
     // get user
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
-  // TODO: read groups
-  const { error, data } = await supabase
-      .from("groups")                       //the table you want to work with
-      .select("id, name, owner, members")   // columns to select from the database
-      .in("members", user?.id)              // match only groups where user is a member
-      .order("id", { ascending: false });   // sort the data so the last item comes on top;
-    if (error) throw error;                 // check if there was an error fetching the data and move the execution to the catch block
+    // TODO: read groups
+    const { error, data } = await supabase
+      .from("groups") //the table you want to work with
+      .select("id, name, owner, members") // columns to select from the database
+    //   .in("members", user?.id) // match only groups where user is a member
+    //   .order("id", { ascending: false }); // sort the data so the last item comes on top;
+    
+    if (error) throw error; // check if there was an error fetching the data and move the execution to the catch block
     if (data) setGroups(data);
     console.log(groups);
   }
 
+  React.useEffect(() => {
+    readGroups();
+  }, []);
+
   return (
-  <div onload="readGroups()">
-    
-  </div>
+    <div>
+      {groups.length == 0 ? (
+        <p>No groups to display</p>
+      ) : (
+        <div>
+          {groups.map((group, i) => (
+            // <Group group={group} userEmail={userEmail} key={group.id} />
+            <p>group</p>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 
