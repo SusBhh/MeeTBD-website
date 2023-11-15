@@ -66,7 +66,7 @@ const ReadGroups = () => {
   }
 
   return (
-  <div onload="readGroups()">
+  <div>
     
   </div>
   );
