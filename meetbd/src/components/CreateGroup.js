@@ -17,26 +17,31 @@ const CreateGroup = () => {
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    
+
     // get user
     const {
-        data: { user },
-      } = await supabase.auth.getUser();
-  
+      data: { user },
+    } = await supabase.auth.getUser();
+
     //  TODO: some sort of email validation
     // split group member emails into individual emails
-    let emailArray = [user.id];
+    let emailArray = [user.email];
     if (formJson["groupMembers"].length > 0) {
-        emailArray = [user.id].concat(formJson["groupMembers"].split(","));
+      emailArray = [user.email].concat(formJson["groupMembers"].split(","));
     }
-    emailArray.filter((n) => n);
+    emailArray = emailArray.map((s) => s.trim());           // trim whitespace
+    emailArray = emailArray.filter(                         // remove duplicates
+      (item, index) => emailArray.indexOf(item) === index
+    );
+
+    console.log(emailArray);
 
     // insert group into db
     await supabase.from("groups").insert({
-        name: formJson["groupName"],
-        owner: user?.id,
-        members: emailArray,
-      });
+      name: formJson["groupName"],
+      owner: user?.id,
+      members: emailArray,
+    });
 
     closeModal();
   }
