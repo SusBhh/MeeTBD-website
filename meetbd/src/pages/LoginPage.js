@@ -14,18 +14,31 @@ const LoginPage = () => {
     const session = useSession(); // Contains Tokens
     const supabase = useSupabaseClient();
     const { isLoading } = useSessionContext();
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        });
-    };
+
     // Prevents flickering when loading session
     if (isLoading) {
         return <></>
     }
+
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        const userData = new FormData(event.currentTarget);
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: userData.get("email"),
+                password: userData.get("password"),        
+            })
+        }
+        catch (error) {
+            alert(error)
+        }
+
+        console.log({
+            email: userData.get("email"),
+            password: userData.get("password"),
+        });
+    };
+
 
     async function googleSignIn() {
         const { error } = await supabase.auth.signInWithOAuth({
@@ -93,7 +106,7 @@ const LoginPage = () => {
                         fullWidth
                         variant="contained"
                         sx={{ mb: 1 }}
-                        img src={"./img/google.png"}
+                       
                         onClick={ () => googleSignIn() }
                     >
                         Sign in with Google
@@ -105,7 +118,7 @@ const LoginPage = () => {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link href="/signup" variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>

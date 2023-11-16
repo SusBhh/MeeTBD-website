@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { lightBlue, purple } from '@mui/material/colors';
@@ -11,7 +11,8 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ToDoPage from './pages/ToDoPage';
 import TasksPage from './pages/TasksPage';
-
+import SignupPage from './pages/SignupPage';
+import WelcomePage from './pages/WelcomePage';
 const theme = createTheme({
     palette: {
         primary: {
@@ -27,6 +28,12 @@ const theme = createTheme({
 
 function App() {
     const session = useSession(); // Contains Tokens
+    const { isLoading } = useSessionContext();
+
+    // Prevents flickering when loading session
+    if (isLoading) {
+        return <></>
+    }
 /*
   async function createCalendarEvent() {
     console.log("Creating a calendar event");
@@ -62,8 +69,9 @@ function App() {
                 <div>
                     <NavBar />
                     <Routes>
-                        <Route exact path="/" element={<HomePage />} />
+                        <Route exact path="/" element={session ? (<HomePage />) : (<WelcomePage />)} />
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/signup" element={<SignupPage />} />
                         <Route path="/groups" element={session ? (<GroupsPage />) : (<LoginPage />)} />
                         <Route path="/todo" element={session ? (<ToDoPage />) : (<LoginPage />)} />
                         <Route path="/tasks" element={session ? (<TasksPage />) : (<LoginPage />)} />
