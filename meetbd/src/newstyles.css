@@ -191,3 +191,28 @@ input {
 .add-group h2 {
     margin-top: 1rem;
 }
+
+.group-around {
+    margin: 15px;
+}
+
+.group {
+    background-color: #BA7B92;
+    border-radius: 20px;
+    width: 100%;
+    margin: auto;
+    max-width: 400px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.group .text {
+    width: 100%;
+}
+
+.group p {
+    color: #FFFF;
+}
