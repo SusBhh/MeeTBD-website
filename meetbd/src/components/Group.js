@@ -96,28 +96,30 @@ const Group = (group) => {
         <div className="text">
           <p>{group.name}</p>
         </div>
-        <Tooltip title="copy join ID" placement="start-top">
+        <Tooltip title="copy join code" placement="top" arrow>
           <IconButton onClick={handleCopy} disableRipple>
             <ContentCopyIcon />
           </IconButton>
         </Tooltip>
-        <IconButton onClick={handleEdit} disableRipple>
-          <EditIcon />
-        </IconButton>
+        <Tooltip title="edit group" placement="top" arrow>
+          <IconButton onClick={handleEdit} disableRipple>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
         {isOwner ? (
           // delete option if owner
-          <IconButton onClick={handleDelete} disableRipple>
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="delete group" placement="top" arrow>
+            <IconButton onClick={handleDelete} disableRipple>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         ) : (
           // leave option if not owner
-          <IconButton
-            onClick={handleLeave}
-            onHovver="leave group"
-            disableRipple
-          >
-            <ExitToAppIcon />
-          </IconButton>
+          <Tooltip title="leave group" placement="top" arrow>
+            <IconButton onClick={handleLeave} disableRipple>
+              <ExitToAppIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </div>
     </div>
