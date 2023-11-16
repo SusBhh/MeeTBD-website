@@ -1,10 +1,10 @@
 import React from "react";
-import { Button, IconButton, Tooltip } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { IconButton, Tooltip } from "@mui/material";
+
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import "../newstyles.css";

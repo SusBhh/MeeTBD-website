@@ -205,14 +205,14 @@ input {
 .group {
     background-color: #BA7B92;
     border-radius: 20px;
-    width: 100%;
+    display: flex;
+    justify-content: space-between;
     margin: auto;
     max-width: 400px;
     padding-left: 10px;
     padding-right: 10px;
-    display: flex;
-    justify-content: space-between;
     text-align: center;
+    width: 100%;
 }
 
 .group .text {
