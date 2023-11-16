@@ -12,8 +12,6 @@ import "../newstyles.css";
 const Group = (group) => {
   group = group.group;
   const [userId, setUserId] = React.useState(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
 
   const supabase = useSupabaseClient();
 
@@ -25,10 +23,6 @@ const Group = (group) => {
   };
   getUserId();
   const isOwner = userId === group.owner;
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleEdit = async () => {
     // TODO: edit group name
