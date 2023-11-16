@@ -92,15 +92,13 @@ const HomePage = () => {
                     <WeeklyDropdown updateDate={updateDate} />
                {/*     <h2>Selected Date: {JSON.stringify(selectedDate.startDate)}</h2>*/}
                 </Grid>
-                <Grid item xs={6}>
-                    <Button size="small">
+                <Grid item xs={4} alignItems="left">
+                    <Button size="small" variant="outlined" sx={{ ml: 1 }} color="secondary" >
                         Weekly Availability
                     </Button>
-                </Grid>
-                <Grid item xs={6} alignItems="left">
                     <ClickAwayListener onClickAway={handleClickAway}>
                         <div>
-                        <Button aria-describedby={id} type="button" onClick={handleClick} size="small">
+                            <Button aria-describedby={id} type="button" onClick={handleClick} size="small" variant="outlined" color="secondary" >
                             Manually Select Dates
                             </Button>
                             {open ? (
