@@ -53,8 +53,9 @@ const GroupsPage = () => {
 
     // check that the group names match
     if (
+      data == null ||
       currGroupNameSquish.toString().replace(/\s/g, "") !=
-      currGroupName.toString().replace(/\s/g, "")
+        currGroupName.toString().replace(/\s/g, "")
     ) {
       alert("There is no group with that join ID.");
       return;
