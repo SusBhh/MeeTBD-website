@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, IconButton, Menu, MenuItem } from "@mui/material";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -25,10 +25,6 @@ const Group = (group) => {
   };
   getUserId();
   const isOwner = userId === group.owner;
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -92,55 +88,36 @@ const Group = (group) => {
     handleClose();
   };
 
+  // TODO: add tooltips
   return (
     <div className="group-around">
       <div className="group">
         <div className="text">
           <p>{group.name}</p>
         </div>
-        <div>
-          <IconButton
-            aria-label="more"
-            id="long-button"
-            aria-controls={open ? "long-menu" : undefined}
-            aria-expanded={open ? "true" : undefined}
-            aria-haspopup="true"
-            onClick={handleClick}
-          >
-            <MoreVertIcon />
+        <Tooltip title="copy join ID" placement="start-top">
+          <IconButton onClick={handleCopy} disableRipple>
+            <ContentCopyIcon />
           </IconButton>
-          <Menu
-            id="long-menu"
-            MenuListProps={{
-              "aria-labelledby": "long-button",
-            }}
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
+        </Tooltip>
+        <IconButton onClick={handleEdit} disableRipple>
+          <EditIcon />
+        </IconButton>
+        {isOwner ? (
+          // delete option if owner
+          <IconButton onClick={handleDelete} disableRipple>
+            <DeleteIcon />
+          </IconButton>
+        ) : (
+          // leave option if not owner
+          <IconButton
+            onClick={handleLeave}
+            onHovver="leave group"
+            disableRipple
           >
-            <MenuItem onClick={handleEdit} disableRipple>
-              <EditIcon />
-              Edit
-            </MenuItem>
-            {isOwner ? (
-              // delete option if owner
-              <MenuItem onClick={handleDelete} disableRipple>
-                <DeleteIcon />
-                Delete
-              </MenuItem>
-            ) : (
-              // leave option if not owner
-              <MenuItem onClick={handleLeave} disableRipple>
-                <ExitToAppIcon />
-                Leave Group
-              </MenuItem>
-            )}
-            <MenuItem onClick={handleCopy} disableRipple>
-              <ContentCopyIcon />
-              Copy Join ID
-            </MenuItem>
-          </Menu>
-        </div>
+            <ExitToAppIcon />
+          </IconButton>
+        )}
       </div>
     </div>
   );
