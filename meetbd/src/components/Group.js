@@ -80,11 +80,12 @@ const Group = (group) => {
   };
 
   const handleCopy = () => {
-    // copies join ID
+    // copies join code
     const copyText = group.id + group.name.toString().replace(/\s/g, "");
     console.log(copyText);
     navigator.clipboard.writeText(copyText);
 
+    alert("successfully copied join code!");
     handleClose();
   };
 
