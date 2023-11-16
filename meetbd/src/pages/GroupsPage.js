@@ -8,10 +8,11 @@ import "../newstyles.css";
 
 const GroupsPage = () => {
   const [groupName, setGroupName] = React.useState("");
-  const [joinID, setJoinID] = React.useState("");
+  const [joinCode, setJoinCode] = React.useState("");
 
   const supabase = useSupabaseClient();
 
+  // TODO: check if join works
   async function handleJoinGroup(e) {
     e.preventDefault();
 
@@ -24,7 +25,7 @@ const GroupsPage = () => {
       return;
     }
 
-    // break up join ID (groupID + groupName, no spaces)
+    // break up join code (groupID + groupName, no spaces)
     const currGroupID = formJson["joinID"].match(/\d+/g);
     const currGroupNameSquish = formJson["joinID"].substring(
       currGroupID.length
@@ -57,7 +58,7 @@ const GroupsPage = () => {
       currGroupNameSquish.toString().replace(/\s/g, "") !=
         currGroupName.toString().replace(/\s/g, "")
     ) {
-      alert("There is no group with that join ID.");
+      alert("There is no group with that join code.");
       return;
     }
 
@@ -73,7 +74,7 @@ const GroupsPage = () => {
 
     alert("Successfully joined group " + currGroupName + "!");
 
-    setJoinID("");
+    setJoinCode("");
   }
 
   async function handleCreateGroup(e) {
@@ -117,16 +118,16 @@ const GroupsPage = () => {
       <div className="bottom">
         <div className="add-group">
           {/* add groups here */}
-          <h2>Join an Existing Group by ID</h2>
+          <h2>Join an Existing Group by Code</h2>
           <form onSubmit={handleJoinGroup}>
             <label>
               <input
                 type="text"
-                name="joinID"
-                onChange={(e) => setJoinID(e.target.value)}
+                name="joinCode"
+                onChange={(e) => setJoinCode(e.target.value)}
               />
             </label>
-            {joinID.length == 0 ? (
+            {joinCode.length == 0 ? (
               <Button type="submit" variant="contained" size="small" disabled>
                 Join
               </Button>
@@ -137,7 +138,6 @@ const GroupsPage = () => {
             )}
           </form>
           <h2>Create a New Group</h2>
-          {/* <CreateGroup /> */}
           <form onSubmit={handleCreateGroup}>
             <label>
               <input
