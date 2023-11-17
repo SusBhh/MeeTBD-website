@@ -26,8 +26,6 @@ const Group = (group) => {
 
   const handleEdit = async () => {
     // TODO: edit group name
-
-    handleClose();
   };
 
   const handleDelete = async () => {
@@ -43,8 +41,6 @@ const Group = (group) => {
     } catch (error) {
       alert(error.error_description || error.message);
     }
-
-    handleClose();
   };
 
   const handleLeave = async () => {
@@ -69,8 +65,6 @@ const Group = (group) => {
     } catch (error) {
       alert(error.error_description || error.message);
     }
-
-    handleClose();
   };
 
   const handleCopy = () => {
@@ -80,7 +74,6 @@ const Group = (group) => {
     navigator.clipboard.writeText(copyText);
 
     alert("successfully copied join code!");
-    handleClose();
   };
 
   // TODO: add tooltips
