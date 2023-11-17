@@ -20,14 +20,14 @@ const GroupsPage = () => {
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
 
-    if (formJson["joinID"] === "") {
+    if (formJson["joinCode"] === "") {
       // return early if groupName is empty
       return;
     }
 
     // break up join code (groupID + groupName, no spaces)
-    const currGroupID = formJson["joinID"].match(/\d+/g);
-    const currGroupNameSquish = formJson["joinID"].substring(
+    const currGroupID = formJson["joinCode"].match(/\d+/g);
+    const currGroupNameSquish = formJson["joinCode"].substring(
       currGroupID.length
     );
 
@@ -50,7 +50,10 @@ const GroupsPage = () => {
     if (data) {
       members = data["members"];
       currGroupName = data["name"];
+    } else {
+      console.log("handleJoinGroup: data is null");
     }
+
 
     // check that the group names match
     if (
