@@ -45,7 +45,7 @@ const ReadGroups = () => {
       ) : (
         <div>
           {groups.map((group, i) => (
-            <Group group={group} key={i} />
+            <Group group={group} key={group.id} />
           ))}
         </div>
       )}
