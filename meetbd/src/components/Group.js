@@ -9,8 +9,8 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import "../newstyles.css";
 
-const Group = (group) => {
-  group = group.group;
+const Group = (props) => {
+  const group = props.group;
   const [userId, setUserId] = React.useState(null);
 
   const supabase = useSupabaseClient();
@@ -26,21 +26,6 @@ const Group = (group) => {
 
   const handleEdit = async () => {
     // TODO: edit group name
-  };
-
-  const handleDelete = async () => {
-    // TODO: check if delete works
-    try {
-      const { error } = await supabase
-        .from("group")
-        .delete() //delete the row
-        .eq("id", group.id) //the id of row to delete
-        .eq("owner", userId); //check if the item being deleted belongs to the user
-
-      if (error) throw error;
-    } catch (error) {
-      alert(error.error_description || error.message);
-    }
   };
 
   const handleLeave = async () => {
@@ -95,7 +80,7 @@ const Group = (group) => {
         {isOwner ? (
           // delete option if owner
           <Tooltip title="delete group" placement="top" arrow>
-            <IconButton onClick={handleDelete} disableRipple>
+            <IconButton onClick={() => props.handleDelete(group)} disableRipple>
               <DeleteIcon />
             </IconButton>
           </Tooltip>

@@ -4,11 +4,26 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import Group from "./Group";
 
-const ReadGroups = () => {
+const ReadGroups = (readGroups) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [groups, setGroups] = React.useState([]);
 
   const supabase = useSupabaseClient();
+
+  async function handleDelete(group) {
+    console.log(group);
+    try {
+      const { error } = await supabase
+        .from("groups")
+        .delete()
+        .eq("id", group.id);
+
+      if (error) throw error;
+    } catch (error) {
+      alert(error.error_description || error.message);
+    }
+    readGroups();
+  };
 
   async function readGroups() {
     // set isLoading to true
@@ -45,7 +60,7 @@ const ReadGroups = () => {
       ) : (
         <div>
           {groups.map((group, i) => (
-            <Group group={group} key={group.id} />
+            <Group key={group.id} group={group} handleDelete={handleDelete}/>
           ))}
         </div>
       )}

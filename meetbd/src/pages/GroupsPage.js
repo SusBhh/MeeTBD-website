@@ -81,6 +81,7 @@ const GroupsPage = () => {
   }
 
   async function handleCreateGroup(e) {
+    // TODO: make this faster, super slow rn
     e.preventDefault();
 
     const form = e.target;
@@ -109,6 +110,9 @@ const GroupsPage = () => {
     alert("Successfully created group " + groupName + "!");
 
     setGroupName("");
+
+    // TODO: reload groups
+    window.location.reload();
   }
 
   return (
