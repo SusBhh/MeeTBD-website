@@ -8,29 +8,9 @@ import "../newstyles.css";
 
 const GroupsPage = () => {
   const [groupName, setGroupName] = React.useState("");
-  const [joinID, setJoinID] = React.useState("");
+  const [joinCode, setJoinCode] = React.useState("");
 
-  // TODO: join by ID
-  // const updateItem = async ({ item, id }) => {
-  //     setLoading(true);
-  //     try {
-  //       const user = supabase.auth.user();
-
-  //       const { error } = await supabase
-  //         .from("todo")
-  //         .update({ item })
-  //         .eq("userId", user?.id)
-  //         .eq("id", id); //matching id of row to update
-
-  //       if (error) throw error;
-
-  //       await getActiveItems();
-  //     } catch (error) {
-  //       alert(error.error_description || error.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  // TODO: join by code
 
   const supabase = useSupabaseClient();
 
@@ -73,16 +53,16 @@ const GroupsPage = () => {
       <div className="bottom">
         <div className="add-group">
           {/* add groups here */}
-          <h2>Join an Existing Group by ID</h2>
+          <h2>Join an Existing Group by Code</h2>
           <form>
             <label>
               <input
                 type="text"
-                name="joinID"
-                onChange={(e) => setJoinID(e.target.value)}
+                name="joinCode"
+                onChange={(e) => setJoinCode(e.target.value)}
               />
             </label>
-            {joinID.length == 0 ? (
+            {joinCode.length == 0 ? (
               <Button type="submit" variant="contained" size="small" disabled>
                 Join
               </Button>
@@ -93,7 +73,6 @@ const GroupsPage = () => {
             )}
           </form>
           <h2>Create a New Group</h2>
-          {/* <CreateGroup /> */}
           <form onSubmit={handleCreateGroup}>
             <label>
               <input

@@ -183,6 +183,7 @@ input {
     border-width: 3px;
     margin-left: auto;
     margin-right: auto;
+    max-width: 400px;
     padding: 15px;
     text-align: center;
     width: 80%;
@@ -190,4 +191,34 @@ input {
 
 .add-group h2 {
     margin-top: 1rem;
+}
+
+.add-group form {
+    display: flex;
+    justify-content: space-around;
+}
+
+.group-around {
+    margin-top: 15px;
+}
+
+.group {
+    background-color: #BA7B92;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    max-width: 400px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.group .text {
+    width: 100%;
+}
+
+.group p {
+    color: #FFFF;
 }
