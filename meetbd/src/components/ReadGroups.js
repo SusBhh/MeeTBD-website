@@ -20,7 +20,7 @@ const ReadGroups = (readGroups) => {
   getUserId();
 
   async function handleDelete(group) {
-    console.log(group);
+    setIsLoading(true);
     try {
       const { error } = await supabase
         .from("groups")
@@ -31,11 +31,12 @@ const ReadGroups = (readGroups) => {
     } catch (error) {
       alert(error.error_description || error.message);
     }
-    readGroups();
+    await readGroups();
+    setIsLoading(false);
   }
 
   async function handleLeave(group) {
-    // TODO: check if leave works
+    setIsLoading(true);
     try {
       // create members array without curr user
       let members = group.members;
@@ -55,11 +56,11 @@ const ReadGroups = (readGroups) => {
     } catch (error) {
       alert(error.error_description || error.message);
     }
-    readGroups();
+    await readGroups();
+    setIsLoading(false);
   }
 
   async function readGroups() {
-    // set isLoading to true
     setIsLoading(true);
 
     // get user
