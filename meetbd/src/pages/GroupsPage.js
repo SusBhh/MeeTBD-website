@@ -55,8 +55,7 @@ const GroupsPage = () => {
 
     // check that the group names match
     if (
-      currGroupNameSquish.replace(/\s/g, "") !=
-      currGroupName.replace(/\s/g, "")
+      currGroupNameSquish.replace(/\s/g, "") != currGroupName.replace(/\s/g, "")
     ) {
       alert("There is no group with that join code.");
       return;

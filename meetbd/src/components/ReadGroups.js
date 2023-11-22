@@ -6,9 +6,18 @@ import Group from "./Group";
 
 const ReadGroups = (readGroups) => {
   const [isLoading, setIsLoading] = React.useState(false);
+  const [userId, setUserId] = React.useState(null);
   const [groups, setGroups] = React.useState([]);
 
   const supabase = useSupabaseClient();
+
+  const getUserId = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    setUserId(user.id);
+  };
+  getUserId();
 
   async function handleDelete(group) {
     console.log(group);
@@ -23,7 +32,31 @@ const ReadGroups = (readGroups) => {
       alert(error.error_description || error.message);
     }
     readGroups();
-  };
+  }
+
+  async function handleLeave(group) {
+    // TODO: check if leave works
+    try {
+      // create members array without curr user
+      let members = group.members;
+      const index = members.indexOf(userId);
+      if (index > -1) {
+        members.splice(index);
+      }
+
+      // update curr group without  member
+      const { updateError } = await supabase
+        .from("groups")
+        .update({ members: members })
+        .eq("id", group.id);
+      if (updateError) throw updateError;
+
+      if (updateError) throw updateError;
+    } catch (error) {
+      alert(error.error_description || error.message);
+    }
+    readGroups();
+  }
 
   async function readGroups() {
     // set isLoading to true
@@ -60,7 +93,12 @@ const ReadGroups = (readGroups) => {
       ) : (
         <div>
           {groups.map((group, i) => (
-            <Group key={group.id} group={group} handleDelete={handleDelete}/>
+            <Group
+              key={group.id}
+              group={group}
+              handleDelete={handleDelete}
+              handleLeave={handleLeave}
+            />
           ))}
         </div>
       )}

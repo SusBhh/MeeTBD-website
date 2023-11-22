@@ -28,34 +28,9 @@ const Group = (props) => {
     // TODO: edit group name
   };
 
-  const handleLeave = async () => {
-    // TODO: check if leave works
-    try {
-      // create members array without curr user
-      let members = group.members;
-      const index = members.indexOf(userId);
-      if (index > -1) {
-        members.splice(index);
-      }
-      console.log(members);
-
-      // update curr group without  member
-      const { updateError } = await supabase
-        .from("groups")
-        .update({ members: members })
-        .eq("id", group.id);
-      if (updateError) throw updateError;
-
-      if (updateError) throw updateError;
-    } catch (error) {
-      alert(error.error_description || error.message);
-    }
-  };
-
   const handleCopy = () => {
     // copies join code
     const copyText = group.id + group.name.toString().replace(/\s/g, "");
-    console.log(copyText);
     navigator.clipboard.writeText(copyText);
 
     alert("successfully copied join code!");
@@ -87,7 +62,7 @@ const Group = (props) => {
         ) : (
           // leave option if not owner
           <Tooltip title="leave group" placement="top" arrow>
-            <IconButton onClick={handleLeave} disableRipple>
+            <IconButton onClick={() => props.handleLeave(group)} disableRipple>
               <ExitToAppIcon />
             </IconButton>
           </Tooltip>
