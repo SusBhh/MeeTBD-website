@@ -12,7 +12,6 @@ const GroupsPage = () => {
 
   const supabase = useSupabaseClient();
 
-  // TODO: check if join works
   async function handleJoinGroup(e) {
     e.preventDefault();
 
@@ -26,7 +25,7 @@ const GroupsPage = () => {
     }
 
     // break up join code (groupID + groupName, no spaces)
-    const currGroupID = formJson["joinCode"].match(/\d+/g);
+    const currGroupID = formJson["joinCode"].match(/\d+/g)[0];
     const currGroupNameSquish = formJson["joinCode"].substring(
       currGroupID.length
     );
@@ -36,7 +35,7 @@ const GroupsPage = () => {
       data: { user },
     } = await supabase.auth.getUser();
 
-    // read curr group's members + name
+    // read curr group's members + name based on id
     const { readError, data } = await supabase
       .from("groups")
       .select("name, members")
@@ -46,22 +45,27 @@ const GroupsPage = () => {
     // get curr group's members + name
     let members = [];
     let currGroupName = "";
-    console.log(data);
-    if (data) {
-      members = data["members"];
-      currGroupName = data["name"];
+    if (data && data.length > 0) {
+      members = data[0]["members"];
+      currGroupName = data[0]["name"];
     } else {
-      console.log("handleJoinGroup: data is null");
+      alert("There is no group with that join code.");
+      return;
     }
-
 
     // check that the group names match
     if (
-      data == null ||
-      currGroupNameSquish.toString().replace(/\s/g, "") !=
-        currGroupName.toString().replace(/\s/g, "")
+      currGroupNameSquish.replace(/\s/g, "") !=
+      currGroupName.replace(/\s/g, "")
     ) {
       alert("There is no group with that join code.");
+      return;
+    }
+
+    // check if user is already member of group
+    if (members.includes(user?.id)) {
+      alert("You are already a member of this group!");
+      setJoinCode("");
       return;
     }
 
@@ -78,6 +82,8 @@ const GroupsPage = () => {
     alert("Successfully joined group " + currGroupName + "!");
 
     setJoinCode("");
+
+    window.location.reload();
   }
 
   async function handleCreateGroup(e) {
