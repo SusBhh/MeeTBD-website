@@ -15,6 +15,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Logout from '@mui/icons-material/Logout';
+import google_icon from '../assets/google_icon.png';
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
 const pages = ['Groups', 'Tasks', 'To-Do List', 'About'];
 const routes = ['/groups', '/tasks', '/todo', '/about'];
@@ -191,13 +192,13 @@ function NavBar() {
                             ) : (
                                 <div>
                                      <MenuItem onClick={event => window.location.href = '/login'}>
-                                       <Typography textAlign="center">Login</Typography>
+                                       <Typography align="center">Login</Typography>
                                      </MenuItem>
                                      <MenuItem onClick={googleSignIn}>                        
-                                        <Typography textAlign="center">Google Login</Typography>
+                                            <Typography align="center"><img src={google_icon} alt="my" width={"15px"} />&nbsp;{` Login`}</Typography>
                                      </MenuItem>
                                     <MenuItem onClick={event => window.location.href = '/signup'}>
-                                        <Typography textAlign="center">Sign up</Typography>
+                                        <Typography align="center">Sign up</Typography>
                                     </MenuItem>
                                 </div>
                             )}

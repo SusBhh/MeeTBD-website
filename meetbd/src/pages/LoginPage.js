@@ -10,6 +10,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
+import google_icon from '../assets/google_icon.png';
+
 const LoginPage = () => {
     const session = useSession(); // Contains Tokens
     const supabase = useSupabaseClient();
@@ -106,10 +108,9 @@ const LoginPage = () => {
                         fullWidth
                         variant="contained"
                         sx={{ mb: 1 }}
-                       
-                        onClick={ () => googleSignIn() }
-                    >
-                        Sign in with Google
+                        onClick={() => googleSignIn()}
+                    ><img src={google_icon} alt="my" width={"20px"} />&nbsp;{` Sign in with Google`}
+                        
                     </Button>
                     <Grid container>
                         <Grid item xs>

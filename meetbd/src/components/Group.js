@@ -26,7 +26,6 @@ const Group = (group) => {
 
   const handleEdit = async () => {
     // TODO: edit group name
-
   };
 
   const handleDelete = async () => {
@@ -77,7 +76,6 @@ const Group = (group) => {
     alert("successfully copied join code!");
   };
 
-  // TODO: add tooltips
   return (
     <div className="group-around">
       <div className="group">
