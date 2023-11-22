@@ -116,7 +116,7 @@ const GroupsPage = () => {
 
     setGroupName("");
 
-    // TODO: reload groups
+    // TODO: reload groups (is there a better way?)
     window.location.reload();
   }
 
@@ -124,7 +124,6 @@ const GroupsPage = () => {
     <div>
       <h1>Groups Page</h1>
       <div>
-        {/* TODO: list groups here */}
         <ReadGroups />
       </div>
       <div className="bottom">
