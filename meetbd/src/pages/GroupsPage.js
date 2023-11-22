@@ -97,8 +97,13 @@ const GroupsPage = () => {
       // return early if groupName is empty
       return;
     }
+    // prevent number from starting groupname
+    if (!isNaN(formJson["groupName"][0])) {
+      alert("Group name cannot start with a number.");
+      setGroupName("");
+      return;
+    }
     // TODO: more group name validation
-    // TODO: prevent number from starting groupname
 
     // get user
     const {
