@@ -19,7 +19,7 @@ const ReadGroups = () => {
       data: { user },
     } = await supabase.auth.getUser();
 
-    // TODO: read groups
+    // read groups
     const { error, data } = await supabase
       .from("groups") //the table you want to work with
       .select("id, name, owner, members") // columns to select from the database
