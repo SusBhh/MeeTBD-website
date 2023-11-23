@@ -1,4 +1,5 @@
 import React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
@@ -7,12 +8,14 @@ import ReadGroups from "../components/ReadGroups";
 import "../newstyles.css";
 
 const GroupsPage = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [groupName, setGroupName] = React.useState("");
   const [joinCode, setJoinCode] = React.useState("");
 
   const supabase = useSupabaseClient();
 
   async function handleJoinGroup(e) {
+    setIsLoading(true);
     e.preventDefault();
 
     const form = e.target;
@@ -82,11 +85,13 @@ const GroupsPage = () => {
 
     setJoinCode("");
 
+    setIsLoading(false);
     window.location.reload();
   }
 
   async function handleCreateGroup(e) {
     // TODO: make this faster, super slow rn
+    setIsLoading(true);
     e.preventDefault();
 
     const form = e.target;
@@ -122,18 +127,22 @@ const GroupsPage = () => {
     setGroupName("");
 
     // TODO: reload groups (is there a better way?)
+    setIsLoading(false);
     window.location.reload();
   }
 
   return (
     <div>
       <h1>Groups Page</h1>
-      <div>
-        <ReadGroups />
-      </div>
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <div>
+          <ReadGroups />
+        </div>
+      )}
       <div className="bottom">
         <div className="add-group">
-          {/* add groups here */}
           <h2>Join an Existing Group by Code</h2>
           <form onSubmit={handleJoinGroup}>
             <label>
