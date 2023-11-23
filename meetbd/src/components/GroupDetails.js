@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import CreateEvent from "./CreateEvent"
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import CircularProgress from "@mui/material/CircularProgress";
+import Container from "@mui/material/Container";
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
 const GroupDetails = () => {
   const { groupId } = useParams();
@@ -9,6 +13,7 @@ const GroupDetails = () => {
   const [events, setEvents] = useState(null);
   const supabase = useSupabaseClient();
   const [userId, setUserId] = React.useState(null);
+  const [showCreateEvent, setShowCreateEvent] = useState(false);
 
   const getUserId = async () => {
     const {
@@ -17,6 +22,10 @@ const GroupDetails = () => {
     setUserId(user.id);
   };
   getUserId();
+
+  async function handleCreateEvent() {
+    setShowCreateEvent(true);
+  }
 
   useEffect(() => {
     const fetchGroup = async () => {
@@ -56,8 +65,18 @@ const GroupDetails = () => {
       {group ? (
         <div>
           <h1>{group.name}</h1>
-          <h2>Events Being Planned</h2>
-          <h2>Upcoming Events</h2>
+          <h2>Events</h2>
+          <Grid container justifyContent="center" spacing={1}>
+            <Button onClick={handleCreateEvent} size="small" variant="outlined" sx={{ ml: 1 }} color="secondary" >
+              Schedule Event
+            </Button>
+          </Grid>
+          {showCreateEvent && (
+            <CreateEvent
+              groupId={groupId}
+              onClose={() => setShowCreateEvent(false)} // Callback to hide the CreateEvent component
+            />
+          )}  
         </div>
       ) : (
         <CircularProgress />
