@@ -4,14 +4,63 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import Group from "./Group";
 
-const ReadGroups = () => {
+const ReadGroups = (readGroups) => {
   const [isLoading, setIsLoading] = React.useState(false);
+  const [userId, setUserId] = React.useState(null);
   const [groups, setGroups] = React.useState([]);
 
   const supabase = useSupabaseClient();
 
+  const getUserId = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    setUserId(user.id);
+  };
+  getUserId();
+
+  async function handleDelete(group) {
+    setIsLoading(true);
+    try {
+      const { error } = await supabase
+        .from("groups")
+        .delete()
+        .eq("id", group.id);
+
+      if (error) throw error;
+    } catch (error) {
+      alert(error.error_description || error.message);
+    }
+    await readGroups();
+    setIsLoading(false);
+  }
+
+  async function handleLeave(group) {
+    setIsLoading(true);
+    try {
+      // create members array without curr user
+      let members = group.members;
+      const index = members.indexOf(userId);
+      if (index > -1) {
+        members.splice(index);
+      }
+
+      // update curr group without  member
+      const { updateError } = await supabase
+        .from("groups")
+        .update({ members: members })
+        .eq("id", group.id);
+      if (updateError) throw updateError;
+
+      if (updateError) throw updateError;
+    } catch (error) {
+      alert(error.error_description || error.message);
+    }
+    await readGroups();
+    setIsLoading(false);
+  }
+
   async function readGroups() {
-    // set isLoading to true
     setIsLoading(true);
 
     // get user
@@ -45,7 +94,12 @@ const ReadGroups = () => {
       ) : (
         <div>
           {groups.map((group, i) => (
-            <Group group={group} key={group.id} />
+            <Group
+              key={group.id}
+              group={group}
+              handleDelete={handleDelete}
+              handleLeave={handleLeave}
+            />
           ))}
         </div>
       )}
