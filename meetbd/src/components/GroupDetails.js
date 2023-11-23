@@ -6,7 +6,17 @@ import CircularProgress from "@mui/material/CircularProgress";
 const GroupDetails = () => {
   const { groupId } = useParams();
   const [group, setGroup] = useState(null);
+  const [events, setEvents] = useState(null);
   const supabase = useSupabaseClient();
+  const [userId, setUserId] = React.useState(null);
+
+  const getUserId = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    setUserId(user.id);
+  };
+  getUserId();
 
   useEffect(() => {
     const fetchGroup = async () => {
@@ -22,9 +32,19 @@ const GroupDetails = () => {
         }
 
         setGroup(data);
+
+        const { data: eventData, error: eventError } = await supabase
+          .from('events')
+          .select('*')
+          .eq('group_id', groupId);
+
+        if (eventError) {
+          throw eventError;
+        }
+
+        setEvents(eventData);
       } catch (error) {
-        console.error('Error fetching group:', error);
-        // Handle error state or redirection
+        console.error('Error fetching data:', error);
       }
     };
 
@@ -36,7 +56,8 @@ const GroupDetails = () => {
       {group ? (
         <div>
           <h1>{group.name}</h1>
-          {/* Display other group information */}
+          <h2>Events Being Planned</h2>
+          <h2>Upcoming Events</h2>
         </div>
       ) : (
         <CircularProgress />
