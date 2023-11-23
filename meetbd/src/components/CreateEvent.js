@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box'; 
+import DatePicker from 'react-multi-date-picker';
 
 const CreateEvent = ({ groupId, onClose }) => {
   const [eventName, setEventName] = useState('');
   const [selectedDates, setSelectedDates] = useState([null, null]);
-
   const handleDateChange = (newDates) => {
     setSelectedDates(newDates);
   };
@@ -25,6 +25,11 @@ const CreateEvent = ({ groupId, onClose }) => {
         onChange={(e) => setEventName(e.target.value)}
         fullWidth
         margin="normal"
+      />
+      <DatePicker 
+        multiple
+        value={selectedDates} 
+        onChange={setSelectedDates}
       />
       <Box mt={2}>
         <Button variant="contained" color="primary" onClick={handleSubmit}>
