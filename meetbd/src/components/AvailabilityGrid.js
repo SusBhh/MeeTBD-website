@@ -33,14 +33,33 @@ const AvailabilityGrid = (selectedDate) => {
         console.log(cells);
     }
 
-    const handleClick = () => {
+    const handleReset = () => {
         const cells = Array.from({ length: 28 }, () => Array(7).fill(false));
         changeCurr({ cells });
     };
 
+    const handleSubmit = () => {
+        
+    };
+
+    const tableDragSelectStyles = {
+        width: '80%', 
+        height: '300px',
+    };
+
+    const tableFormButtonStyles = {
+        margin: '10px',
+        display: 'flex',
+        justifyContent: 'center',
+    };
+
+    const buttonStyles = {
+        margin: '0 5px',
+    }
+    
     return (
         <div>
-            <TableDragSelect value={curr.cells} onChange={handleChange}>
+            <TableDragSelect value={curr.cells} onChange={handleChange} style={tableDragSelectStyles}>
                 <tr>
                     <td disabled />
                     <td disabled>Monday</td>
@@ -302,8 +321,10 @@ const AvailabilityGrid = (selectedDate) => {
                     <td className="sun" />
                 </tr>
             </TableDragSelect>
-            <button onClick={handleClick}>Reset</button>
-            {/* <button onClick={submit}>Submit</button> */}
+            <div className="table-form-buttons-container" style={tableFormButtonStyles}>
+                <button onClick={handleReset} style={buttonStyles}>Reset</button>
+                <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
+            </div>
         </div>
     );
 };
