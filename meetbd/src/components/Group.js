@@ -37,9 +37,16 @@ const Group = (props) => {
     alert("successfully copied join code!");
   };
 
+  const handleGroupClick = (event) => {
+    const target = event.target;
+    if (!target.closest('button')) {
+      window.location.href = `/groups/${group.id}`;
+    }
+  };
+
   return (
-    <Link to={`/groups/${group.id}`}>
-      <div className="group-around">
+      <div className="group-around" onClick={handleGroupClick}>
+        <Link to={`/groups/${group.id}`} onClick={(e) => e.preventDefault()}>
         <div className="group">
           <div className="text">
             <p>{group.name}</p>
@@ -70,8 +77,8 @@ const Group = (props) => {
             </Tooltip>
           )}
         </div>
+        </Link>
       </div>
-    </Link>
   );
 };
 
