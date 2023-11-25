@@ -3,9 +3,11 @@ import { useState, useEffect } from "react";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "../components/Hours";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const AvailabilityGrid = (selectedDate) => {
     const [rows, setRows] = useState([new Date()]);
+    const [userId, setUserId] = React.useState(null);
 
     useEffect(() => {
         console.log("hi")
@@ -25,8 +27,35 @@ const AvailabilityGrid = (selectedDate) => {
     });
 
     const [curr, changeCurr] = useState({
-        cells: Array.from({ length: 28 }, () => Array(7).fill(false)),
+        cells: Array.from({ length: 26}, () => Array(8).fill(false)),
     });
+
+    const supabase = useSupabaseClient();
+    const getUserId = async () => {
+        const {
+        data: { user },
+        } = await supabase.auth.getUser();
+        setUserId(user.id);
+    };
+    getUserId();
+    
+    const trimmedCells = curr.cells.slice(1).map(row => row.slice(1));
+    async function insertBooleanArray() {
+        // Insert the 2D boolean array into the Supabase table
+        const { data, error } = await supabase
+        .from('availability_grid')
+        .upsert([{
+            id: userId,
+            availability_grid: trimmedCells
+        }]);
+      
+        if (error) {
+          console.error('Error inserting boolean array:', error.message);
+        } else {
+          console.log('Boolean array inserted successfully:', data);
+        }
+    }
+    insertBooleanArray();
 
     function handleChange(cells) {
         changeCurr({ cells });
