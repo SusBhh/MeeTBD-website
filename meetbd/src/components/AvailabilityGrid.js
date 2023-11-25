@@ -30,6 +30,30 @@ const AvailabilityGrid = (selectedDate) => {
         cells: Array.from({ length: 26}, () => Array(8).fill(false)),
     });
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('availability_grid')
+                    .select('availability_grid');
+
+                if (error) {
+                    console.error('Error fetching data from Supabase:', error);
+                } else {
+                    if (data.length > 0 && data[0].availability_grid) {
+                        changeCurr({
+                            cells: data[0].availability_grid,
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching data from Supabase:', error.message);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     const supabase = useSupabaseClient();
     const getUserId = async () => {
         const {
@@ -39,14 +63,14 @@ const AvailabilityGrid = (selectedDate) => {
     };
     getUserId();
     
-    const trimmedCells = curr.cells.slice(1).map(row => row.slice(1));
     async function insertBooleanArray() {
         // Insert the 2D boolean array into the Supabase table
         const { data, error } = await supabase
         .from('availability_grid')
         .upsert([{
-            id: userId,
-            availability_grid: trimmedCells
+            id: 1,
+            availability_grid: curr.cells,
+            user_id: userId
         }]);
       
         if (error) {
