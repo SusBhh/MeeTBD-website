@@ -3,9 +3,11 @@ import { useState, useEffect } from "react";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "../components/Hours";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const AvailabilityGrid = (selectedDate) => {
     const [rows, setRows] = useState([new Date()]);
+    const [userId, setUserId] = React.useState(null);
 
     useEffect(() => {
         console.log("hi")
@@ -25,8 +27,59 @@ const AvailabilityGrid = (selectedDate) => {
     });
 
     const [curr, changeCurr] = useState({
-        cells: Array.from({ length: 28 }, () => Array(7).fill(false)),
+        cells: Array.from({ length: 26}, () => Array(8).fill(false)),
     });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('availability_grid')
+                    .select('availability_grid');
+
+                if (error) {
+                    console.error('Error fetching data from Supabase:', error);
+                } else {
+                    if (data.length > 0 && data[0].availability_grid) {
+                        changeCurr({
+                            cells: data[0].availability_grid,
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching data from Supabase:', error.message);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const supabase = useSupabaseClient();
+    const getUserId = async () => {
+        const {
+        data: { user },
+        } = await supabase.auth.getUser();
+        setUserId(user.id);
+    };
+    getUserId();
+    
+    async function insertBooleanArray() {
+        // Insert the 2D boolean array into the Supabase table
+        const { data, error } = await supabase
+        .from('availability_grid')
+        .upsert([{
+            id: 1,
+            availability_grid: curr.cells,
+            user_id: userId
+        }]);
+      
+        if (error) {
+          console.error('Error inserting boolean array:', error.message);
+        } else {
+          console.log('Boolean array inserted successfully:', data);
+        }
+    }
+    insertBooleanArray();
 
     function handleChange(cells) {
         changeCurr({ cells });
