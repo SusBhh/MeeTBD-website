@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 export default class TableDragSelect extends React.Component {
     static propTypes = {
         value: (props) => {
+            console.log(props.value)
             const error = new Error(
                 "Invalid prop `value` supplied to `TableDragSelect`. Validation failed."
             );

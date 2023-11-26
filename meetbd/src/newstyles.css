@@ -87,89 +87,58 @@ input {
 }
 
     /* Table cells */
-    .table-drag-select td {
-        height: 1em;
-        text-align: center;
-        /* Cut off long strings of text with ... */
-        text-overflow: ellipsis;
-        overflow: hidden;
-        /* Make transparent gaps between cells. Better than relying on margin
-     * because clicking an element's margin doesn't trigger events */
-        /* border: 0.7rem solid transparent; */
-        /* border-radius: 5px; */
-        background-clip: padding-box;
-        /* Make cells reasonable size */
-        line-height: 2rem;
-        /* Shows more text when text too big to fit into cell */
-        padding-left: 0rem;
-        padding-right: 0rem;
-    }
+.table-drag-select td {
+    height: 1em;
+    text-align: center;
+    /* Cut off long strings of text with ... */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /* Make transparent gaps between cells. Better than relying on margin
+    * because clicking an element's margin doesn't trigger events */
+    /* border: 0.7rem solid transparent; */
+    /* border-radius: 5px; */
+    background-clip: padding-box;
+    /* Make cells reasonable size */
+    line-height: 1rem;
+    /* Shows more text when text too big to fit into cell */
+    padding-left: 0rem;
+    padding-right: 0rem;
+}
 
-        /* Cells that can be interacted with */
-        .table-drag-select td.cell-enabled {
-            background-color: #ddd;
-            border-top: 0.1px solid;
-            border-bottom: 0.1px solid;
-            /* Make the cursor a + symbol */
-            /* cursor: cell; */
-        }
 
-        /* Cells that cannot be interacted with */
-        .table-drag-select td.cell-disabled {
-            /* Put yer css here */
-            background-color: rgb(255, 255, 255);
-        }
+/* Cells that can be interacted with */
+.table-drag-select td.cell-enabled {
+    background-color: #ddd;
+    border-top: 0.1px solid;
+    border-bottom: 0.1px solid;
+    /* Make the cursor a + symbol */
+    /* cursor: cell; */
+}
 
-        /* Cells that have been selected */
-        .table-drag-select td.cell-selected {
-            background-color: #ff69b4;
-            border-top: 0.1px solid;
-            border-bottom: 0.1px solid;
-        }
+/* Cells that cannot be interacted with */
+.table-drag-select td.cell-disabled {
+    /* Put yer css here */
+    background-color: rgb(255, 255, 255);
+}
 
-        /* Cells that are in the process of being selected */
-        .table-drag-select td.cell-being-selected {
-            /* This is the blue color y//ou see when you select text with the cursor */
-            background-color: #FFB4D9;
-            border-top: 0.1px solid;
-            border-bottom: 0.1px solid;
-        }
+/* Cells that have been selected */
+.table-drag-select td.cell-selected {
+    background-color: #ff69b4;
+    border-top: 0.1px solid;
+    border-bottom: 0.1px solid;
+}
 
-        .table-drag-select td.mon {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
-
-        .table-drag-select td.tue {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
-
-        .table-drag-select td.wed {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
-
-        .table-drag-select td.thu {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
-
-        .table-drag-select td.fri {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
-
-        .table-drag-select td.sat {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
-
-        .table-drag-select td.sun {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
-    
+/* Cells that are in the process of being selected */
+.table-drag-select td.cell-being-selected {
+    /* This is the blue color y//ou see when you select text with the cursor */
+    background-color: #FFB4D9;
+    border-top: 0.1px solid;
+    border-bottom: 0.1px solid;
+}
+.table-drag-select td.date {
+    border-left: 0.1px solid grey;
+    border-right: 0.2px solid grey;
+}
 .bottom {
     bottom: 10px;
     position: fixed;
@@ -213,6 +182,27 @@ input {
     padding-right: 10px;
     text-align: center;
     width: 80%;
+}
+
+.event {
+    background-color: #689f38;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    max-width: 400px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    width: 80%;
+}
+
+.event .text {
+    width: 100%;
+}
+
+.event p {
+    color: #FFFF;
 }
 
 .group .text {

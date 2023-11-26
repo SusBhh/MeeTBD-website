@@ -5,7 +5,7 @@ import "../newstyles.css";
 import hours from "../components/Hours";
 
 const AvailabilityGrid = (selectedDate) => {
-    const [rows, setRows] = useState([new Date()]);
+    const [dateRange, setDateRange] = useState([new Date()]);
 
     useEffect(() => {
         console.log("hi")
@@ -20,9 +20,9 @@ const AvailabilityGrid = (selectedDate) => {
             array.push(new Date(currentDate));
             currentDate.setDate(currentDate.getDate() + 1);
         }
-        //setRows(array)
+        setDateRange(array)
         console.log(array)
-    });
+    }, [selectedDate.selectedDate.startDate, selectedDate.selectedDate.endDate]);
 
     const [curr, changeCurr] = useState({
         cells: Array.from({ length: 28 }, () => Array(7).fill(false)),
