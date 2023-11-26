@@ -6,14 +6,28 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { styled } from '@mui/system';
+import Box from '@mui/material/Box';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { Portal } from '@mui/base/Portal';
+import ReadEvents from './ReadEvents'
 
 const GroupDetails = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { groupId } = useParams();
+  const [anchor, setAnchor] = React.useState(null);
   const [group, setGroup] = useState(null);
   const [events, setEvents] = useState(null);
   const supabase = useSupabaseClient();
   const [userId, setUserId] = React.useState(null);
-  const [showCreateEvent, setShowCreateEvent] = useState(false);
+    const handleClick = (event) => {
+        setAnchor(anchor ? null : event.currentTarget);
+    };
+
+    const handleClickAway = () => {
+        setAnchor(false);
+    };
 
   const getUserId = async () => {
     const {
@@ -22,10 +36,6 @@ const GroupDetails = () => {
     setUserId(user.id);
   };
   getUserId();
-
-  async function handleCreateEvent() {
-    setShowCreateEvent(true);
-  }
 
   useEffect(() => {
     const fetchGroup = async () => {
@@ -59,6 +69,39 @@ const GroupDetails = () => {
 
     fetchGroup();
   }, [groupId, supabase]);
+
+    const open = Boolean(anchor);
+    const id = open ? 'simple-popup' : undefined;
+    const grey = {
+        50: '#F3F6F9',
+        100: '#E5EAF2',
+        200: '#DAE2ED',
+        300: '#C7D0DD',
+        400: '#B0B8C4',
+        500: '#9DA8B7',
+        600: '#6B7A90',
+        700: '#434D5B',
+        800: '#303740',
+        900: '#1C2025',
+    };
+    const PopupBody = styled('div')(
+        ({ theme }) => `
+        width: 500px;
+        padding: 12px 16px;
+        margin: 8px;
+        border-radius: 8px;
+        border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+        background-color: ${theme.palette.mode === 'dark' ? grey[900] : '#FFF'};
+        box-shadow: ${theme.palette.mode === 'dark'
+                ? `0px 4px 8px rgb(0 0 0 / 0.7)`
+                : `0px 4px 8px rgb(0 0 0 / 0.1)`
+            };
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-weight: 500;
+        font-size: 0.875rem;
+        z-index: 1;
+        `,
+    );
   
   return (
     <div>
@@ -66,29 +109,32 @@ const GroupDetails = () => {
         <div>
           <h1>{group.name}</h1>
           <Grid container justifyContent="center" spacing={1}>
-            <Button onClick={handleCreateEvent} size="small" variant="outlined" sx={{ ml: 1 }} color="secondary" >
-              Schedule Event
-            </Button>
+       {/*     <ClickAwayListener onClickAway={handleClickAway}>*/}
+                <div>
+                    <Button aria-describedby={id} type="button" onClick={handleClick} size="small" variant="outlined" color="secondary" >
+                        Schedule Event
+                    </Button>
+                    {open ? (
+                        <Portal>
+                            <BasePopup id={id} open={open} anchor={anchor}>
+                                <PopupBody>
+                                    <CreateEvent groupId={groupId} onClose={handleClickAway} />
+                                </PopupBody>
+                            </BasePopup>
+                        </Portal>
+                    ) : null}
+                </div>
+{/*            </ClickAwayListener>*/}
           </Grid>
-          {showCreateEvent && (
-            <CreateEvent
-              groupId={groupId}
-              onClose={() => setShowCreateEvent(false)} // Callback to hide the CreateEvent component
-            />
-            )}  
-          <h2>Events</h2>
-          {events && events.length > 0 ? (
-          <div>
-            <h3>Existing Events:</h3>
-            <ul>
-              {events.map((event) => (
-                <li key={event.id}>{event.name}</li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          <p>No events found.</p>
-        )}
+            <h2>Scheduled Events:</h2>
+            <h3>Pending Events:</h3>
+            {isLoading ? (
+                <CircularProgress />
+            ) : (
+                <div>
+                    <ReadEvents groupId={ groupId } />
+                </div>
+            )}
         </div>
       ) : (
         <CircularProgress />
