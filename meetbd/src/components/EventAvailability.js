@@ -22,33 +22,28 @@ const EventAvailability = (props) => {
         setUserId(user.id);
     };
     getUserId();
-
-
     useEffect(() => {
         console.log("useEffect")
-        if (!readAvailability()) {
-            console.log("hi")
-            setDates(event.possible_dates);
-            const hourArray = [];
-            const startHour = new Date(`2000-01-01T${event.start_time}`);
-            const endHour = new Date(`2000-01-01T${event.end_time}`);
+        console.log("hi")
+        setDates(event.possible_dates);
+        const hourArray = [];
+        const startHour = new Date(`2000-01-01T${event.start_time}`);
+        const endHour = new Date(`2000-01-01T${event.end_time}`);
 
-            for (let currentTime = startHour; currentTime <= endHour; currentTime.setHours(currentTime.getHours() + 1)) {
-                const formattedHour = currentTime.toLocaleString('en-US', { hour: 'numeric', hour12: true });
-                hourArray.push(formattedHour);
-            }
-            console.log(hourArray)
-            setHours(hourArray)
-            //console.log(dates.length)
-            const cells = Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
-            console.log(cells)
-            changeCurr({ cells })
+        for (let currentTime = startHour; currentTime <= endHour; currentTime.setHours(currentTime.getHours() + 1)) {
+            const formattedHour = currentTime.toLocaleString('en-US', { hour: 'numeric', hour12: true });
+            hourArray.push(formattedHour);
         }
-       
+        console.log(hourArray)
+        setHours(hourArray)
+        //console.log(dates.length)
+        const cells = Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
+        console.log(cells)
+        changeCurr({ cells })
+        readAvailability()
     }, [event.possible_dates, event.start_time, event.end_time]);
 
     async function readAvailability() {
-        console.log("readAvailability")
         setIsLoading(true);
         const { data: { user }, } = await supabase.auth.getUser();
         const { data: eventData, error: eventError } = await supabase
@@ -63,17 +58,16 @@ const EventAvailability = (props) => {
         }
         console.log("next step")
         if (eventData) {
+            if(eventData.length == 0) {
+                return;
+            }
             console.log(eventData[0].availability)
             const cells = eventData[0].availability
             changeCurr({ cells })
             setIsLoading(false);
-            console.log("hi")
-            return true;
         }
         else {
-            console.log("no set availability")
             setIsLoading(false);
-            return false;
         }
     }
 
@@ -89,18 +83,37 @@ const EventAvailability = (props) => {
 
     const handleSubmit = async () => {
         try {
-            const { data, error } = await supabase.from("event_availability").insert({
-                event_id: event.id,
-                user_id: userId,
-                availability: curr.cells,
-            });
-            if (error) {
-                throw error;
+            const { data: { user }, } = await supabase.auth.getUser();
+            const { data: eventData, error: eventError } = await supabase
+            .from('event_availability')
+            .select('availability')
+            .eq('event_id', event.id)
+            .eq("user_id", [user?.id]);
+            if (eventError) {
+                console.log(eventError)
+                throw eventError;
             }
-
-            // If the operation was successful, close the CreateEvent component
-            alert('Updated event availability');
-
+            if (eventData && eventData.length != 0) {
+                const { updateError } = await supabase
+                    .from("event_availability")
+                    .update({ availability: curr.cells })
+                    .eq("event_id", event.id)
+                    .eq("user_id",user?.id);
+                if (updateError) throw updateError;
+                alert('Updated event availability');
+            }
+            else {
+                const { data, error } = await supabase.from("event_availability").insert({
+                    event_id: event.id,
+                    user_id: userId,
+                    availability: curr.cells,
+                });
+                if (error) {
+                    throw error;
+                }
+                // If the operation was successful, close the CreateEvent component
+                alert('Inserted new event availability');
+            }
         }
         catch (error) {
             console.error('Error creating event:', error);
