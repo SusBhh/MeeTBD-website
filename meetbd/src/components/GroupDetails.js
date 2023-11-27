@@ -184,35 +184,35 @@ const GroupDetails = () => {
     <div>
       {group ? (
         <div>
-          <div>
-            {isEditing ? (
-              <form onSubmit={handleSubmit}>
-                <input
-                  id="groupNameInput"
-                  className="groupName"
-                  type="text"
-                  value={groupName}
-                  onChange={handleChange}
-                />
-              </form>
-            ) : (
-              <h1 className="groupName">{groupName}</h1>
-            )}
-            {isOwner && (
-              <Tooltip title="edit group name" placement="top" arrow>
-                <IconButton
-                  id="groupNameEdit"
-                  onClick={handleEdit}
-                  disableRipple
-                >
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-          </div>
           <Container>
             <Grid container spacing={5}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12}>
+                {isEditing ? (
+                  <form onSubmit={handleSubmit}>
+                    <input
+                      id="groupNameInput"
+                      className="groupName"
+                      type="text"
+                      value={groupName}
+                      onChange={handleChange}
+                    />
+                  </form>
+                ) : (
+                  <h1 className="groupName">{groupName}</h1>
+                )}
+                {isOwner && (
+                  <Tooltip title="edit group name" placement="top" arrow>
+                    <IconButton
+                      id="groupNameEdit"
+                      onClick={handleEdit}
+                      disableRipple
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Grid>
+              <Grid item xs={12} md={6} style={{paddingTop: 0 + 'px'}}>
                 <h2>Group Members</h2>
                 {members.map((member, i) => (
                   <GroupMember
@@ -224,7 +224,7 @@ const GroupDetails = () => {
                   />
                 ))}
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={6} style={{paddingTop: 0 + 'px'}}>
                 <h2>Scheduled Events:</h2>
                 <Grid container justifyContent="center" spacing={1}>
                   <div>
