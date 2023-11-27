@@ -2,7 +2,9 @@ import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-
+import Container from "@mui/material/Container";
+import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
 import ReadGroups from "../components/ReadGroups";
 
 import "../newstyles.css";
@@ -132,59 +134,63 @@ const GroupsPage = () => {
   }
 
   return (
-    <div>
-      <h1>Groups Page</h1>
-      {isLoading ? (
-        <CircularProgress />
-      ) : (
-        <div>
-          <ReadGroups />
-        </div>
-      )}
-      <div className="bottom">
-        <div className="add-group">
-          <h2>Join an Existing Group by Code</h2>
-          <form onSubmit={handleJoinGroup}>
-            <label>
-              <input
-                type="text"
-                name="joinCode"
-                onChange={(e) => setJoinCode(e.target.value)}
-              />
-            </label>
-            {joinCode.length == 0 ? (
-              <Button type="submit" variant="contained" size="small" disabled>
-                Join
-              </Button>
-            ) : (
-              <Button type="submit" variant="contained" size="small">
-                Join
-              </Button>
-            )}
-          </form>
-          <h2>Create a New Group</h2>
-          <form onSubmit={handleCreateGroup}>
-            <label>
-              <input
-                type="text"
-                value={groupName}
-                name="groupName"
-                onChange={(e) => setGroupName(e.target.value)}
-              />
-            </label>
-            {groupName.length == 0 ? (
-              <Button type="submit" variant="contained" size="small" disabled>
-                Create
-              </Button>
-            ) : (
-              <Button type="submit" variant="contained" size="small">
-                Create
-              </Button>
-            )}
-          </form>
-        </div>
-      </div>
-    </div>
+    <Container>
+        <Grid container spacing={ 5 }>
+            <Grid item xs={ 12 } md={ 8 }>
+                <h1>Groups Page</h1>
+                {isLoading ? (
+                <CircularProgress />
+                ) : (
+                <div>
+                    <ReadGroups />
+                </div>
+                )}
+            </Grid>
+            <Grid item xs={12} md={4} sx={{ mt: 5 }}>
+                <div className="add-group">
+                    <h2>Join an Existing Group by Code</h2>
+                    <form onSubmit={handleJoinGroup}>
+                        <label>
+                            <input
+                                type="text"
+                                name="joinCode"
+                                onChange={(e) => setJoinCode(e.target.value)}
+                            />
+                        </label>
+                        {joinCode.length == 0 ? (
+                            <Button type="submit" variant="contained" size="small" disabled>
+                                Join
+                            </Button>
+                        ) : (
+                            <Button type="submit" variant="contained" size="small">
+                                Join
+                            </Button>
+                        )}
+                    </form>
+                    <h2>Create a New Group</h2>
+                    <form onSubmit={handleCreateGroup}>
+                        <label>
+                            <input
+                                type="text"
+                                value={groupName}
+                                name="groupName"
+                                onChange={(e) => setGroupName(e.target.value)}
+                            />
+                        </label>
+                        {groupName.length == 0 ? (
+                            <Button type="submit" variant="contained" size="small" disabled>
+                                Create
+                            </Button>
+                        ) : (
+                            <Button type="submit" variant="contained" size="small">
+                                Create
+                            </Button>
+                        )}
+                    </form>
+                </div>
+            </Grid>
+        </Grid>
+    </Container>
   );
 };
 

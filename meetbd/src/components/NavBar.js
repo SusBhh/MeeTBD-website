@@ -17,8 +17,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Logout from '@mui/icons-material/Logout';
 import google_icon from '../assets/google_icon.png';
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
-const pages = ['Groups', 'Tasks', 'To-Do List', 'About'];
-const routes = ['/groups', '/tasks', '/todo', '/about'];
+const pages = ['Groups', 'To-Do List', 'About'];
+const routes = ['/groups', '/todo', '/about'];
 
 function NavBar() {
     const session = useSession(); // Contains Tokens
@@ -78,7 +78,7 @@ function NavBar() {
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
-                            color: 'inherit',
+                            color: 'white',
                             textDecoration: 'none',
                         }}
                     >
@@ -114,11 +114,15 @@ function NavBar() {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
+                            {pages.map((page, index) => (
+                                <Link key={page} to={routes[index]} style={{ textDecoration: 'none' }}>
+                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                        <Typography sx={{color:'black'}}  textAlign="center">{page}</Typography>
+                                    </MenuItem>
+                                </Link>
+
                             ))}
+
                         </Menu>
                     </Box>
                     <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -126,7 +130,7 @@ function NavBar() {
                         variant="h5"
                         noWrap
                         component="a"
-                        href="#app-bar-with-responsive-menu"
+                        href="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
@@ -134,7 +138,7 @@ function NavBar() {
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
-                            color: 'inherit',
+                            color: 'white',
                             textDecoration: 'none',
                         }}
                     >

@@ -140,9 +140,7 @@ input {
     border-right: 0.2px solid grey;
 }
 .bottom {
-    bottom: 10px;
     position: fixed;
-    width: 100%;
 }
 .add-group {
     background-color: #F4F4F4;
