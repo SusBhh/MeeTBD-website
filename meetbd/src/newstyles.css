@@ -210,3 +210,24 @@ input {
 .group p {
     color: #FFFF;
 }
+
+#groupNameInput {
+    color: #313638;
+    /* Bold headers are unnecessary */
+    font-weight: normal;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    width: 60%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.groupName {
+    padding: 0.2em;
+}
+
+#groupNameEdit {
+    top: -50px;
+}
