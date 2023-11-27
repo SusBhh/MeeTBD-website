@@ -195,6 +195,19 @@ input {
     width: 80%;
 }
 
+.groupMember {
+    background-color: #a87bba;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    max-width: 400px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    width: 80%;
+}
+
 .event .text {
     width: 100%;
 }

@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import CreateEvent from "./CreateEvent";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import CircularProgress from "@mui/material/CircularProgress";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
+
+import {
+  CircularProgress,
+  Container,
+  Button,
+  Grid,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { styled } from "@mui/system";
-import Box from "@mui/material/Box";
-import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import { Portal } from "@mui/base/Portal";
 import EditIcon from "@mui/icons-material/Edit";
-import { IconButton, Tooltip } from "@mui/material";
 
+import CreateEvent from "./CreateEvent";
+import GroupMember from "./GroupMember";
 import ReadEvents from "./ReadEvents";
 
 const GroupDetails = () => {
@@ -66,51 +69,77 @@ const GroupDetails = () => {
     setIsEditing(false);
   };
 
+  async function handleDeleteMember(memberId) {
+    setIsLoading(true);
+
+    let members = group.members;
+    const index = members.indexOf(memberId);
+    if (index < 0) {
+      // should be unreachable
+      alert("Was not able to remove member from group");
+      return;
+    }
+    members.splice(index, 1);
+
+    // update curr group without additional member
+    const { updateError } = await supabase
+      .from("groups")
+      .update({ members: members })
+      .eq("id", group.id);
+    if (updateError) throw updateError;
+
+    // update group information
+    fetchGroup();
+
+    setIsLoading(false);
+  }
+
+  const fetchGroup = async () => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUserId(user.id);
+
+      // get group data
+      const { data: groupData, groupError } = await supabase
+        .from("groups")
+        .select("*")
+        .eq("id", groupId)
+        .single();
+      if (groupError) {
+        throw groupError;
+      }
+      setGroup(groupData);
+      setGroupName(groupData.name);
+      setIsOwner(user.id === groupData.owner);
+
+      // get events data
+      const { data: eventData, error: eventError } = await supabase
+        .from("events")
+        .select("*")
+        .eq("group_id", groupId);
+      if (eventError) {
+        throw eventError;
+      }
+      setEvents(eventData);
+
+      // get member data
+      const { data: memberData, error: memberError } = await supabase
+        .from("profile")
+        .select("*")
+        .in("id", [groupData.members]);
+      if (memberError) {
+        throw memberError;
+      }
+      setMembers(memberData);
+    } catch (e) {
+      console.error("Error fetching data:", e);
+    }
+  };
+
   useEffect(() => {
     setIsLoading(true);
-    const fetchGroup = async () => {
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-
-        // get group data
-        const { data: groupData, groupError } = await supabase
-          .from("groups")
-          .select("*")
-          .eq("id", groupId)
-          .single();
-        if (groupError) {
-          throw groupError;
-        }
-        setGroup(groupData);
-        setGroupName(groupData.name);
-        setIsOwner(user.id === groupData.owner);
-
-        // get events data
-        const { data: eventData, error: eventError } = await supabase
-          .from("events")
-          .select("*")
-          .eq("group_id", groupId);
-        if (eventError) {
-          throw eventError;
-        }
-        setEvents(eventData);
-
-        // get member data
-        const { data: memberData, error: memberError } = await supabase
-          .from("profile")
-          .select("*")
-          .in("id", [groupData.members]);
-        if (memberError) {
-          throw memberError;
-        }
-        setMembers(memberData);
-      } catch (e) {
-        console.error("Error fetching data:", e);
-      }
-    };
-
     fetchGroup();
     setIsLoading(false);
   }, [groupId, supabase]);
@@ -160,14 +189,14 @@ const GroupDetails = () => {
               <form onSubmit={handleSubmit}>
                 <input
                   id="groupNameInput"
-                  class="groupName"
+                  className="groupName"
                   type="text"
                   value={groupName}
                   onChange={handleChange}
                 />
               </form>
             ) : (
-              <h1 class="groupName">{groupName}</h1>
+              <h1 className="groupName">{groupName}</h1>
             )}
             {isOwner && (
               <Tooltip title="edit group name" placement="top" arrow>
@@ -181,49 +210,60 @@ const GroupDetails = () => {
               </Tooltip>
             )}
           </div>
-          <h2>Group Members</h2>
-          {members.map((member, i) => (
-            <div className="groupMember">
-              <p>{member.display_name}</p>
-            </div>
-          ))}
-          <Grid container justifyContent="center" spacing={1}>
-            {/*     <ClickAwayListener onClickAway={handleClickAway}>*/}
-            <div>
-              <Button
-                aria-describedby={id}
-                type="button"
-                onClick={handleClick}
-                size="small"
-                variant="outlined"
-                color="secondary"
-              >
-                Schedule Event
-              </Button>
-              {open ? (
-                <Portal>
-                  <BasePopup id={id} open={open} anchor={anchor}>
-                    <PopupBody>
-                      <CreateEvent
-                        groupId={groupId}
-                        onClose={handleClickAway}
-                      />
-                    </PopupBody>
-                  </BasePopup>
-                </Portal>
-              ) : null}
-            </div>
-            {/*            </ClickAwayListener>*/}
-          </Grid>
-          <h2>Scheduled Events:</h2>
-          <h3>Pending Events:</h3>
-          {isLoading ? (
-            <CircularProgress />
-          ) : (
-            <div>
-              <ReadEvents groupId={groupId} />
-            </div>
-          )}
+          <Container>
+            <Grid container spacing={5}>
+              <Grid item xs={12} md={6}>
+                <h2>Group Members</h2>
+                {members.map((member, i) => (
+                  <GroupMember
+                    key={member.id}
+                    handleDelete={handleDeleteMember}
+                    member={member}
+                    isOwner={isOwner}
+                    isSelf={member.id === userId}
+                  />
+                ))}
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <h2>Scheduled Events:</h2>
+                <Grid container justifyContent="center" spacing={1}>
+                  <div>
+                    <Button
+                      aria-describedby={id}
+                      type="button"
+                      onClick={handleClick}
+                      size="small"
+                      variant="outlined"
+                      color="secondary"
+                    >
+                      Schedule Event
+                    </Button>
+                    {open ? (
+                      <Portal>
+                        <BasePopup id={id} open={open} anchor={anchor}>
+                          <PopupBody>
+                            <CreateEvent
+                              groupId={groupId}
+                              onClose={handleClickAway}
+                            />
+                          </PopupBody>
+                        </BasePopup>
+                      </Portal>
+                    ) : null}
+                  </div>
+                </Grid>
+
+                <h3>Pending Events:</h3>
+                {isLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <div>
+                    <ReadEvents groupId={groupId} />
+                  </div>
+                )}
+              </Grid>
+            </Grid>
+          </Container>
         </div>
       ) : (
         <CircularProgress />
