@@ -48,9 +48,6 @@ const GroupDetails = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: edit group name
-    console.log(group);
-    console.log(groupName);
 
     // update groupName in db
     const { error } = await supabase
@@ -63,7 +60,7 @@ const GroupDetails = () => {
     let data = group;
     data.name = groupName;
     setGroup(data);
-    
+
     setIsEditing(false);
   };
 
