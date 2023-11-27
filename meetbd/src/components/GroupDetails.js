@@ -22,6 +22,8 @@ const GroupDetails = () => {
   const [anchor, setAnchor] = React.useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
+  const [userId, setUserId] = React.useState(null);
+  const [isOwner, setIsOwner] = React.useState(false);
   const [group, setGroup] = useState(null);
   const [groupName, setGroupName] = useState(null);
   const [events, setEvents] = useState(null);
@@ -68,6 +70,10 @@ const GroupDetails = () => {
     setIsLoading(true);
     const fetchGroup = async () => {
       try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
         // get group data
         const { data: groupData, groupError } = await supabase
           .from("groups")
@@ -79,6 +85,7 @@ const GroupDetails = () => {
         }
         setGroup(groupData);
         setGroupName(groupData.name);
+        setIsOwner(user.id === groupData.owner);
 
         // get events data
         const { data: eventData, error: eventError } = await supabase
@@ -162,11 +169,17 @@ const GroupDetails = () => {
             ) : (
               <h1 class="groupName">{groupName}</h1>
             )}
-            <Tooltip title="edit group name" placement="top" arrow>
-              <IconButton id="groupNameEdit" onClick={handleEdit} disableRipple>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
+            {isOwner && (
+              <Tooltip title="edit group name" placement="top" arrow>
+                <IconButton
+                  id="groupNameEdit"
+                  onClick={handleEdit}
+                  disableRipple
+                >
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            )}
           </div>
           <h2>Group Members</h2>
           {members.map((member, i) => (
