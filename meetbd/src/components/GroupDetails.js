@@ -38,7 +38,8 @@ const GroupDetails = () => {
   };
 
   const handleEdit = async () => {
-    setIsEditing(true);
+    setGroupName(group.name);
+    setIsEditing(!isEditing);
   };
 
   const handleChange = (event) => {
@@ -51,11 +52,18 @@ const GroupDetails = () => {
     console.log(group);
     console.log(groupName);
 
+    // update groupName in db
     const { error } = await supabase
       .from("groups")
       .update({ name: groupName })
       .eq("id", group.id);
+    if (error) throw error;
 
+    // update group's groupName
+    let data = group;
+    data.name = groupName;
+    setGroup(data);
+    
     setIsEditing(false);
   };
 
@@ -146,22 +154,23 @@ const GroupDetails = () => {
           <div>
             {isEditing ? (
               <form onSubmit={handleSubmit}>
-                <input type="text" value={groupName} onChange={handleChange} />
+                <input
+                  id="groupNameInput"
+                  class="groupName"
+                  type="text"
+                  value={groupName}
+                  onChange={handleChange}
+                />
               </form>
             ) : (
-              <h1>{groupName}</h1>
+              <h1 class="groupName">{groupName}</h1>
             )}
-          </div>
-
-          <div>
-            {/* <h1>{group.name}</h1> */}
             <Tooltip title="edit group name" placement="top" arrow>
-              <IconButton onClick={handleEdit} disableRipple>
+              <IconButton id="groupNameEdit" onClick={handleEdit} disableRipple>
                 <EditIcon />
               </IconButton>
             </Tooltip>
           </div>
-
           <h2>Group Members</h2>
           {members.map((member, i) => (
             <div className="groupMember">
