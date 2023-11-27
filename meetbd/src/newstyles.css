@@ -222,6 +222,7 @@ input {
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     width: 60%;
+    max-width: 400px;
     text-align: center;
 }
 
@@ -230,7 +231,5 @@ input {
 }
 
 #groupNameEdit {
-    position: fixed;
-    right: 0px;
-    top: 60px;
+    top: -50px;
 }
