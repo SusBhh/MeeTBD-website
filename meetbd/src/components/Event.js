@@ -16,6 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import EventAvailability from "./EventAvailability";
+import GroupAvailability from "./GroupAvailability"
 
 const Event = (props) => {
     const [anchor, setAnchor] = React.useState(null);
@@ -105,7 +106,7 @@ const Event = (props) => {
                             </Grid>
                             <Grid item xs={ 6 }>
                                 <h2>Group's Availability</h2>
-                                <EventAvailability event={event} />
+                                <GroupAvailability event={event} />
                             </Grid>
                         </Grid>
                        
