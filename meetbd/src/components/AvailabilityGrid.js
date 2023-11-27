@@ -8,7 +8,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 const AvailabilityGrid = (selectedDate) => {
     const [rows, setRows] = useState([new Date()]);
     const [userId, setUserId] = React.useState(null);
-
+    const [dateRange, setDateRange] = React.useState([])
     useEffect(() => {
         console.log("hi")
         //console.log(JSON.stringify(selectedDate.selectedDate.startDate))
