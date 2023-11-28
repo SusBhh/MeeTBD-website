@@ -192,9 +192,7 @@ input {
     border-right: 0.2px solid grey;
 }
 .bottom {
-    bottom: 10px;
     position: fixed;
-    width: 100%;
 }
 .add-group {
     background-color: #F4F4F4;
@@ -249,6 +247,19 @@ input {
     width: 80%;
 }
 
+.groupMember {
+    background-color: #a87bba;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    max-width: 400px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    width: 80%;
+}
+
 .event .text {
     width: 100%;
 }
@@ -263,4 +274,25 @@ input {
 
 .group p {
     color: #FFFF;
+}
+
+#groupNameInput {
+    color: #313638;
+    /* Bold headers are unnecessary */
+    font-weight: normal;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    width: 60%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.groupName {
+    padding: 0.2em;
+}
+
+#groupNameEdit {
+    top: -50px;
 }

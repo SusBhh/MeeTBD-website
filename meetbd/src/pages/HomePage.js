@@ -1,8 +1,4 @@
-// HomePage.js
 import React, { useState, useEffect } from 'react';
-import AvailabilityGrid from '../components/AvailabilityGrid';
-import WeeklyDropdown from '../components/WeeklyDropdown';
-import CalendarSelect from '../components/CalendarSelect';
 import Container from "@mui/material/Container";
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -12,113 +8,89 @@ import { styled } from '@mui/system';
 import Box from '@mui/material/Box';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { Portal } from '@mui/base/Portal';
-import HourlyDropdown from '../components/HourlyDropdown';
+import Divider from '@mui/material/Divider';
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { PostgrestError } from '@supabase/supabase-js'
+
 const HomePage = () => {
-    const [anchor, setAnchor] = React.useState(null);
-    const [selectedDate, setSelectedDate] = useState({
-        startDate: new Date(),
-        endDate: new Date()
-    });
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [userId, setUserId] = React.useState(null);
+    const [myEvents, setMyEvents] = React.useState([]);
+    const supabase = useSupabaseClient();
 
-    const handleClick = (event) => {
-        setAnchor(anchor ? null : event.currentTarget);
-    };
+    async function loadMyEvents() {
+        const { data: { user }, } = await supabase.auth.getUser();
+        setIsLoading(true)
+        try {
+            let { data, error } = await supabase
+                .from("events")
+                .select(`
+                    name,
+                    groups( name)
 
-    const handleClickAway = () => {
-        setAnchor(false);
-    };                                                                                                                   
+                `)
+                .eq("event_owner", [user?.id]);
 
-    const handleDates = (newDate) => {
-        setSelectedDate(newDate);
-    };
+            if (error) throw error;
+            if (data) setMyEvents(data);
+            console.log(data)
+        } catch (error) {
+            alert(error.error_description || error.message);
+        }
 
-    function updateDate(start, end) {
-        console.log("Update date range inside of AvailabilityGrid");
-        setSelectedDate({
-            startDate: start,
-            endDate: end
-        });
-        
+        setIsLoading(false)
+
     }
-
-    const open = Boolean(anchor);
-    const id = open ? 'simple-popup' : undefined;
-    const grey = {
-        50: '#F3F6F9',
-        100: '#E5EAF2',
-        200: '#DAE2ED',
-        300: '#C7D0DD',
-        400: '#B0B8C4',
-        500: '#9DA8B7',
-        600: '#6B7A90',
-        700: '#434D5B',
-        800: '#303740',
-        900: '#1C2025',
-    };
-    const PopupBody = styled('div')(
-        ({ theme }) => `
-        width: max-content;
-        padding: 12px 16px;
-        margin: 8px;
-        border-radius: 8px;
-        border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-        background-color: ${theme.palette.mode === 'dark' ? grey[900] : '#FFF'};
-        box-shadow: ${theme.palette.mode === 'dark'
-                    ? `0px 4px 8px rgb(0 0 0 / 0.7)`
-                    : `0px 4px 8px rgb(0 0 0 / 0.1)`
-                };
-        font-family: 'IBM Plex Sans', sans-serif;
-        font-weight: 500;
-        font-size: 0.875rem;
-        z-index: 1;
-        `,
-    );
+    React.useEffect(() => {
+        loadMyEvents();
+    }, []);
 
     return (
         <Container>
-            <Grid container justifyContent="center" spacing={1}>
-                <Grid item xs={12}>
-                    <Typography variant="h4">
-                        My Availability
+            <Grid container spacing={5} sx={{ mt: 1 }}>
+                <Grid item xs={12} md={8}>
+                    <Typography variant="h6" gutterBottom>
+                        Scheduled Events
                     </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    {/* Empty grid item */}
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="h7">
-                        This Week's Availability:
+                    <Divider />
+                    <p>insert calender representation</p>
+                    <Typography variant="h6" gutterBottom>
+                        Pending Events
                     </Typography>
-                    <WeeklyDropdown updateDate={updateDate} />
-               {/*     <h2>Selected Date: {JSON.stringify(selectedDate.startDate)}</h2>*/}
+                    <p>Other people's events that I need to respond to with my availability</p>
+                    <Divider />
                 </Grid>
-                <Grid item xs={4} alignItems="left">
-                    <Button size="small" variant="outlined" sx={{ ml: 1 }} color="secondary" >
-                        Weekly Availability
-                    </Button>
-                    <ClickAwayListener onClickAway={handleClickAway}>
-                        <div>
-                            <Button aria-describedby={id} type="button" onClick={handleClick} size="small" variant="outlined" color="secondary" >
-                            Manually Select Dates
-                            </Button>
-                            {open ? (
-                                <Portal>
-                                    <BasePopup id={id} open={open} anchor={anchor}>
-                                        <PopupBody>
-                                            <CalendarSelect onChange={handleDates} />
-                                        </PopupBody>
-                                    </BasePopup>                                   
-                                </Portal>
-                            ) : null}
-                        </div>
-                    </ClickAwayListener>
-                </Grid>
-                <Grid item>
-                    <AvailabilityGrid selectedDate={selectedDate} />
+                <Grid item xs={12} md={4}>
+                    <Typography variant="h6" gutterBottom>
+                        Created Events
+                    </Typography>
+                    <p>Pending Events I Created: </p>
+                    <div>
+
+                        {myEvents.map((event) => (
+                            /*      <p>{JSON.stringify(event)}</p>*/
+                            <div>
+                                <Divider />
+                                <Typography variant="h9" sx={{ mr: 1 }} align="left" >
+                                    Group:
+                                </Typography>
+                                <Typography variant="h9" color='#BA7B92' sx={{ mr: 2 }} align="left">
+                                    {event.groups.name} 
+                                </Typography>
+                                <Typography variant="h9" sx={{ mr: 1 }} align="right">
+                                    Event:
+                                </Typography>
+                                <Typography variant="h9" color='#689f38' align="right">
+                                    {event.name}
+                                </Typography>
+                            </div>
+                            ))
+                        }
+                    </div>
+
                 </Grid>
             </Grid>
         </Container>
     );
 };
-
 export default HomePage;

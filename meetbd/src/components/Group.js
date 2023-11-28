@@ -1,7 +1,6 @@
 import React from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { IconButton, Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -25,10 +24,6 @@ const Group = (props) => {
   getUserId();
   const isOwner = userId === group.owner;
 
-  const handleEdit = async () => {
-    // TODO: edit group name
-  };
-
   const handleCopy = () => {
     // copies join code
     const copyText = group.id + group.name.toString().replace(/\s/g, "");
@@ -39,14 +34,14 @@ const Group = (props) => {
 
   const handleGroupClick = (event) => {
     const target = event.target;
-    if (!target.closest('button')) {
+    if (!target.closest("button")) {
       window.location.href = `/groups/${group.id}`;
     }
   };
 
   return (
-      <div className="group-around" onClick={handleGroupClick}>
-        <Link to={`/groups/${group.id}`} onClick={(e) => e.preventDefault()}>
+    <div className="group-around" onClick={handleGroupClick}>
+      <Link to={`/groups/${group.id}`} onClick={(e) => e.preventDefault()}>
         <div className="group">
           <div className="text">
             <p>{group.name}</p>
@@ -56,29 +51,30 @@ const Group = (props) => {
               <ContentCopyIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="edit group" placement="top" arrow>
-            <IconButton onClick={handleEdit} disableRipple>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
           {isOwner ? (
             // delete option if owner
             <Tooltip title="delete group" placement="top" arrow>
-              <IconButton onClick={() => props.handleDelete(group)} disableRipple>
+              <IconButton
+                onClick={() => props.handleDelete(group)}
+                disableRipple
+              >
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
           ) : (
             // leave option if not owner
             <Tooltip title="leave group" placement="top" arrow>
-              <IconButton onClick={() => props.handleLeave(group)} disableRipple>
+              <IconButton
+                onClick={() => props.handleLeave(group)}
+                disableRipple
+              >
                 <ExitToAppIcon />
               </IconButton>
             </Tooltip>
           )}
         </div>
-        </Link>
-      </div>
+      </Link>
+    </div>
   );
 };
 
