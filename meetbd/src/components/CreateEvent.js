@@ -62,16 +62,19 @@ const CreateEvent = ({ groupId, onClose }) => {
                 possible_dates: selectedDatesISO,
                 start_time: startTime,
                     end_time: endTime,
-                event_owner: userId
+                    event_owner: userId,
+                scheduled: false
                 },
             ]);
 
             if (error) {
-            throw error;
+                alert(error);
             }
-  
+
             // If the operation was successful, close the CreateEvent component
-            alert('Made event i think');
+            else {
+                alert('Made event');
+            }
             onClose();
         } catch (error) {
             console.error('Error creating event:', error);
