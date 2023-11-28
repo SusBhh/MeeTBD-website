@@ -115,7 +115,7 @@ const HomePage = () => {
                                     <Typography variant="h9" sx={{ mr: 1 }} align="right">
                                         Event:
                                     </Typography>
-                                    <Typography variant="h9" color='#BA7B92' sx={{ mr: 2 }} align="left">
+                                    <Typography variant="h9" color='#689f38' sx={{ mr: 2 }} align="left">
                                         {e.name}
                                     </Typography>
                                 </div>
