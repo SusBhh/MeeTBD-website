@@ -9,18 +9,19 @@ const WelcomePage = () => {
     return (
         <Box className={classes.heroBox}>
             <Grid container spacing={6} className={classes.gridContainer}>
-                <Grid item xs={12} md={7}>
-                    <Typography variant="h3" fontWeight={700} className={classes.title}>
+                <Grid item xs={12} md={7} >
+                    <Typography variant="h3" fontWeight={700} className={classes.title} align="right">
                         Welcome to MeeTBD
                     </Typography>
-                    <Typography variant="h6" className={classes.subtitle}>
+                    <Typography variant="h6" className={classes.subtitle} align="right">
                         Navigating the complexities of group scheduling and managing assignments just got easier! Our application combines the power of Google Calendar with innovative features to streamline your planning process. Say goodbye to the hassle of coordinating with multiple calendars and juggling assignment deadlines.
                     </Typography>
                     <Button
-                        variant="contained"
+                        variant="outlined"
                         color="primary"
-                        sx={{ width: '150px', fontSize: '16px' }}
+                        sx={{ width: '150px', fontSize: '16px', ml: 1}}
                         onClick={event => window.location.href = '/signup'}
+                    
                     >
                         Sign Up
                     </Button>

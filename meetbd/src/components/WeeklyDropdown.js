@@ -6,9 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import Menu from '@mui/material/Menu';
 
 const WeeklyDropdown = ({ updateDate }) => {
-
     const [formattedDate, setFormattedDate] = useState('')
-
     const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
@@ -73,7 +71,7 @@ const WeeklyDropdown = ({ updateDate }) => {
                     }}
                 >
                     {/* Example: Generate menu items for the next 10 weeks */}
-                    {Array.from({ length: 10 }, (_, index) => {
+                    {Array.from({ length: 5 }, (_, index) => {
                         const currentDate = new Date();
                         currentDate.setDate(currentDate.getDate() + index * 7);
                         const options = { weekday: 'short', month: 'short', day: 'numeric' };

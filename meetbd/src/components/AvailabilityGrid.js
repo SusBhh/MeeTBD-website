@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "../components/Hours";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const AvailabilityGrid = (selectedDate) => {
     const [rows, setRows] = useState([new Date()]);
-
+    const [userId, setUserId] = React.useState(null);
+    const [dateRange, setDateRange] = React.useState([])
     useEffect(() => {
         console.log("hi")
         //console.log(JSON.stringify(selectedDate.selectedDate.startDate))
@@ -20,27 +22,97 @@ const AvailabilityGrid = (selectedDate) => {
             array.push(new Date(currentDate));
             currentDate.setDate(currentDate.getDate() + 1);
         }
-        //setRows(array)
+        setDateRange(array)
         console.log(array)
-    });
+    }, [selectedDate.selectedDate.startDate, selectedDate.selectedDate.endDate]);
 
     const [curr, changeCurr] = useState({
-        cells: Array.from({ length: 28 }, () => Array(7).fill(false)),
+        cells: Array.from({ length: 26}, () => Array(8).fill(false)),
     });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('availability_grid')
+                    .select('availability_grid');
+
+                if (error) {
+                    console.error('Error fetching data from Supabase:', error);
+                } else {
+                    if (data.length > 0 && data[0].availability_grid) {
+                        changeCurr({
+                            cells: data[0].availability_grid,
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching data from Supabase:', error.message);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const supabase = useSupabaseClient();
+    const getUserId = async () => {
+        const {
+        data: { user },
+        } = await supabase.auth.getUser();
+        setUserId(user.id);
+    };
+    getUserId();
+    
+    async function insertBooleanArray() {
+        // Insert the 2D boolean array into the Supabase table
+        const { data, error } = await supabase
+        .from('availability_grid')
+        .upsert([{
+            id: 1,
+            availability_grid: curr.cells,
+            user_id: userId
+        }]);
+      
+        if (error) {
+          console.error('Error inserting boolean array:', error.message);
+        } else {
+          console.log('Boolean array inserted successfully:', data);
+        }
+    }
+    insertBooleanArray();
 
     function handleChange(cells) {
         changeCurr({ cells });
         console.log(cells);
     }
 
-    const handleClick = () => {
+    const handleReset = () => {
         const cells = Array.from({ length: 28 }, () => Array(7).fill(false));
         changeCurr({ cells });
     };
 
+    const handleSubmit = () => {
+        
+    };
+
+    const tableDragSelectStyles = {
+        width: '80%', 
+        height: '300px',
+    };
+
+    const tableFormButtonStyles = {
+        margin: '10px',
+        display: 'flex',
+        justifyContent: 'center',
+    };
+
+    const buttonStyles = {
+        margin: '0 5px',
+    }
+    
     return (
         <div>
-            <TableDragSelect value={curr.cells} onChange={handleChange}>
+            <TableDragSelect value={curr.cells} onChange={handleChange} style={tableDragSelectStyles}>
                 <tr>
                     <td disabled />
                     <td disabled>Monday</td>
@@ -302,8 +374,10 @@ const AvailabilityGrid = (selectedDate) => {
                     <td className="sun" />
                 </tr>
             </TableDragSelect>
-            <button onClick={handleClick}>Reset</button>
-            {/* <button onClick={submit}>Submit</button> */}
+            <div className="table-form-buttons-container" style={tableFormButtonStyles}>
+                <button onClick={handleReset} style={buttonStyles}>Reset</button>
+                <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
+            </div>
         </div>
     );
 };

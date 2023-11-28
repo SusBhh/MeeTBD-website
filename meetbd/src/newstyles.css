@@ -41,6 +41,16 @@ button {
     padding: 0.3rem 0.5rem;
 }
 
+input {
+    border-radius: 13px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #EDCCD8;
+    height: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .flash {
     animation-name: flash;
     animation-duration: 0.5s;
@@ -77,85 +87,160 @@ button {
 }
 
     /* Table cells */
-    .table-drag-select td {
-        height: 1em;
-        text-align: center;
-        /* Cut off long strings of text with ... */
-        text-overflow: ellipsis;
-        overflow: hidden;
-        /* Make transparent gaps between cells. Better than relying on margin
-     * because clicking an element's margin doesn't trigger events */
-        /* border: 0.7rem solid transparent; */
-        /* border-radius: 5px; */
-        background-clip: padding-box;
-        /* Make cells reasonable size */
-        line-height: 2rem;
-        /* Shows more text when text too big to fit into cell */
-        padding-left: 0rem;
-        padding-right: 0rem;
-    }
+.table-drag-select td {
+    height: 1em;
+    text-align: center;
+    /* Cut off long strings of text with ... */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /* Make transparent gaps between cells. Better than relying on margin
+    * because clicking an element's margin doesn't trigger events */
+    /* border: 0.7rem solid transparent; */
+    /* border-radius: 5px; */
+    background-clip: padding-box;
+    /* Make cells reasonable size */
+    line-height: 1rem;
+    /* Shows more text when text too big to fit into cell */
+    padding-left: 0rem;
+    padding-right: 0rem;
+}
 
-        /* Cells that can be interacted with */
-        .table-drag-select td.cell-enabled {
-            background-color: #ddd;
-            border-top: 0.1px solid;
-            border-bottom: 0.1px solid;
-            /* Make the cursor a + symbol */
-            /* cursor: cell; */
-        }
 
-        /* Cells that cannot be interacted with */
-        .table-drag-select td.cell-disabled {
-            /* Put yer css here */
-            background-color: rgb(255, 255, 255);
-        }
+/* Cells that can be interacted with */
+.table-drag-select td.cell-enabled {
+    background-color: #ddd;
+    border-top: 0.1px solid;
+    border-bottom: 0.1px solid;
+    /* Make the cursor a + symbol */
+    /* cursor: cell; */
+}
 
-        /* Cells that have been selected */
-        .table-drag-select td.cell-selected {
-            background-color: #ff69b4;
-            border-top: 0.1px solid;
-            border-bottom: 0.1px solid;
-        }
+/* Cells that cannot be interacted with */
+.table-drag-select td.cell-disabled {
+    /* Put yer css here */
+    background-color: rgb(255, 255, 255);
+}
 
-        /* Cells that are in the process of being selected */
-        .table-drag-select td.cell-being-selected {
-            /* This is the blue color y//ou see when you select text with the cursor */
-            background-color: #FFB4D9;
-            border-top: 0.1px solid;
-            border-bottom: 0.1px solid;
-        }
+/* Cells that have been selected */
+.table-drag-select td.cell-selected {
+    background-color: #ff69b4;
+    border-top: 0.1px solid;
+    border-bottom: 0.1px solid;
+}
 
-        .table-drag-select td.mon {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
+/* Cells that are in the process of being selected */
+.table-drag-select td.cell-being-selected {
+    /* This is the blue color y//ou see when you select text with the cursor */
+    background-color: #FFB4D9;
+    border-top: 0.1px solid;
+    border-bottom: 0.1px solid;
+}
+.table-drag-select td.date {
+    border-left: 0.1px solid grey;
+    border-right: 0.2px solid grey;
+}
+.bottom {
+    position: fixed;
+}
+.add-group {
+    background-color: #F4F4F4;
+    border-color: #EDCCD8;
+    border-radius: 30px;
+    border-style: solid;
+    border-width: 3px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 400px;
+    padding: 15px;
+    text-align: center;
+    width: 80%;
+}
 
-        .table-drag-select td.tue {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
+.add-group h2 {
+    margin-top: 1rem;
+}
 
-        .table-drag-select td.wed {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
+.add-group form {
+    display: flex;
+    justify-content: space-around;
+}
 
-        .table-drag-select td.thu {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
+.group-around {
+    margin-top: 15px;
+}
 
-        .table-drag-select td.fri {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
+.group {
+    background-color: #BA7B92;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    max-width: 400px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    width: 80%;
+}
 
-        .table-drag-select td.sat {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
+.event {
+    background-color: #689f38;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    max-width: 400px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    width: 80%;
+}
 
-        .table-drag-select td.sun {
-            border-left: 0.1px solid grey;
-            border-right: 0.2px solid grey;
-        }
+.groupMember {
+    background-color: #a87bba;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    max-width: 400px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    width: 80%;
+}
+
+.event .text {
+    width: 100%;
+}
+
+.event p {
+    color: #FFFF;
+}
+
+.group .text {
+    width: 100%;
+}
+
+.group p {
+    color: #FFFF;
+}
+
+#groupNameInput {
+    color: #313638;
+    /* Bold headers are unnecessary */
+    font-weight: normal;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    width: 60%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.groupName {
+    padding: 0.2em;
+}
+
+#groupNameEdit {
+    top: -50px;
+}

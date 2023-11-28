@@ -15,9 +15,10 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Logout from '@mui/icons-material/Logout';
+import google_icon from '../assets/google_icon.png';
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
-const pages = ['Groups', 'Tasks', 'To-Do List', 'About'];
-const routes = ['/groups', '/tasks', '/todo', '/about'];
+const pages = ['Groups', 'To-Do List', 'About'];
+const routes = ['/groups', '/todo', '/about'];
 
 function NavBar() {
     const session = useSession(); // Contains Tokens
@@ -77,7 +78,7 @@ function NavBar() {
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
-                            color: 'inherit',
+                            color: 'white',
                             textDecoration: 'none',
                         }}
                     >
@@ -113,11 +114,15 @@ function NavBar() {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
+                            {pages.map((page, index) => (
+                                <Link key={page} to={routes[index]} style={{ textDecoration: 'none' }}>
+                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                        <Typography sx={{color:'black'}}  textAlign="center">{page}</Typography>
+                                    </MenuItem>
+                                </Link>
+
                             ))}
+
                         </Menu>
                     </Box>
                     <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -125,7 +130,7 @@ function NavBar() {
                         variant="h5"
                         noWrap
                         component="a"
-                        href="#app-bar-with-responsive-menu"
+                        href="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
@@ -133,7 +138,7 @@ function NavBar() {
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
-                            color: 'inherit',
+                            color: 'white',
                             textDecoration: 'none',
                         }}
                     >
@@ -191,13 +196,13 @@ function NavBar() {
                             ) : (
                                 <div>
                                      <MenuItem onClick={event => window.location.href = '/login'}>
-                                       <Typography textAlign="center">Login</Typography>
+                                       <Typography align="center">Login</Typography>
                                      </MenuItem>
                                      <MenuItem onClick={googleSignIn}>                        
-                                        <Typography textAlign="center">Google Login</Typography>
+                                            <Typography align="center"><img src={google_icon} alt="my" width={"15px"} />&nbsp;{` Login`}</Typography>
                                      </MenuItem>
                                     <MenuItem onClick={event => window.location.href = '/signup'}>
-                                        <Typography textAlign="center">Sign up</Typography>
+                                        <Typography align="center">Sign up</Typography>
                                     </MenuItem>
                                 </div>
                             )}
