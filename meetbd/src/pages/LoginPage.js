@@ -114,7 +114,7 @@ const LoginPage = () => {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
+                            <Link href="#" variant="body2" onClick={event => window.location.href = '/forgotpassword'}>
                                 Forgot password?
                             </Link>
                         </Grid>

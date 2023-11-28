@@ -14,6 +14,8 @@ import TasksPage from './pages/TasksPage';
 import SignupPage from './pages/SignupPage';
 import WelcomePage from './pages/WelcomePage';
 import ProfilePage from './pages/ProfilePage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
+import ForgotPassowrdPage from './pages/ForgotPasswordPage';
 import GroupDetails from './components/GroupDetails';
 const theme = createTheme({
     palette: {
@@ -80,6 +82,8 @@ function App() {
                         <Route path="/about" element={<AboutPage />} />
                         <Route path="/groups/:groupId" element={session ? (<GroupDetails />) : (<LoginPage />)}/>
                         <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/forgotpassword" element={<ForgotPassowrdPage />} />
+                        <Route path="/resetpassword" element={<ResetPasswordPage />} />
                     </Routes>
                 </div>
             </div>
