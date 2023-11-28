@@ -4,7 +4,6 @@ import { Button } from "@mui/material";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Container from "@mui/material/Container";
 import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
 import ReadGroups from "../components/ReadGroups";
 
 import "../newstyles.css";
