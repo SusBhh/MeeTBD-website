@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import EditIcon from '@mui/icons-material/Edit';
 import Logout from '@mui/icons-material/Logout';
 import google_icon from '../assets/google_icon.png';
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
@@ -26,6 +27,7 @@ function NavBar() {
     const { isLoading } = useSessionContext();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -62,6 +64,7 @@ function NavBar() {
         setAnchorElUser(null);
     }
 
+    
     return (
         <AppBar position="sticky" elevation={0}>
             <Container maxWidth="xl">
@@ -184,12 +187,20 @@ function NavBar() {
                             {session ? (
                                 <div>
                               
+                                    <MenuItem onClick={event => window.location.href = '/profile'}>
+                                        <ListItemIcon>
+                                            <EditIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        <Typography textAlign="center">Edit Display Name</Typography>
+                                    </MenuItem>
+
                                     <MenuItem onClick={handleLogout}>
                                         <ListItemIcon>
                                             <Logout fontSize="small" />
                                         </ListItemIcon>
                                         <Typography textAlign="center">Logout</Typography>
                                     </MenuItem>
+                                    
                                 </div>
 
                           

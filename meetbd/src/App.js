@@ -13,6 +13,7 @@ import ToDoPage from './pages/ToDoPage';
 import TasksPage from './pages/TasksPage';
 import SignupPage from './pages/SignupPage';
 import WelcomePage from './pages/WelcomePage';
+import ProfilePage from './pages/ProfilePage';
 import GroupDetails from './components/GroupDetails';
 const theme = createTheme({
     palette: {
@@ -78,6 +79,7 @@ function App() {
                         <Route path="/tasks" element={session ? (<TasksPage />) : (<LoginPage />)} />
                         <Route path="/about" element={<AboutPage />} />
                         <Route path="/groups/:groupId" element={session ? (<GroupDetails />) : (<LoginPage />)}/>
+                        <Route path="/profile" element={<ProfilePage />} />
                     </Routes>
                 </div>
             </div>
