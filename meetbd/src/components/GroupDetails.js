@@ -14,10 +14,10 @@ import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { styled } from "@mui/system";
 import { Portal } from "@mui/base/Portal";
 import EditIcon from "@mui/icons-material/Edit";
-
 import CreateEvent from "./CreateEvent";
 import GroupMember from "./GroupMember";
 import ReadEvents from "./ReadEvents";
+import ReadScheduled from './ReadScheduled';
 
 const GroupDetails = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -92,7 +92,9 @@ const GroupDetails = () => {
     fetchGroup();
 
     setIsLoading(false);
-  }
+    }
+
+
 
   const fetchGroup = async () => {
     try {
@@ -225,7 +227,7 @@ const GroupDetails = () => {
                 ))}
               </Grid>
               <Grid item xs={12} md={6} style={{paddingTop: 0 + 'px'}}>
-                <h2>Scheduled Events:</h2>
+                 <h2>Scheduled Events:</h2>    
                 <Grid container justifyContent="center" spacing={1}>
                   <div>
                     <Button
@@ -252,7 +254,13 @@ const GroupDetails = () => {
                     ) : null}
                   </div>
                 </Grid>
-
+                {isLoading ? (
+                    <CircularProgress />
+                ) : (
+                    <div>
+                        <ReadScheduled groupId={groupId} />
+                    </div>
+                )}
                 <h3>Pending Events:</h3>
                 {isLoading ? (
                   <CircularProgress />
