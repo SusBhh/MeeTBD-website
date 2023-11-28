@@ -46,7 +46,7 @@ const ReadEvents = (groupId) => {
             .from('events')
             .select('*')
             .eq('group_id', groupId.groupId)
-            .eq('scheduled', false);
+            .eq('scheduled', true);
 
         if (eventError) {
             throw eventError;
