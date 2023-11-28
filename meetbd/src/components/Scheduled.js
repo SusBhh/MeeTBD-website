@@ -10,7 +10,7 @@ import CardMedia from '@mui/material/CardMedia';
 function Scheduled(props) {
     const event = props.event;
     return (
-        <Card sx={{ display: 'flex' }}>
+        <Card sx={{ display: 'flex' }} >
             <CardContent sx={{ flex: 1 }}>
                 <Typography variant="h7">
                     {event.name}
