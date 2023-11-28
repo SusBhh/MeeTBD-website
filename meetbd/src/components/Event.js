@@ -3,25 +3,28 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Tooltip } from "@mui/material";
-import { styled } from '@mui/system';
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Portal } from '@mui/base/Portal';
 import "../newstyles.css";
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import EventAvailability from "./EventAvailability";
+import GroupAvailability from "./GroupAvailability"
 
 const Event = (props) => {
     const [anchor, setAnchor] = React.useState(null);
     const event = props.event;
     const [userId, setUserId] = React.useState(null);
-
+    const [startTime, setStartTime] = React.useState(null);
+    const [endTime, setEndTime] = React.useState(null);
+    const [startError, setStartError] = React.useState(null);
+    const [endError, setEndError] = React.useState(null)
     const supabase = useSupabaseClient();
     const getUserId = async () => {
         const {
@@ -44,6 +47,43 @@ const Event = (props) => {
         setOpen(false);
     };
 
+    async function handleSchedule(){
+        //error handling
+        let message = ""
+        let error = false;
+        if (startError) {
+            message += "Your start time is not valid\n"
+            error = true
+        }
+        if (endError) {
+            message += "Your end time is not valid\n"
+            error = true
+        }
+        if (startTime === null) {
+            message += "Need start time \n"
+            error = true;
+        }
+        if (endTime === null) {
+            message += "Need end time"
+            error = true;
+        }
+        if (error) {
+            alert(message)
+        }
+        //console.log(startError)
+        //console.log(startTime)
+        console.log(event.id)
+        const { updateError} = await supabase
+            .from("events")
+            .update({ 'scheduled': "true" }, { start_time: startTime }, {end_time: endTime})
+            .eq("id", event.id);
+        if (updateError) {
+            alert(updateError)
+        }
+  
+        setOpen(false);
+    };
+
     const handleEdit = async () => {
         // TODO: edit group name
     };
@@ -60,6 +100,7 @@ const Event = (props) => {
     }, [open]);
 
     return (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
         <React.Fragment>
             <div className="group-around" onClick={handleClickOpen('paper')}>
                 <div className="event">
@@ -72,8 +113,6 @@ const Event = (props) => {
                 open={open}
                 onClose={handleClose}
                 scroll={scroll}
-                aria-labelledby="scroll-dialog-title"
-                aria-describedby="scroll-dialog-description"
             >
                 <DialogTitle id="scroll-dialog-title">
                     {event.name}
@@ -91,33 +130,42 @@ const Event = (props) => {
                         <></>
                     )}
                 </DialogTitle>
-                <DialogContent dividers={scroll === 'paper'}>
-                    <DialogContentText
-                        id="scroll-dialog-description"
-                        ref={descriptionElementRef}
-                        tabIndex={-1}
-                    >
-                        <Grid container>
-                            <Grid item xs={ 6 }>
-                                <h2>My Availability</h2>
-                                <EventAvailability event={event} />
-                                
-                            </Grid>
-                            <Grid item xs={ 6 }>
-                                <h2>Group's Availability</h2>
-                                <EventAvailability event={event} />
-                            </Grid>
+                <DialogContent dividers={scroll === 'paper'} >
+                    <Grid container >
+                        <Grid item xs={6} >
+                            <h2>My Availability</h2>
+                            <EventAvailability event={event} />                                
                         </Grid>
-                       
-
-                    </DialogContentText>
+                        <Grid item xs={ 6 }>
+                            <h2>Group's Availability</h2>
+                            <GroupAvailability event={event} />
+                        </Grid>
+                        <Grid item xs={6}>
+                             <TimePicker
+                                    label="Start Time:"
+                                    value={startTime}
+                                    onChange={(newValue) => setStartTime(newValue)}
+                                    onError={(newError) => setStartError(newError)}
+                                />      
+                            </Grid>
+                        <Grid item xs={6}>
+                                <TimePicker
+                                    label="End Time:"
+                                    value={endTime}
+                                    onChange={(newValue) => setEndTime(newValue)}
+                                    onError={(newError) => setEndError(newError)}
+                                />
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Subscribe</Button>
+                    <Button onClick={handleSchedule}>Schedule</Button>
                 </DialogActions>
             </Dialog>
-        </React.Fragment>
+            </React.Fragment>
+        </LocalizationProvider>
+
     );
 };
 

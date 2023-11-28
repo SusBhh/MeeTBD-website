@@ -2,7 +2,7 @@ import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
-import Event from "./Event";
+import Scheduled from "./Scheduled";
 
 const ReadEvents = (groupId) => {
     const [isLoading, setIsLoading] = React.useState(false);
@@ -19,7 +19,7 @@ const ReadEvents = (groupId) => {
                 .from("events")
                 .delete()
                 .eq("id", event_id)
-                .eq("scheduled", false);
+                .eq("scheduled", true);
 
             if (error) throw error;
         } catch (error) {
@@ -30,7 +30,7 @@ const ReadEvents = (groupId) => {
     }
 
     async function handleLeave(event) {
-    
+
     }
 
     async function readEvents() {
@@ -46,7 +46,7 @@ const ReadEvents = (groupId) => {
             .from('events')
             .select('*')
             .eq('group_id', groupId.groupId)
-            .eq('scheduled', false);
+            .eq('scheduled', true);
 
         if (eventError) {
             throw eventError;
@@ -70,7 +70,7 @@ const ReadEvents = (groupId) => {
             ) : (
                 <div>
                     {events.map((event, i) => (
-                        <Event
+                        <Scheduled
                             key={event.id}
                             event={event}
                             handleDelete={handleDelete}

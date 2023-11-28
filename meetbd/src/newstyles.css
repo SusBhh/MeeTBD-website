@@ -128,9 +128,61 @@ input {
     border-bottom: 0.1px solid;
 }
 
+/* For group table */
+.table-drag-select td.cell-selected-0 {
+    background-color: rgba(255, 105, 180, 0.0);
+}
+
+.table-drag-select td.cell-selected-10 {
+    background-color: rgba(255, 105, 180, 0.1);
+}
+
+.table-drag-select td.cell-selected-20 {
+    background-color: rgba(255, 105, 180, 0.2);
+}
+
+.table-drag-select td.cell-selected-30 {
+    background-color: rgba(255, 105, 180, 0.3);
+}
+
+.table-drag-select td.cell-selected-40 {
+    background-color: rgba(255, 105, 180, 0.4);
+}
+
+.table-drag-select td.cell-selected-50 {
+    background-color: rgba(255, 105, 180, 0.5);
+}
+
+.table-drag-select td.cell-selected-60 {
+    background-color: rgba(255, 105, 180, 0.6);
+}
+
+.table-drag-select td.cell-selected-70 {
+    background-color: rgba(255, 105, 180, 0.7);
+}
+
+.table-drag-select td.cell-selected-80 {
+    background-color: rgba(255, 105, 180, 0.8);
+}
+
+.table-drag-select td.cell-selected-90 {
+    background-color: rgba(255, 105, 180, 0.9);
+}
+
+.table-drag-select td.cell-selected-100 {
+    background-color: rgba(255, 105, 180, 1);
+}
+
+.table-drag-select td.cell-selected-group {
+    border-top: 0.2px solid;
+    border-bottom: 0.2px solid;
+    border-left: 0.2px solid;
+    border-right: 0.2px solid;
+    border-color: white;
+}
+
 /* Cells that are in the process of being selected */
 .table-drag-select td.cell-being-selected {
-    /* This is the blue color y//ou see when you select text with the cursor */
     background-color: #FFB4D9;
     border-top: 0.1px solid;
     border-bottom: 0.1px solid;
