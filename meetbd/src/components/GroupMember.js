@@ -10,7 +10,19 @@ const GroupMember = ({ handleDelete, member, isOwner, isSelf }) => {
         <p>{member.display_name}</p>
         {isOwner && !isSelf && (
           <Tooltip title="delete group" placement="top" arrow>
-            <IconButton onClick={() => handleDelete(member.id)} disableRipple>
+            <IconButton
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Are you sure you wish to remove member: " +
+                      member.display_name +
+                      "? They will have to rejoin the group."
+                  )
+                )
+                  handleDelete(member.id);
+              }}
+              disableRipple
+            >
               <DeleteIcon />
             </IconButton>
           </Tooltip>
