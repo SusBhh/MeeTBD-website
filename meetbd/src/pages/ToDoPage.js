@@ -27,6 +27,7 @@ const ToDoPage = ({ }) => {
     getUserId();
 
     const handleCreateToDo = async () => {
+        console.log('hi')
         setIsLoading(true);
         setCompleted(false)
         if (!itemName) {
@@ -46,7 +47,7 @@ const ToDoPage = ({ }) => {
                 ]);
 
             if (error) {
-                throw error;
+                alert(error);
             }
 
             // If the operation was successful, close the CreateEvent component
@@ -68,9 +69,9 @@ const ToDoPage = ({ }) => {
                     label="Add new to-do item"
                     placeholder="Input an item"
                     autoComplete="off"
-                    multiline
+
                 />
-                <Button type="submit" className="btn btn__primary btn__lg" onSubmit={handleCreateToDo}>
+                <Button type="submit" className="btn btn__primary btn__lg" onClick={handleCreateToDo}>
                     Add
                 </Button>
             </form>
@@ -89,7 +90,7 @@ const ToDoPage = ({ }) => {
             {/* <ToDo name="Eat" completed={true} id="todo-0" />
             <ToDo name="Sleep" completed={false} id="todo-1" />
             <ToDo name="Code" completed={false} id="todo-2" /> */}
-            <ToDo name="Code" completed={false} id="todo-2" />
+            {/* <ToDo name="Code" completed={false} id="todo-2" /> */}
             {isLoading ? (
                 <CircularProgress />
             ) : (
