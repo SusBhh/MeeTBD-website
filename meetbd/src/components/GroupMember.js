@@ -9,7 +9,7 @@ const GroupMember = ({ handleDelete, member, isOwner, isSelf }) => {
       <div className="groupMember">
         <p>{member.display_name}</p>
         {isOwner && !isSelf && (
-          <Tooltip title="delete group" placement="top" arrow>
+          <Tooltip title="remove member" placement="top" arrow>
             <IconButton
               onClick={() => {
                 if (
