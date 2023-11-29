@@ -1,38 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ToDo from '../components/ToDo';
 import '../components/ToDo.css';
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import ReadToDo from '../components/ReadToDo';
+import CircularProgress from "@mui/material/CircularProgress";
 
-const ToDoPage = () => {
+const ToDoPage = ({ }) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [itemName, setItemName] = useState('');
+    const [completed, setCompleted] = useState(false);
+    const [userId, setUserId] = useState('');
+
     const supabase = useSupabaseClient();
-    async function handleCreateToDo(e) {
-        e.preventDefault();
 
-        const form = e.target;
-        const formData = new FormData(form);
-        const formJson = Object.fromEntries(formData.entries());
-
-        // get user
+    const updateComplete = (completed) => {
+        setCompleted(!completed);
+    }
+    const getUserId = async () => {
         const {
             data: { user },
         } = await supabase.auth.getUser();
+        setUserId(user.id);
+    };
+    getUserId();
 
-        // insert group into db
-        await supabase.from("todos").insert({
-            name: formJson["name"],
-            id: formJson["id"],
-            completed: formJson["completed"],
-            owner: user?.id,
-        });
+    const handleCreateToDo = async () => {
+        setIsLoading(true);
+        setCompleted(false)
+        if (!itemName) {
+            alert('Please fill in the event name.');
+            return;
+        }
 
-        console.log({
-            name: formJson["name"],
-            id: formJson["id"],
-            completed: formJson["completed"],
-            owner: user?.id,
-        });
+        try {
+            const { data, error } = await supabase
+                .from('todos')
+                .insert([
+                    {
+                        name: itemName,
+                        completed: completed,
+                        owner: userId
+                    },
+                ]);
+
+            if (error) {
+                throw error;
+            }
+
+            // If the operation was successful, close the CreateEvent component
+            alert('added todo i think');
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error creating event:', error);
+            // Handle error scenarios (e.g., show an error message)
+        }
     }
 
     return (
@@ -63,10 +86,17 @@ const ToDoPage = () => {
                 </Button>
             </div>
             <h2 id="list-heading">Tasks Remaining</h2>
-            <ToDo name="Eat" completed={true} id="todo-0" />
+            {/* <ToDo name="Eat" completed={true} id="todo-0" />
             <ToDo name="Sleep" completed={false} id="todo-1" />
+            <ToDo name="Code" completed={false} id="todo-2" /> */}
             <ToDo name="Code" completed={false} id="todo-2" />
-
+            {isLoading ? (
+                <CircularProgress />
+            ) : (
+                <div>
+                    <ReadToDo />
+                </div>
+            )}
 
         </div>
     );
