@@ -15,6 +15,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import EventAvailability from "./EventAvailability";
+import DatePicker from 'react-multi-date-picker';
 import GroupAvailability from "./GroupAvailability"
 
 const Event = (props) => {
@@ -25,6 +26,7 @@ const Event = (props) => {
     const [endTime, setEndTime] = React.useState(null);
     const [startError, setStartError] = React.useState(null);
     const [endError, setEndError] = React.useState(null)
+    const [selectedDates, setSelectedDates] = React.useState(null);
     const supabase = useSupabaseClient();
     const getUserId = async () => {
         const {
@@ -73,12 +75,13 @@ const Event = (props) => {
         //console.log(startError)
         //console.log(startTime)
         console.log(event.id)
-        const { updateError} = await supabase
+        console.log(selectedDates)
+        const { data, e } = await supabase
             .from("events")
-            .update({ 'scheduled': "true" }, { start_time: startTime }, {end_time: endTime})
+            .update({ scheduled: "true", start_time: startTime, end_time: endTime, possible_dates: selectedDates})
             .eq("id", event.id);
-        if (updateError) {
-            alert(updateError)
+        if (e) {
+            alert(e)
         }
   
         setOpen(false);
@@ -131,7 +134,7 @@ const Event = (props) => {
                     )}
                 </DialogTitle>
                 <DialogContent dividers={scroll === 'paper'} >
-                    <Grid container >
+                    <Grid container spacing={1}>
                         <Grid item xs={6} >
                             <h2>My Availability</h2>
                             <EventAvailability event={event} />                                
@@ -156,6 +159,18 @@ const Event = (props) => {
                                     onError={(newError) => setEndError(newError)}
                                 />
                         </Grid>
+                        <Grid item xs={6}>
+                            <DatePicker
+                                label="Selected Date:"
+                                style={{ width: "155px", height: "55px" }}
+                                multiple
+                                value={selectedDates}
+                                onChange={(selectedDates) => setSelectedDates(selectedDates)}
+                                color="secondary"
+                                calendarPosition="right"
+                            />
+                        </Grid>
+                        <br></br>
                     </Grid>
                 </DialogContent>
                 <DialogActions>
