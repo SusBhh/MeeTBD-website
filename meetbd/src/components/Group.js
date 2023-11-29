@@ -55,7 +55,16 @@ const Group = (props) => {
             // delete option if owner
             <Tooltip title="delete group" placement="top" arrow>
               <IconButton
-                onClick={() => props.handleDelete(group)}
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Are you sure you wish to delete group: " +
+                        group.name +
+                        "? This action cannot be undone."
+                    )
+                  )
+                    props.handleDelete(group);
+                }}
                 disableRipple
               >
                 <DeleteIcon />
@@ -65,7 +74,16 @@ const Group = (props) => {
             // leave option if not owner
             <Tooltip title="leave group" placement="top" arrow>
               <IconButton
-                onClick={() => props.handleLeave(group)}
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Are you sure you wish to leave group: " +
+                        group.name +
+                        "?"
+                    )
+                  )
+                    props.handleLeave(group);
+                }}
                 disableRipple
               >
                 <ExitToAppIcon />
