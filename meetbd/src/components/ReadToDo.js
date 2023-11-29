@@ -11,13 +11,13 @@ const ReadToDo = (readToDo) => {
 
     const supabase = useSupabaseClient();
 
-    async function handleDelete(item) {
+    async function handleDelete(id) {
         setIsLoading(true);
         try {
             const { error } = await supabase
                 .from("todos")
                 .delete()
-                .eq("id", item.id);
+                .eq("id", id);
 
             if (error) throw error;
         } catch (error) {

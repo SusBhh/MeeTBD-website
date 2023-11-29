@@ -5,7 +5,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const ToDo = (props) => {
-    const todo = props.todo;
+    console.log(props)
+    // const item = props.item;
     const [userId, setUserId] = useState(null);
 
     const supabase = useSupabaseClient();
@@ -17,7 +18,7 @@ const ToDo = (props) => {
         setUserId(user.id);
     };
     getUserId();
-    const isOwner = userId === todo.owner;
+    // const isOwner = userId === item.owner;
 
 
     return (
