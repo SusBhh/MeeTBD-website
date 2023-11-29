@@ -34,6 +34,8 @@ const ReadToDo = () => {
                 .from("todos")
                 .update({ completed: !item.completed })
                 .eq("id", item.id);
+            
+            item.completed = !item.completed
 
             if (error) throw error;
         } catch (error) {
@@ -73,7 +75,7 @@ const ReadToDo = () => {
             {isLoading ? (
                 <CircularProgress />
             ) : items.length == 0 ? (
-                <p></p>
+                <p>No todo item added yet</p>
             ) : (
                 <div>
                     {items.map((item, i) => (

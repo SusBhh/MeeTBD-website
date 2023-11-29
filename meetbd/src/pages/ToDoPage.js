@@ -15,9 +15,6 @@ const ToDoPage = ({ }) => {
 
     const supabase = useSupabaseClient();
 
-    const updateComplete = (completed) => {
-        setCompleted(!completed);
-    }
     const getUserId = async () => {
         const {
             data: { user },
@@ -26,53 +23,62 @@ const ToDoPage = ({ }) => {
     };
     getUserId();
 
-    const handleCreateToDo = async () => {
+    async function handleCreateToDo(e) {
+        // TODO: make this faster, super slow rn
         setIsLoading(true);
-        setCompleted(false)
-        if (!itemName) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+        const formJson = Object.fromEntries(formData.entries());
+
+        if (formJson["itemName"] === "") {
             alert('Please fill in the event name.');
             return;
         }
 
+        // insert item into db
         try {
-            const { data, error } = await supabase
-                .from('todos')
-                .insert([
-                    {
-                        name: itemName,
-                        completed: completed,
-                        owner: userId
-                    },
-                ]);
-
-            if (error) {
-                throw error;
-            }
-
-            // If the operation was successful, close the CreateEvent component
-            alert('added todo i think');
-            setIsLoading(false);
-        } catch (error) {
+            await supabase.from("todos").insert({
+                name: formJson["itemName"],
+                owner: userId,
+                completed: false,
+            });
+            alert("Successfully created todo item " + itemName + "!");
+        }
+        catch (error) {
             console.error('Error creating event:', error);
             // Handle error scenarios (e.g., show an error message)
         }
+
+        setItemName("");
+
+        setIsLoading(false);
+        window.location.reload();
     }
 
     return (
         <div className="todoapp stack-large">
             <h1>To-Do List</h1>
-            <form>
-                <TextField
-                    id="new-todo-input"
-                    className="input input__lg"
-                    label="Add new to-do item"
-                    placeholder="Input an item"
-                    autoComplete="off"
-                    multiline
-                />
-                <Button type="submit" className="btn btn__primary btn__lg" onSubmit={handleCreateToDo}>
-                    Add
-                </Button>
+            <form onSubmit={handleCreateToDo}>
+                <label>
+                    <input
+                        type="text"
+                        value={itemName}
+                        name="itemName"
+                        placeholder="Input an item"
+                        onChange={(e) => setItemName(e.target.value)}
+                    />
+                </label>
+                {itemName.length == 0 ? (
+                    <Button type="submit" variant="contained" size="small" disabled>
+                        Add
+                    </Button>
+                ) : (
+                    <Button type="submit" variant="contained" size="small">
+                        Add
+                    </Button>
+                )}
             </form>
             <div className="filters btn-group stack-exception">
                 <Button className="btn toggle-btn" aria-pressed="true">
@@ -89,7 +95,6 @@ const ToDoPage = ({ }) => {
             {/* <ToDo name="Eat" completed={true} id="todo-0" />
             <ToDo name="Sleep" completed={false} id="todo-1" />
             <ToDo name="Code" completed={false} id="todo-2" /> */}
-            <ToDo name="Code" completed={false} id="todo-2" />
             {isLoading ? (
                 <CircularProgress />
             ) : (
