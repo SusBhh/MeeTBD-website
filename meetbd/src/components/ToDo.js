@@ -24,7 +24,7 @@ const ToDo = (props) => {
     return (
         <li className="todo stack-small">
             <div className="c-cb">
-                <Checkbox id={props.id} defaultChecked={props.completed} size="large" onClick={props.handleComplete(props.item)}/>
+                <Checkbox id={props.id} defaultChecked={props.completed} size="large" onClick={() => props.handleComplete(props.item)}/>
                 <label className="todo-label" htmlFor={props.id}>
                     {props.name}
                 </label>

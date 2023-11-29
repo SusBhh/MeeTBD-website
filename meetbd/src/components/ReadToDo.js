@@ -4,7 +4,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import ToDo from './ToDo';
 
-const ReadToDo = (readToDo) => {
+const ReadToDo = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [userId, setUserId] = useState(null);
     const [items, setItems] = useState([]);
@@ -60,7 +60,7 @@ const ReadToDo = (readToDo) => {
 
         if (error) throw error; // check if there was an error fetching the data and move the execution to the catch block
         if (data) setItems(data);
-
+        console.log(data)
         setIsLoading(false);
     }
 
@@ -83,7 +83,8 @@ const ReadToDo = (readToDo) => {
                             item={item}
                             id={item.id} 
                             owner={item.owner}
-                            handleDelete={handleDelete}/>
+                            handleDelete={handleDelete}
+                            handleComplete={handleComplete}/>
                     ))}
                 </div>
             )}
