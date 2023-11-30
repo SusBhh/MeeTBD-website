@@ -7,7 +7,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import ReadToDo from '../components/ReadToDo';
 import CircularProgress from "@mui/material/CircularProgress";
 
-const ToDoPage = ({ }) => {
+const ToDoPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [itemName, setItemName] = useState('');
     const [completed, setCompleted] = useState(false);
