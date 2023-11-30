@@ -111,7 +111,7 @@ const Event = (props) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
         <React.Fragment>
             <div className="group-around" onClick={handleClickOpen('paper')}>
-                <div className="event">
+                <div className="event" style={{cursor:'pointer'}}>
                     <div className="text">
                         <p>{event.name}</p>
                     </div> 

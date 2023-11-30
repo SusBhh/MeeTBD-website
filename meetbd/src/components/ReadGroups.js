@@ -51,8 +51,6 @@ const ReadGroups = (readGroups) => {
         .update({ members: members })
         .eq("id", group.id);
       if (updateError) throw updateError;
-
-      if (updateError) throw updateError;
     } catch (error) {
       alert(error.error_description || error.message);
     }
