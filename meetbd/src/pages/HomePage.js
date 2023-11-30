@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
-import { styled } from '@mui/system';
-import Box from '@mui/material/Box';
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
-import { Portal } from '@mui/base/Portal';
 import Divider from '@mui/material/Divider';
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Link } from 'react-router-dom';
+
 const HomePage = () => {
-    const [userId, setUserId] = React.useState(null);
     const [myEvents, setMyEvents] = React.useState([]);
+    const [isEventsLoading, setIsEventsLoading] = React.useState(false);
     const [myPending, setMyPending] = React.useState([]);
+    const [isPendingLoading, setIsPendingLoading] = React.useState(false);
+
     const supabase = useSupabaseClient();
-    //can add isLoadign later
+
     async function loadMyPending() {
+        setIsPendingLoading(true);
         //it would be nice if I didn't have to repeat this line
         const { data: { user }, } = await supabase.auth.getUser();
         let result = "";
@@ -29,11 +28,7 @@ const HomePage = () => {
                 `)
                 .eq("user_id", [user?.id])
             if (filledError) throw filledError; 
-            //let { allFilled, error }
             result = "(" + allFilled.map(a => a.event_id).toString() + ")";
-            //console.log(result.toString())
-            console.log(result)
-            //console.log(allFilled)
         }
         catch (pendingError) {
             console.error('Error home page load:', pendingError);
@@ -48,18 +43,16 @@ const HomePage = () => {
                 `)
                 .contains("members", [user?.id])
                 .not('events.id', 'in', result)
-            //let { allFilled, error }
-            //console.log(result)
             if (pendingError) throw pendingError;
             if (allPending) setMyPending(allPending); 
-            console.log(allPending)
         }
         catch (pendingError) {
             console.error('Error home page load:', pendingError);
         }
-
+        setIsPendingLoading(false);
     }
     async function loadMyEvents() {
+        setIsEventsLoading(true);
         const { data: { user }, } = await supabase.auth.getUser();
         try {
             let { data, error } = await supabase
@@ -73,10 +66,10 @@ const HomePage = () => {
 
             if (error) throw error;
             if (data) setMyEvents(data);
-            //console.log(data)
         } catch (error) {
             alert(error.error_description || error.message);
         }
+        setIsEventsLoading(false);
     }
 
     React.useEffect(() => {
@@ -97,9 +90,12 @@ const HomePage = () => {
                         Pending Events
                     </Typography>
                     <p>Other people's events that I need to respond to with my availability</p>
+
                     <Divider />
-                    {myPending.map((event) => (
-                        /*      <p>{JSON.stringify(event)}</p>*/
+                    {isPendingLoading ? (
+                        <CircularProgress />
+                    ) : (
+                      myPending.map((event) => (
                         <div>
                             {event.events.map((e) => (
                                 <div>
@@ -119,11 +115,10 @@ const HomePage = () => {
                                         {e.name}
                                     </Typography>
                                 </div>
-                               
                             )) }
                         </div>
-                    ))
-                    }
+                      ))
+                    )}
                 </Grid>
                 <Grid item xs={12} md={4}>
                     <Typography variant="h6" gutterBottom>
@@ -131,8 +126,10 @@ const HomePage = () => {
                     </Typography>
                     <p>Pending Events I Created: </p>
                     <div>
-                        {myEvents.map((event) => (
-                            
+                        {isEventsLoading ? (
+                            <CircularProgress />
+                        ) : (
+                          myEvents.map((event) => (
                             <div>
                                 <Divider />
                                 <Typography variant="h9" sx={{ mr: 1 }} align="left" >
@@ -150,8 +147,8 @@ const HomePage = () => {
                                     {event.name}
                                 </Typography>
                             </div>
-                            ))
-                        }
+                          ))
+                        )}
                     </div>
 
                 </Grid>
