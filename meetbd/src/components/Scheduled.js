@@ -7,6 +7,16 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 
+const printTime = (currentHour) => {
+    const timeString12hr = new Date('1970-01-01T' + currentHour.toString() + 'Z')
+  .toLocaleTimeString('en-US',
+    {timeZone:'UTC',hour12:true,hour:'numeric',minute:'numeric'}
+  );
+
+  return timeString12hr;
+
+}
+
 function Scheduled(props) {
     const event = props.event;
     return (
@@ -16,11 +26,8 @@ function Scheduled(props) {
                     {event.name}
                 </Typography>
                 <Typography variant="subtitle1" color="text.secondary">
-                    Start Time: {event.start_time}
+                    Start Time: { printTime(event.start_time)}  End Time: {printTime(event.end_time)}
                 </Typography>
-                <Typography variant="subtitle1" color="text.secondary">
-                    End Time: {event.end_time}
-                    </Typography>
             </CardContent>
         </Card>
     );

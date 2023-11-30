@@ -72,19 +72,24 @@ const Event = (props) => {
         if (error) {
             alert(message)
         }
+        const selectedDatesISO = selectedDates.map(timestamp => {
+            const dateObject = new Date(timestamp);
+            return dateObject.toISOString();
+            });
         //console.log(startError)
         //console.log(startTime)
         console.log(event.id)
         console.log(selectedDates)
         const { data, e } = await supabase
             .from("events")
-            .update({ scheduled: "true", start_time: startTime, end_time: endTime, possible_dates: selectedDates})
+            .update({ scheduled: "true"}, {start_time: startTime}, {end_time: endTime}, {possible_dates: selectedDatesISO})
             .eq("id", event.id);
+        console.log(data)
         if (e) {
             alert(e)
         }
-  
         setOpen(false);
+        window.location.reload();
     };
 
     const handleEdit = async () => {
