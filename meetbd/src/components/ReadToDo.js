@@ -35,7 +35,6 @@ const ReadToDo = () => {
                 .update({ completed: !item.completed })
                 .eq("id", item.id);
             
-            item.completed = !item.completed
 
             if (error) throw error;
         } catch (error) {
@@ -56,7 +55,7 @@ const ReadToDo = () => {
         // read todos
         const { error, data } = await supabase
             .from("todos") //the table you want to work with
-            .select("id, name, owner, created_at") // columns to select from the database
+            .select("id, name, owner, created_at, completed") // columns to select from the database
             .eq("owner", [user?.id]) // match only groups where user is a member
             .order("created_at", { ascending: false }); // sort the data so the last item comes on top;
 

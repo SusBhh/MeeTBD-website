@@ -37,12 +37,13 @@ const ToDoPage = ({ }) => {
             return;
         }
 
+        setCompleted(false)
         // insert item into db
         try {
             await supabase.from("todos").insert({
                 name: formJson["itemName"],
                 owner: userId,
-                completed: false,
+                completed: completed,
             });
             alert("Successfully created todo item " + itemName + "!");
         }
@@ -80,7 +81,7 @@ const ToDoPage = ({ }) => {
                     </Button>
                 )}
             </form>
-            <div className="filters btn-group stack-exception">
+            {/* <div className="filters btn-group stack-exception">
                 <Button className="btn toggle-btn" aria-pressed="true">
                     Show All Tasks
                 </Button>
@@ -90,8 +91,8 @@ const ToDoPage = ({ }) => {
                 <Button className="btn toggle-btn" aria-pressed="false">
                     Show Completed Tasks
                 </Button>
-            </div>
-            <h2 id="list-heading">Tasks Remaining</h2>
+            </div> */}
+            <h2 id="list-heading">All Tasks</h2>
             {/* <ToDo name="Eat" completed={true} id="todo-0" />
             <ToDo name="Sleep" completed={false} id="todo-1" />
             <ToDo name="Code" completed={false} id="todo-2" /> */}
