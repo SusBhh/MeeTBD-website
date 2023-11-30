@@ -1,0 +1,50 @@
+.todoapp {
+    padding-left: 30%;
+    padding-right: 30%;
+    position: relative;
+}
+
+.btn {
+    padding: 0.8rem 1rem 0.7rem;
+    text-transform: capitalize;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-group>* {
+    flex: 1 1 49%;
+}
+
+.btn-group>*+* {
+    margin-left: 0.8rem;
+}
+/* Todo item styles */
+.todo {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.todo>* {
+    flex: 0 0 100%;
+}
+
+.todo-text {
+    width: 100%;
+    min-height: 4.4rem;
+    padding: 0.4rem 0.8rem;
+    border: 2px solid #565656;
+}
+
+.todo-text:focus {
+    box-shadow: inset 0 0 0 2px;
+}
+.stack-small {
+    border-width: 1px;
+    border-color: lightgray;
+    border-style: solid;
+    border-radius: 5px;
+}
