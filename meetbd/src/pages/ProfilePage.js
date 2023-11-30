@@ -13,6 +13,7 @@ const ProfilePage = () => {
   const supabase = useSupabaseClient();
 
   const getProfile = async () => {
+    setIsLoading(true);
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -24,6 +25,7 @@ const ProfilePage = () => {
       .eq("id", user.id);
     if (memberError) throw memberError;
     setDisplayName(memberData[0].display_name);
+    setIsLoading(false);
   };
 
   React.useEffect(() => {
