@@ -41,6 +41,7 @@ const HomePage = () => {
                     name,
                     events( id, name )
                 `)
+                .eq("events.scheduled", false)
                 .contains("members", [user?.id])
                 .not('events.id', 'in', result)
             if (pendingError) throw pendingError;
