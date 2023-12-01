@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import ToDo from '../components/ToDo';
 import '../components/ToDo.css';
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import ReadToDo from '../components/ReadToDo';
 import CircularProgress from "@mui/material/CircularProgress";
@@ -12,16 +11,27 @@ const ToDoPage = () => {
     const [itemName, setItemName] = useState('');
     const [completed, setCompleted] = useState(false);
     const [userId, setUserId] = useState('');
+    const [filter, setFilter] = useState(null);
 
     const supabase = useSupabaseClient();
 
-    const getUserId = async () => {
+    const getUserId = async (id) => {
         const {
             data: { user },
         } = await supabase.auth.getUser();
         setUserId(user.id);
     };
     getUserId();
+
+    async function handelFilterChange(curr) {
+        if (curr == "active") {
+            setFilter(false);
+        } else if (curr == "complete") {
+            setFilter(true);
+        } else {
+            setFilter(null);
+        }
+    }
 
     async function handleCreateToDo(e) {
         // TODO: make this faster, super slow rn
@@ -31,11 +41,6 @@ const ToDoPage = () => {
         const form = e.target;
         const formData = new FormData(form);
         const formJson = Object.fromEntries(formData.entries());
-
-        if (formJson["itemName"] === "") {
-            alert('Please fill in the event name.');
-            return;
-        }
 
         setCompleted(false)
         // insert item into db
@@ -55,8 +60,7 @@ const ToDoPage = () => {
         setItemName("");
 
         setIsLoading(false);
-        window.location.reload();
-    }
+    };
 
     return (
         <div className="todoapp stack-large">
@@ -81,26 +85,23 @@ const ToDoPage = () => {
                     </Button>
                 )}
             </form>
-            {/* <div className="filters btn-group stack-exception">
-                <Button className="btn toggle-btn" aria-pressed="true">
+            <div className="filters btn-group stack-exception">
+                <Button className="btn toggle-btn" onClick={() => handelFilterChange("all")}>
                     Show All Tasks
                 </Button>
-                <Button className="btn toggle-btn" aria-pressed="false">
+                <Button className="btn toggle-btn" onClick={() => handelFilterChange("active")}>
                     Show Active Tasks
                 </Button>
-                <Button className="btn toggle-btn" aria-pressed="false">
+                <Button className="btn toggle-btn" onClick={() => handelFilterChange("complete")}>
                     Show Completed Tasks
                 </Button>
-            </div> */}
-            <h2 id="list-heading">All Tasks</h2>
-            {/* <ToDo name="Eat" completed={true} id="todo-0" />
-            <ToDo name="Sleep" completed={false} id="todo-1" />
-            <ToDo name="Code" completed={false} id="todo-2" /> */}
+            </div>
+            <h2 id="list-heading">Tasks Remaining</h2>
             {isLoading ? (
                 <CircularProgress />
             ) : (
                 <div>
-                    <ReadToDo />
+                    <ReadToDo filter={filter} />
                 </div>
             )}
 

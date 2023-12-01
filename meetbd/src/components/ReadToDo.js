@@ -4,7 +4,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import ToDo from './ToDo';
 
-const ReadToDo = () => {
+const ReadToDo = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [userId, setUserId] = useState(null);
     const [items, setItems] = useState([]);
@@ -85,7 +85,8 @@ const ReadToDo = () => {
                             id={item.id} 
                             owner={item.owner}
                             handleDelete={handleDelete}
-                            handleComplete={handleComplete}/>
+                            handleComplete={handleComplete}
+                            filter={props.filter}/>
                     ))}
                 </div>
             )}
