@@ -25,18 +25,22 @@ const HomePage = () => {
             let { data: allFilled, error: filledError } = await supabase
                 .from("event_availability")
                 .select(`
-                    event_id
+                    event_id, 
+                    events (scheduled)
                 `)
                 .eq("user_id", [user?.id])
+                
+
             if (filledError) throw filledError; 
             //let { allFilled, error }
+            //console.log(data)
             result = "(" + allFilled.map(a => a.event_id).toString() + ")";
             //console.log(result.toString())
-            console.log(result)
-            //console.log(allFilled)
+           // console.log(result)
+            console.log(allFilled)
         }
-        catch (pendingError) {
-            console.error('Error home page load:', pendingError);
+        catch (filledError) {
+            console.error('Error home page load:', filledError);
         }
         try {
             let { data: allPending, error: pendingError } = await supabase
@@ -44,15 +48,17 @@ const HomePage = () => {
                 .select(`
                     id,
                     name,
-                    events( id, name )
+                    events( id, name, scheduled )
                 `)
+                .eq("events.scheduled", false)
                 .contains("members", [user?.id])
                 .not('events.id', 'in', result)
+
             //let { allFilled, error }
             //console.log(result)
             if (pendingError) throw pendingError;
             if (allPending) setMyPending(allPending); 
-            console.log(allPending)
+            //console.log(allPending)
         }
         catch (pendingError) {
             console.error('Error home page load:', pendingError);
