@@ -3,7 +3,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Tooltip } from "@mui/material";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useSession, useSessionContext } from "@supabase/auth-helpers-react";
 import "../newstyles.css";
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,11 +14,15 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import EventAvailability from "./EventAvailability";
 import DatePicker from 'react-multi-date-picker';
 import GroupAvailability from "./GroupAvailability"
 
 const Event = (props) => {
+
     const [anchor, setAnchor] = React.useState(null);
     const event = props.event;
     const [userId, setUserId] = React.useState(null);
@@ -26,8 +30,11 @@ const Event = (props) => {
     const [endTime, setEndTime] = React.useState(null);
     const [startError, setStartError] = React.useState(null);
     const [endError, setEndError] = React.useState(null)
-    const [selectedDates, setSelectedDates] = React.useState(null);
+    const [selectedDates, setSelectedDates] = React.useState([]);
+    const [checked, setChecked] = React.useState(false);
     const supabase = useSupabaseClient();
+    const session = useSession(); // Contains Tokens
+
     const getUserId = async () => {
         const {
             data: { user },
@@ -49,6 +56,48 @@ const Event = (props) => {
         setOpen(false);
     };
 
+    const handleCheck = (event) => {
+        setChecked(event.target.checked);
+    };
+    async function createCalendarEvent() {
+        const selectedDatesISO = selectedDates.map(timestamp => {
+            const dateObject = new Date(timestamp);
+            return dateObject.toISOString();
+        });
+        
+        //console.log("Creating a calendar event");
+        //const createEvent = {
+        //    'summary': event.name,
+        //    'description': "Event created from MeeTBD!",
+        //    'start': {
+        //        'dateTime': new Date().toISOString,
+        //        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+        //    },
+        //    'end': {
+        //        'dateTime': new Date().toISOString,
+        //        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+        //    },
+
+        //} // The below function defaults to primary calendar. You can replace primary with a calendar ID.
+        ////console.log(selectedDatesISO[0] + " " + startTime.toISOString())
+        //await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
+        //    method: "POST",
+        //    headers: {
+        //        'Authorization': 'Bearer ' + session.provider_token // PROVIDER TOKEN IS THE GOOGLE ONE, NOT AUTHORIZER TOKEN!!!
+        //    },
+        //    body: JSON.stringify(createEvent)
+        //}).then((data) => {
+        //    return data.json();
+        //}).then((data, error) => {
+        //    if (data.error) {
+        //        console.log(data.error)
+        //    }
+        //    else {
+        //        console.log(data);
+        //        alert("Event created, check calendar");
+        //    }
+        //        })
+        }
     async function handleSchedule(){
         //error handling
         let message = ""
@@ -75,18 +124,49 @@ const Event = (props) => {
         const selectedDatesISO = selectedDates.map(timestamp => {
             const dateObject = new Date(timestamp);
             return dateObject.toISOString();
-            });
+        });
+        console.log("times")
+        console.log(startTime)
+        console.log(endTime)
+        //console.log(selectedDatesISO)
         //console.log(startError)
         //console.log(startTime)
         console.log(event.id)
-        console.log(selectedDates)
-        const { data, e } = await supabase
+        //console.log(selectedDates)
+        const formattedStart = startTime.$d.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false, // Use 24-hour format
+        });
+        const formattedEnd = endTime.$d.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false, // Use 24-hour format
+        });
+        const { data: scheduled, error:schedError } = await supabase
             .from("events")
-            .update({ scheduled: "true"}, {start_time: startTime}, {end_time: endTime}, {possible_dates: selectedDatesISO})
+            .update({ scheduled: "true" }, {start_time: startTime})
             .eq("id", event.id);
-        console.log(data)
-        if (e) {
-            alert(e)
+        const { data:start, error: sError } = await supabase
+            .from("events")
+            .update({ start_time: formattedStart })
+            .eq("id", event.id);
+        const { data: end, error: eError } = await supabase
+            .from("events")
+            .update({ end_time: formattedEnd })
+            .eq("id", event.id);
+        const { data: at, error: atError } = await supabase
+            .from("events")
+            .update({ scheduled_at: selectedDatesISO })
+            .eq("id", event.id);
+        
+         //, start_time: startTime, end_time: endTime, scheduled_at: selectedDatesISO 
+        //console.log(data)
+
+
+        //Send email invite stuff
+        if (checked) {
+            createCalendarEvent()
         }
         setOpen(false);
         window.location.reload();
@@ -95,8 +175,14 @@ const Event = (props) => {
     const handleEdit = async () => {
         // TODO: edit group name
     };
-  
 
+    React.useEffect(() => {
+        const selectedDatesISO = selectedDates.map(timestamp => {
+            const dateObject = new Date(timestamp);
+            return dateObject.toISOString();
+        });
+        console.log(selectedDatesISO)
+    })
     const descriptionElementRef = React.useRef(null);
     React.useEffect(() => {
         if (open) {
@@ -129,11 +215,13 @@ const Event = (props) => {
                             <IconButton onClick={handleEdit} disableRipple>
                                 <EditIcon />
                             </IconButton>
-                        </Tooltip><Tooltip title="delete event" placement="top" arrow>
+                            </Tooltip>
+                            <Tooltip title="delete event" placement="top" arrow>
                                 <IconButton onClick={() => props.handleDelete(event.id)} disableRipple>
-                                <DeleteIcon />
-                            </IconButton>
-                        </Tooltip></>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                            </>
                     ) : (
                         <></>
                     )}
@@ -176,9 +264,18 @@ const Event = (props) => {
                             />
                         </Grid>
                         <br></br>
-                    </Grid>
+                        </Grid>
                 </DialogContent>
-                <DialogActions>
+                    <DialogActions>
+                        <FormGroup justifyContent="flex-end">
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={checked} onChange={handleCheck} />
+                                }
+                                label="Send email invite"
+                            />
+                        </FormGroup>
+                         <div style={{flex: '1 0 0'}} />
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleSchedule}>Schedule</Button>
                 </DialogActions>

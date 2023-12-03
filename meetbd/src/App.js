@@ -38,35 +38,7 @@ function App() {
     if (isLoading) {
         return <></>
     }
-/*
-  async function createCalendarEvent() {
-    console.log("Creating a calendar event");
-    const event = {
-      'summary': eventName,
-      'description': eventDescription,
-      'start': {
-        'dateTime': eventStart.toISOString(),
-        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-      },
-      'end': {
-        'dateTime': end.toISOString(),
-        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-      }
-    } // The below function defaults to primary calendar. You can replace primary with a calendar ID.
-    await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
-      method: "POST",
-      headers: {
-        'Authorization':'Bearer ' + session.provider_token // PROVIDER TOKEN IS THE GOOGLE ONE, NOT AUTHORIZER TOKEN!!!
-      },
-      body: JSON.stringify(event)
-    }).then((data) => {
-      return data.json();
-    }).then((data) => {
-      console.log(data);
-      alert("Event created, check calendar");
-    })
-  }
-*/
+
     return (
         <ThemeProvider theme={theme}>
             <div className="App">

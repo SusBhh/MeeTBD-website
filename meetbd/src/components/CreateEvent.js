@@ -28,10 +28,6 @@ const CreateEvent = ({ groupId, onClose }) => {
         //console.log(time)
     }
 
-    const handleDateChange = (newDates) => {
-    setSelectedDates(newDates);
-    };
-
     const supabase = useSupabaseClient();
     const getUserId = async () => {
         const {data: { user },} = await supabase.auth.getUser();
@@ -51,7 +47,8 @@ const CreateEvent = ({ groupId, onClose }) => {
         const selectedDatesISO = selectedDates.map(timestamp => {
             const dateObject = new Date(timestamp);
             return dateObject.toISOString();
-            });
+        });
+
         try {
             const { data, error } = await supabase
             .from('events')
@@ -63,7 +60,8 @@ const CreateEvent = ({ groupId, onClose }) => {
                 start_time: startTime,
                     end_time: endTime,
                     event_owner: userId,
-                scheduled: false
+                    scheduled: false,
+                scheduled_at: []
                 },
             ]);
 

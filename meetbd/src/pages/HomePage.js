@@ -14,7 +14,6 @@ const HomePage = () => {
     const [isPendingLoading, setIsPendingLoading] = React.useState(false);
 
     const supabase = useSupabaseClient();
-
     async function loadMyPending() {
         setIsPendingLoading(true);
         //it would be nice if I didn't have to repeat this line
