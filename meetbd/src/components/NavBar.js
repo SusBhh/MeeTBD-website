@@ -18,8 +18,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import Logout from '@mui/icons-material/Logout';
 import google_icon from '../assets/google_icon.png';
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
-const pages = ['Groups', 'To-Do List', 'About'];
-const routes = ['/groups', '/todo', '/about'];
+const pages = ['Groups', 'To-Do List'];
+const routes = ['/groups', '/todo'];
 
 function NavBar() {
     const session = useSession(); // Contains Tokens

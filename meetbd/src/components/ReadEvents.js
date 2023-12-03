@@ -29,10 +29,6 @@ const ReadEvents = (groupId) => {
         setIsLoading(false);
     }
 
-    async function handleLeave(event) {
-    
-    }
-
     async function readEvents() {
         setIsLoading(true);
 
@@ -74,7 +70,7 @@ const ReadEvents = (groupId) => {
                             key={event.id}
                             event={event}
                             handleDelete={handleDelete}
-                            handleLeave={handleLeave}
+
                         />
                     ))}
                 </div>
