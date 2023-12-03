@@ -60,43 +60,64 @@ const Event = (props) => {
         setChecked(event.target.checked);
     };
     async function createCalendarEvent() {
+
         const selectedDatesISO = selectedDates.map(timestamp => {
             const dateObject = new Date(timestamp);
             return dateObject.toISOString();
         });
-        
-        //console.log("Creating a calendar event");
-        //const createEvent = {
-        //    'summary': event.name,
-        //    'description': "Event created from MeeTBD!",
-        //    'start': {
-        //        'dateTime': new Date().toISOString,
-        //        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-        //    },
-        //    'end': {
-        //        'dateTime': new Date().toISOString,
-        //        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-        //    },
 
-        //} // The below function defaults to primary calendar. You can replace primary with a calendar ID.
-        ////console.log(selectedDatesISO[0] + " " + startTime.toISOString())
-        //await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
-        //    method: "POST",
-        //    headers: {
-        //        'Authorization': 'Bearer ' + session.provider_token // PROVIDER TOKEN IS THE GOOGLE ONE, NOT AUTHORIZER TOKEN!!!
-        //    },
-        //    body: JSON.stringify(createEvent)
-        //}).then((data) => {
-        //    return data.json();
-        //}).then((data, error) => {
-        //    if (data.error) {
-        //        console.log(data.error)
-        //    }
-        //    else {
-        //        console.log(data);
-        //        alert("Event created, check calendar");
-        //    }
-        //        })
+        const formattedStart = startTime.$d.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false, // Use 24-hour format
+        });
+        const formattedEnd = endTime.$d.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false, // Use 24-hour format
+        });
+        //console.log(selectedDatesISO[0] + "-" + formattedStart)
+        const calStart = selectedDatesISO[0] + "-" + formattedStart
+        const calEnd = selectedDatesISO[0] + "-" + formattedEnd
+        try {
+            console.log("Creating a calendar event");
+            const createEvent = {
+                'summary': event.name,
+                'description': "Event created from MeeTBD!",
+                'start': {
+                    'dateTime': calStart,
+                    'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+                },
+                'end': {
+                    'dateTime': calEnd,
+                    'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+                },
+
+            } // The below function defaults to primary calendar. You can replace primary with a calendar ID.
+            //console.log(selectedDatesISO[0] + " " + startTime.toISOString())
+            await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
+                method: "POST",
+                headers: {
+                    'Authorization': 'Bearer ' + session.provider_token // PROVIDER TOKEN IS THE GOOGLE ONE, NOT AUTHORIZER TOKEN!!!
+                },
+                body: JSON.stringify(createEvent)
+            }).then((data) => {
+                return data.json();
+            }).then((data, error) => {
+                if (data.error) {
+                    console.log(data)
+                    throw error
+                }
+                else {
+                    console.log(data);
+                    alert("Event created, check calendar");
+                }
+            })
+        }
+        catch (error) {
+            alert("failed to add to google calendar")
+        }
+        
         }
     async function handleSchedule(){
         //error handling
@@ -126,8 +147,8 @@ const Event = (props) => {
             return dateObject.toISOString();
         });
         console.log("times")
-        console.log(startTime)
-        console.log(endTime)
+        //console.log(startTime)
+        //console.log(endTime)
         //console.log(selectedDatesISO)
         //console.log(startError)
         //console.log(startTime)
@@ -169,20 +190,13 @@ const Event = (props) => {
             createCalendarEvent()
         }
         setOpen(false);
-        window.location.reload();
+        //window.location.reload();
     };
 
     const handleEdit = async () => {
         // TODO: edit group name
     };
 
-    React.useEffect(() => {
-        const selectedDatesISO = selectedDates.map(timestamp => {
-            const dateObject = new Date(timestamp);
-            return dateObject.toISOString();
-        });
-        console.log(selectedDatesISO)
-    })
     const descriptionElementRef = React.useRef(null);
     React.useEffect(() => {
         if (open) {
