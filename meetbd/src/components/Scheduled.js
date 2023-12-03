@@ -85,6 +85,7 @@ function Scheduled(props) {
                                     </IconButton>
                                 </Tooltip>
                             }
+                            titleTypographyProps={{ variant: 'h9' }}
                             title={event.name}
                             subheader={day}
                         />

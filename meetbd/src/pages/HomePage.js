@@ -6,13 +6,17 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Link } from 'react-router-dom';
-
+import Scheduled from '../components/Scheduled';
+import Box from '@mui/system/Box';
+import Paper from '@mui/material/Paper';
+import Card from '@mui/material/Card';
 const HomePage = () => {
     const [myEvents, setMyEvents] = React.useState([]);
     const [isEventsLoading, setIsEventsLoading] = React.useState(false);
     const [myPending, setMyPending] = React.useState([]);
     const [isPendingLoading, setIsPendingLoading] = React.useState(false);
-
+    const [allEvents, setAllEvents] = React.useState([]);
+    const [isScheduled, setIsScheduled] = React.useState(false);
     const supabase = useSupabaseClient();
     async function loadMyPending() {
         setIsPendingLoading(true);
@@ -62,7 +66,9 @@ const HomePage = () => {
                     groups( id, name)
 
                 `)
-                .eq("event_owner", [user?.id]);
+                .eq("event_owner", [user?.id])
+                .eq("scheduled", false);
+
 
             if (error) throw error;
             if (data) setMyEvents(data);
@@ -72,9 +78,46 @@ const HomePage = () => {
         setIsEventsLoading(false);
     }
 
+    async function loadAllEvents() {
+        setIsScheduled(true);
+        const { data: { user }, } = await supabase.auth.getUser();
+        let result = "";
+        //get all group ids where you are a member
+        try {
+            let { data: allGroups, error } = await supabase
+                .from("groups")
+                .select(`
+                    id
+                `)
+                .contains("members", [user?.id])
+
+            if (error) throw error;
+            result = allGroups.map(a => a.id);
+            console.log(result)
+        } catch (error) {
+            alert(error.error_description || error.message);
+        }
+
+        //get all events corresponding to groups you are in
+        try {
+            let { data: events, error } = await supabase
+                .from("events")
+                .select()
+                .in("group_id", result)
+                .eq("scheduled", true);
+            if (error) throw error;
+            if (events) setAllEvents(events);
+            console.log(events)
+        } catch (error) {
+            alert(error.error_description || error.message);
+        }
+        setIsScheduled(false)
+    }
+
     React.useEffect(() => {
         loadMyEvents();
         loadMyPending();
+        loadAllEvents();
     }, []);
 
     return (
@@ -84,73 +127,101 @@ const HomePage = () => {
                     <Typography variant="h6" gutterBottom>
                         Scheduled Events
                     </Typography>
+                    <p>All scheduled events</p>
                     <Divider />
-                    <p>insert calender representation</p>
+                    <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
+                    <Box  >
+                    <div>
+                        {isScheduled ? (
+                            <CircularProgress />
+                        ) : ( allEvents.length === 0 ? (
+                            <p>No Scheduled Events to Display</p>
+                        ) : (
+                            <div>
+                                {allEvents.map((event, i) => (
+                                    <Scheduled
+                                        key={event.id}
+                                        event={event}
+                                    />
+                                ))}
+                            </div>
+                        ))}
+                        </div>
+                        </Box>
+                    </Paper>
+                   
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  
+                        <Typography variant="h6" gutterBottom>
+                            Created Events
+                    </Typography>
+                    <Card>
+                        <p>Events I Created But Have Not Scheduled: </p>
+                        <div>
+                            {isEventsLoading ? (
+                                <CircularProgress />
+                            ) : (
+                                myEvents.map((event) => (
+                                    <div>
+                                        <Divider />
+                                        <Typography variant="h9" sx={{ mr: 1 }} align="left" >
+                                            Group:
+                                        </Typography>
+                                        <Link to={`/groups/${event.groups.id}`} underline="hover">
+                                            <Typography variant="h9" color='#BA7B92' sx={{ mr: 2 }} align="left">
+                                                {event.groups.name}
+                                            </Typography>
+                                        </Link>
+                                        <Typography variant="h9" sx={{ mr: 1 }} align="right">
+                                            Event:
+                                        </Typography>
+                                        <Typography variant="h9" color='#689f38' align="right">
+                                            {event.name}
+                                        </Typography>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                    </Card>
+                   
                     <Typography variant="h6" gutterBottom>
                         Pending Events
                     </Typography>
-                    <p>Other people's events that I need to respond to with my availability</p>
+                    <Card>
+                    
+                    <p>Events To Respond With My Availability:</p>
 
                     <Divider />
                     {isPendingLoading ? (
                         <CircularProgress />
                     ) : (
-                      myPending.map((event) => (
-                        <div>
-                            {event.events.map((e) => (
-                                <div>
-                                    <Divider />
-                                    <Typography variant="h9" sx={{ mr: 1 }} align="left" >
-                                        Group: 
-                                    </Typography>
-                                    <Link to={`/groups/${event.id}`}>
-                                        <Typography variant="h9" color='#BA7B92' sx={{ mr: 2 }} align="left">
-                                            {event.name}
-                                        </Typography>
-                                    </Link>
-                                    <Typography variant="h9" sx={{ mr: 1 }} align="right">
-                                        Event:
-                                    </Typography>
-                                    <Typography variant="h9" color='#689f38' sx={{ mr: 2 }} align="left">
-                                        {e.name}
-                                    </Typography>
-                                </div>
-                            )) }
-                        </div>
-                      ))
-                    )}
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <Typography variant="h6" gutterBottom>
-                        Created Events
-                    </Typography>
-                    <p>Pending Events I Created: </p>
-                    <div>
-                        {isEventsLoading ? (
-                            <CircularProgress />
-                        ) : (
-                          myEvents.map((event) => (
+                        myPending.map((event) => (
                             <div>
-                                <Divider />
-                                <Typography variant="h9" sx={{ mr: 1 }} align="left" >
-                                    Group:
-                                </Typography>
-                                <Link to={`/groups/${event.groups.id}`} underline="hover">
-                                    <Typography variant="h9" color='#BA7B92' sx={{ mr: 2 }} align="left">
-                                        {event.groups.name}
-                                    </Typography>
-                                </Link>
-                                <Typography variant="h9" sx={{ mr: 1 }} align="right">
-                                    Event:
-                                </Typography>
-                                <Typography variant="h9" color='#689f38' align="right">
-                                    {event.name}
-                                </Typography>
+                                {event.events.map((e) => (
+                                    <div>
+                                        <Divider />
+                                        <Typography variant="h9" sx={{ mr: 1 }} align="left" >
+                                            Group:
+                                        </Typography>
+                                        <Link to={`/groups/${event.id}`}>
+                                            <Typography variant="h9" color='#BA7B92' sx={{ mr: 2 }} align="left">
+                                                {event.name}
+                                            </Typography>
+                                        </Link>
+                                        <Typography variant="h9" sx={{ mr: 1 }} align="right">
+                                            Event:
+                                        </Typography>
+                                        <Typography variant="h9" color='#689f38' sx={{ mr: 2 }} align="left">
+                                            {e.name}
+                                        </Typography>
+                                    </div>
+                                ))}
                             </div>
-                          ))
+                        ))
                         )}
-                    </div>
-
+                    </Card>
                 </Grid>
             </Grid>
         </Container>
