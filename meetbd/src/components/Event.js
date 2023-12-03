@@ -60,10 +60,40 @@ const Event = (props) => {
         setChecked(event.target.checked);
     };
     async function createCalendarEvent() {
+        //get group members
+        let groupMembers = []
+        try {
+            const { data: m, error } = await supabase
+                .from("groups")
+                .select('members')
+                .eq("id", event.group_id )
+
+            if (error) throw error;
+         
+            groupMembers = m[0].members
+            console.log(groupMembers)
+        } catch (error) {
+            alert(error.error_description || error.message);
+        }
+
+        const { data: memberData, error: memberError } = await supabase
+            .from("profile")
+            .select("*")
+            .in("id", groupMembers);
+        if (memberError) {
+            throw memberError;
+        }
+        console.log(memberData)
+
+        const inviteList = []
+        for (let i = 0; i < memberData.length; i++) {
+            inviteList.push({'email': memberData[i].email})
+        }
+        console.log(inviteList)
 
         const selectedDatesISO = selectedDates.map(timestamp => {
             const dateObject = new Date(timestamp);
-            return dateObject.toISOString();
+            return dateObject.toISOString().substring(0, 10);
         });
 
         const formattedStart = startTime.$d.toLocaleTimeString('en-US', {
@@ -76,9 +106,14 @@ const Event = (props) => {
             minute: '2-digit',
             hour12: false, // Use 24-hour format
         });
+
+        console.log(selectedDatesISO[0])
+        const calStart = selectedDatesISO[0] + "T" + formattedStart + ":00.000"
+        const calEnd = selectedDatesISO[0] + "T" + formattedEnd + ":00.000"
+        console.log(calStart)
+        console.log(calEnd)
         //console.log(selectedDatesISO[0] + "-" + formattedStart)
-        const calStart = selectedDatesISO[0] + "-" + formattedStart
-        const calEnd = selectedDatesISO[0] + "-" + formattedEnd
+        //console.log(selectedDatesISO[0] + "-" + formattedEnd)
         try {
             console.log("Creating a calendar event");
             const createEvent = {
@@ -92,13 +127,14 @@ const Event = (props) => {
                     'dateTime': calEnd,
                     'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
                 },
+                'attendees': inviteList
 
             } // The below function defaults to primary calendar. You can replace primary with a calendar ID.
             //console.log(selectedDatesISO[0] + " " + startTime.toISOString())
             await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
                 method: "POST",
                 headers: {
-                    'Authorization': 'Bearer ' + session.provider_token // PROVIDER TOKEN IS THE GOOGLE ONE, NOT AUTHORIZER TOKEN!!!
+                    'Authorization': `Bearer ` + session.provider_token // PROVIDER TOKEN IS THE GOOGLE ONE, NOT AUTHORIZER TOKEN!!!
                 },
                 body: JSON.stringify(createEvent)
             }).then((data) => {
