@@ -119,7 +119,8 @@ const EventAvailability = (props) => {
 
                         const timeDifference = currentDate.getHours() - parseInt(hours[0]);
                         
-                        updatedCells[timeDifference + 1][daysDifference + 1] = true;   
+                        updatedCells[timeDifference + 1][daysDifference + 1] = true; 
+                        if(currentDate > endDateTime) break;  
                     }
                     changeCurr({ cells: updatedCells });
 
