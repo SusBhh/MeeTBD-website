@@ -5,7 +5,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const ToDo = (props) => {
-    console.log(props)
+    console.log(props);
+    const filter = props.filter;
     // const item = props.item;
     const [userId, setUserId] = useState(null);
 
@@ -23,20 +24,23 @@ const ToDo = (props) => {
 
     return (
         <li className="todo stack-small">
-            <div className="c-cb">
-                <Checkbox id={props.id} defaultChecked={props.completed} size="large" onClick={() => props.handleComplete(props.item)}/>
-                <label className="todo-label" htmlFor={props.id}>
-                    {props.name}
-                </label>
-                <Tooltip title="delete item" placement="top" arrow>
-                    <IconButton
-                        onClick={() => props.handleDelete(props.item)}
-                        disableRipple
-                    >
-                    <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            </div>
+            {filter == props.completed || filter == null ? (
+                <div className="c-cb">
+                    <Checkbox id={props.id} defaultChecked={props.completed} size="large" onClick={() => props.handleComplete(props.item)} />
+                    <label className="todo-label" htmlFor={props.id}>
+                        {props.name}
+                    </label>
+                    <Tooltip title="delete item" placement="top" arrow>
+                        <IconButton
+                            onClick={() => props.handleDelete(props.item)}
+                            disableRipple
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                </div>
+            ) : (<></>)
+            }
         </li>
     );
 }
