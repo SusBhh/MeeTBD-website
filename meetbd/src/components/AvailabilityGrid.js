@@ -11,7 +11,7 @@ const AvailabilityGrid = (selectedDate) => {
     const [dateRange, setDateRange] = React.useState([])
     useEffect(() => {
         //console.log(JSON.stringify(selectedDate.selectedDate.startDate))
-        const currentDate = selectedDate.selectedDate.startDate
+        let currentDate = selectedDate.selectedDate.startDate
         const endDate = selectedDate.selectedDate.endDate
         //console.log(JSON.stringify(currentDate))
         //console.log(JSON.stringify(endDate))
@@ -19,7 +19,7 @@ const AvailabilityGrid = (selectedDate) => {
         while (currentDate <= endDate) {
             //console.log(JSON.stringify(currentDate))
             array.push(new Date(currentDate));
-            let currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
+            currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
         }
         //setDateRange(array)
     }, [selectedDate.selectedDate.startDate, selectedDate.selectedDate.endDate]);
