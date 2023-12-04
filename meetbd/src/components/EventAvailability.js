@@ -84,12 +84,17 @@ const EventAvailability = (props) => {
     };
 
     const handleGetCalendarAvailability = async () => {
-        const startDate = new Date(`${event.possible_dates[0]}T${event.start_time}`);
+        const startDay = event.possible_dates[0];
+        const endDay = event.possible_dates[event.possible_dates.length - 1];
+        const startTime = event.start_time;
+        const endTime = event.end_time;
+
+        const startDate = new Date(`${startDay}T${startTime}`);
         startDate.setDate(startDate.getDate() - 1);
-        const endDate = new Date(`${event.possible_dates[event.possible_dates.length - 1]}T${event.end_time}`);
+
+        const endDate = new Date(`${endDay}T${endTime}`);
         endDate.setDate(endDate.getDate() - 1);
-        console.log(startDate);
-        console.log(endDate);
+
         fetch(`${eventsEndpoint}?timeMin=${startDate.toISOString()}&timeMax=${endDate.toISOString()}`, {
             method: "GET",
             headers: {
