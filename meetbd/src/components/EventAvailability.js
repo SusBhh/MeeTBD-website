@@ -171,6 +171,7 @@ const EventAvailability = (props) => {
             </TableDragSelect>
             <div className="table-form-buttons-container" style={tableFormButtonStyles}>
                 <button onClick={handleReset} style={buttonStyles}>Reset</button>
+                <button style={buttonStyles}>Get Availability </button>
                 <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
             </div>
         </div>

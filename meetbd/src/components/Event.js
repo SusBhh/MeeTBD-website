@@ -294,7 +294,8 @@ const Event = (props) => {
                                     onError={(newError) => setStartError(newError)}
                                 />      
                             </Grid>
-                        <Grid item xs={6}>
+                            <Grid item xs={6}>
+                              
                                 <TimePicker
                                     label="End Time:"
                                     value={endTime}
@@ -302,7 +303,8 @@ const Event = (props) => {
                                     onError={(newError) => setEndError(newError)}
                                 />
                         </Grid>
-                        <Grid item xs={6}>
+                            <Grid item xs={6}>
+                                <h5>Select scheduled dates below:</h5>
                             <DatePicker
                                 label="Selected Date:"
                                 style={{ width: "155px", height: "55px" }}
