@@ -19,7 +19,7 @@ const AvailabilityGrid = (selectedDate) => {
         while (currentDate <= endDate) {
             //console.log(JSON.stringify(currentDate))
             array.push(new Date(currentDate));
-            currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
+            let currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
         }
         //setDateRange(array)
     }, [selectedDate.selectedDate.startDate, selectedDate.selectedDate.endDate]);
