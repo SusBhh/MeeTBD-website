@@ -93,7 +93,6 @@ const HomePage = () => {
 
             if (error) throw error;
             result = allGroups.map(a => a.id);
-            console.log(result)
         } catch (error) {
             alert(error.error_description || error.message);
         }
@@ -107,7 +106,6 @@ const HomePage = () => {
                 .eq("scheduled", true);
             if (error) throw error;
             if (events) setAllEvents(events);
-            console.log(events)
         } catch (error) {
             alert(error.error_description || error.message);
         }

@@ -71,7 +71,6 @@ const Event = (props) => {
             if (error) throw error;
          
             groupMembers = m[0].members
-            console.log(groupMembers)
         } catch (error) {
             alert(error.error_description || error.message);
         }
@@ -83,13 +82,11 @@ const Event = (props) => {
         if (memberError) {
             throw memberError;
         }
-        console.log(memberData)
 
         const inviteList = []
         for (let i = 0; i < memberData.length; i++) {
             inviteList.push({'email': memberData[i].email})
         }
-        console.log(inviteList)
 
         const selectedDatesISO = selectedDates.map(timestamp => {
             const dateObject = new Date(timestamp);
@@ -141,11 +138,9 @@ const Event = (props) => {
                 return data.json();
             }).then((data, error) => {
                 if (data.error) {
-                    console.log(data)
                     throw error
                 }
                 else {
-                    console.log(data);
                     alert("Event created, check calendar");
                 }
             })
@@ -182,13 +177,11 @@ const Event = (props) => {
             const dateObject = new Date(timestamp);
             return dateObject.toISOString();
         });
-        console.log("times")
         //console.log(startTime)
         //console.log(endTime)
         //console.log(selectedDatesISO)
         //console.log(startError)
         //console.log(startTime)
-        console.log(event.id)
         //console.log(selectedDates)
         const formattedStart = startTime.$d.toLocaleTimeString('en-US', {
             hour: '2-digit',

@@ -12,7 +12,6 @@ const ReadEvents = (groupId) => {
     const supabase = useSupabaseClient();
 
     async function handleDelete(event_id) {
-        console.log(event_id)
         setIsLoading(true);
         try {
             const { error } = await supabase
