@@ -34,11 +34,6 @@ export default function SignupPage() {
         catch (error) {
             alert(error)
         }
-       
-        console.log({
-            email: userData.get("email"),
-            password: userData.get("password"),
-        });
     };
 
     return (

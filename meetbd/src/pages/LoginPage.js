@@ -48,7 +48,7 @@ const LoginPage = () => {
         });
         if (error) {
             alert("Error occurred when logging into Google provider via Supabase");
-            console.log(error);
+            console.error(error);
         }
     }
 

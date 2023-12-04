@@ -56,7 +56,6 @@ const ReadEvents = (groupId) => {
 
     React.useEffect(() => {
         readEvents();
-        //console.log(groupId.groupId)
     }, []);
 
     return (

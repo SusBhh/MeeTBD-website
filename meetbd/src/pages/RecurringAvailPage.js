@@ -33,7 +33,6 @@ const RecurringAvailPage = () => {
     };
 
     function updateDate(start, end) {
-        console.log("Update date range inside of AvailabilityGrid");
         setSelectedDate({
             startDate: start,
             endDate: end

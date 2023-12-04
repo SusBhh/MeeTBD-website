@@ -37,7 +37,6 @@ const EventAvailability = (props) => {
             hourArray.push(formattedHour);
         }
         setHours(hourArray)
-        //console.log(dates.length)
         const cells = Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
         changeCurr({ cells })
         readAvailability()
@@ -85,8 +84,6 @@ const EventAvailability = (props) => {
 
         const endDate = new Date(dates[dates.length - 1]);
         endDate.setHours(endHour)
-
-        console.log(endDate);
 
         fetch(`${eventsEndpoint}?timeMin=${startDate.toISOString()}&timeMax=${endDate.toISOString()}`, {
             method: "GET",

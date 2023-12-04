@@ -38,7 +38,6 @@ function Scheduled(props) {
     async function handleDelete(day) {
         const dates = event.scheduled_at
 
-        //console.log(JSON.stringify(event.scheduled_at))
         const index = dates.indexOf(day)
         if (index > -1) {
             dates.splice(index, 1)
