@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box'; 
 import DatePicker from 'react-multi-date-picker';
 import Grid from '@mui/material/Grid';
 import Container from "@mui/material/Container";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import HourlyDropdown from './HourlyDropdown';
-import WeeklyDropdown from './WeeklyDropdown';
 import Typography from '@mui/material/Typography';
 
 const CreateEvent = ({ groupId, onClose }) => {
@@ -16,16 +14,13 @@ const CreateEvent = ({ groupId, onClose }) => {
     const [startTime, setStartTime] = useState('9:00 AM');
     const [endTime, setEndTime] = useState('5:00 PM');
     const [userId, setUserId] = React.useState(null);
-    const [open, setOpen] = useState(false)
 
     const updateStartTime = (time) => {
         setStartTime(time);
-        //console.log(time);
     }
 
     const updateEndTime = (time) => {
         setEndTime(time);
-        //console.log(time)
     }
 
     const supabase = useSupabaseClient();

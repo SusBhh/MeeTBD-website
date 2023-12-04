@@ -4,7 +4,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import Group from "./Group";
 
-const ReadGroups = (readGroups) => {
+const ReadGroups = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [userId, setUserId] = React.useState(null);
   const [groups, setGroups] = React.useState([]);
@@ -87,7 +87,7 @@ const ReadGroups = (readGroups) => {
     <div>
       {isLoading ? (
         <CircularProgress />
-      ) : groups.length == 0 ? (
+      ) : groups.length === 0 ? (
         <p>No groups to display</p>
       ) : (
         <div>

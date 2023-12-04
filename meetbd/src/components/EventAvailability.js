@@ -52,11 +52,10 @@ const EventAvailability = (props) => {
             .eq('event_id', event.id)
             .eq("user_id", [user?.id]);
         if (eventError) {
-            //alert(eventError)
             throw eventError;
         }
         if (eventData) {
-            if(eventData.length == 0) {
+            if(eventData.length === 0) {
                 return;
             }
             const cells = eventData[0].availability
@@ -144,7 +143,7 @@ const EventAvailability = (props) => {
                 console.log(eventError)
                 throw eventError;
             }
-            if (eventData && eventData.length != 0) {
+            if (eventData && eventData.length !== 0) {
                 const { updateError } = await supabase
                     .from("event_availability")
                     .update({ availability: curr.cells })
