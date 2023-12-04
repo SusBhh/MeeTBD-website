@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "../components/Hours";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const EventAvailability = (props) => {
     const event = props.event
+    const session = useSession();
     const supabase = useSupabaseClient();
     const [isLoading, setIsLoading] = React.useState(false);
+    const eventsEndpoint = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
     const [dates, setDates] = useState([]);
     const [hours, setHours] = useState([]);
     const [curr, changeCurr] = useState({
@@ -80,6 +82,46 @@ const EventAvailability = (props) => {
         const cells = Array.from({ length: hours.length+1 }, () => Array(dates.length + 1).fill(false));
         changeCurr({ cells });
     };
+
+    const handleGetCalendarAvailability = async () => {
+        const startDate = new Date(`${event.possible_dates[0]}T${event.start_time}`);
+        startDate.setDate(startDate.getDate() - 1);
+        const endDate = new Date(`${event.possible_dates[event.possible_dates.length - 1]}T${event.end_time}`);
+        endDate.setDate(endDate.getDate() - 1);
+        console.log(startDate);
+        console.log(endDate);
+        fetch(`${eventsEndpoint}?timeMin=${startDate.toISOString()}&timeMax=${endDate.toISOString()}`, {
+            method: "GET",
+            headers: {
+              'Authorization': 'Bearer ' + session.provider_token,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              // Process the retrieved events data
+              if (data.items) {
+                // Iterate over each event and print its information
+                data.items.forEach((event) => {
+                  console.log('Event Summary:', event.summary);
+                  console.log('Event Start:', event.start.dateTime || event.start.date);
+                  console.log('Event End:', event.end.dateTime || event.end.date);
+                  console.log('---');
+                });
+              } else {
+                console.log('No events found.');
+              }
+            })
+            .catch((error) => {
+              console.error('Error fetching events:', error);
+            });
+    }
 
     const handleSubmit = async () => {
         try {
@@ -171,7 +213,7 @@ const EventAvailability = (props) => {
             </TableDragSelect>
             <div className="table-form-buttons-container" style={tableFormButtonStyles}>
                 <button onClick={handleReset} style={buttonStyles}>Reset</button>
-                <button style={buttonStyles}>Get Availability </button>
+                <button onClick={handleGetCalendarAvailability} style={buttonStyles}>Get Availability </button>
                 <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
             </div>
         </div>
