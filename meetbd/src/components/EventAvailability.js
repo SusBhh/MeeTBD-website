@@ -114,13 +114,12 @@ const EventAvailability = (props) => {
 
                     const updatedCells = [...curr.cells];
 
-                    for (let currentDate = startDateTime; currentDate++ <= endDateTime; currentDate.setHours(currentDate.getHours() + 1)) {
+                    for (let currentDate = startDateTime; currentDate <= endDateTime; currentDate.setHours(currentDate.getHours() + 1)) {
                         const daysDifference = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24));
 
                         const timeDifference = currentDate.getHours() - parseInt(hours[0]);
                         
-                        updatedCells[timeDifference + 1][daysDifference + 1] = true;
-                        currentDate--;
+                        updatedCells[timeDifference + 1][daysDifference + 1] = true;   
                     }
                     changeCurr({ cells: updatedCells });
 
@@ -128,6 +127,7 @@ const EventAvailability = (props) => {
                     console.log('Event Start:', googleEvent.start.dateTime || googleEvent.start.date);
                     console.log('Event End:', googleEvent.end.dateTime || googleEvent.end.date);
                     console.log('---');
+                    console.log(curr.cells);
                 });
               } else {
                 console.log('No events found.');
