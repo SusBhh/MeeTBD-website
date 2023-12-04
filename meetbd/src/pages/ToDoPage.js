@@ -23,7 +23,7 @@ const ToDoPage = () => {
     };
     getUserId();
 
-    async function handelFilterChange(curr) {
+    async function handleFilterChange(curr) {
         if (curr == "active") {
             setFilter(false);
         } else if (curr == "complete") {
@@ -86,13 +86,13 @@ const ToDoPage = () => {
                 )}
             </form>
             <div className="filters btn-group stack-exception">
-                <Button className="btn toggle-btn" onClick={() => handelFilterChange("all")}>
+                <Button className="btn toggle-btn" onClick={() => handleFilterChange("all")}>
                     Show All Tasks
                 </Button>
-                <Button className="btn toggle-btn" onClick={() => handelFilterChange("active")}>
+                <Button className="btn toggle-btn" onClick={() => handleFilterChange("active")}>
                     Show Active Tasks
                 </Button>
-                <Button className="btn toggle-btn" onClick={() => handelFilterChange("complete")}>
+                <Button className="btn toggle-btn" onClick={() => handleFilterChange("complete")}>
                     Show Completed Tasks
                 </Button>
             </div>
