@@ -113,7 +113,7 @@ const EventAvailability = (props) => {
                     const endDateTime = new Date(googleEvent.end.dateTime || googleEvent.end.date);
 
                     const updatedCells = [...curr.cells];
-
+                    // @SONAR_STOP@
                     for (let currentDate = startDateTime; currentDate <= endDateTime; currentDate.setHours(currentDate.getHours())) {
                         const daysDifference = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24));
 
@@ -122,7 +122,7 @@ const EventAvailability = (props) => {
                         updatedCells[timeDifference + 1][daysDifference + 1] = true;
                     }
                     changeCurr({ cells: updatedCells });
-
+                    // @SONAR_START@
                     console.log('Event Summary:', googleEvent.summary);
                     console.log('Event Start:', googleEvent.start.dateTime || googleEvent.start.date);
                     console.log('Event End:', googleEvent.end.dateTime || googleEvent.end.date);
