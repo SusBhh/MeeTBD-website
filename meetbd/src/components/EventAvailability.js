@@ -122,12 +122,6 @@ const EventAvailability = (props) => {
                         updatedCells[timeDifference + 1][daysDifference + 1] = true;  
                     }
                     changeCurr({ cells: updatedCells });
-
-                    console.log('Event Summary:', googleEvent.summary);
-                    console.log('Event Start:', googleEvent.start.dateTime || googleEvent.start.date);
-                    console.log('Event End:', googleEvent.end.dateTime || googleEvent.end.date);
-                    console.log('---');
-                    console.log(curr.cells);
                 });
               } else {
                 console.log('No events found.');
