@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
 import CardHeader from '@mui/material/CardHeader';
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+
 function Scheduled(props) {
     const event = props.event;
     const supabase = useSupabaseClient();

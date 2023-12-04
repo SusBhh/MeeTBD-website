@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import ToDo from '../components/ToDo';
 import '../components/ToDo.css';
 import Button from "@mui/material/Button";
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import ReadToDo from '../components/ReadToDo';
 import CircularProgress from "@mui/material/CircularProgress";
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+
+import ReadToDo from '../components/ReadToDo';
 
 const ToDoPage = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -24,9 +24,9 @@ const ToDoPage = () => {
     getUserId();
 
     async function handleFilterChange(curr) {
-        if (curr == "active") {
+        if (curr === "active") {
             setFilter(false);
-        } else if (curr == "complete") {
+        } else if (curr === "complete") {
             setFilter(true);
         } else {
             setFilter(null);
@@ -75,7 +75,7 @@ const ToDoPage = () => {
                         onChange={(e) => setItemName(e.target.value)}
                     />
                 </label>
-                {itemName.length == 0 ? (
+                {itemName.length === 0 ? (
                     <Button type="submit" variant="contained" size="small" disabled>
                         Add
                     </Button>
