@@ -44,7 +44,6 @@ const GroupAvailability = (props) => {
     }, [event.possible_dates, event.start_time, event.end_time]);
 
     async function readAvailability() {
-        console.log("Read Availabilty");
         setIsLoading(true);
         const { data: { user }, } = await supabase.auth.getUser();
         const { data: eventData, error: eventError } = await supabase
@@ -52,7 +51,6 @@ const GroupAvailability = (props) => {
             .select('availability, user_id')
             .eq('event_id', event.id)
         if (eventError) {
-            console.log(eventError)
             throw eventError;
         }
         if (eventData) {
@@ -61,7 +59,6 @@ const GroupAvailability = (props) => {
                 setIsLoading(false);
                 return;
             }
-            console.log(eventData);
             setEventData(eventData);
             /* Create list of everyone who has responded */
             const respondingUsers = {};
@@ -84,13 +81,10 @@ const GroupAvailability = (props) => {
                     for (let i = 0; i < eventData.length; i++) {
                         availability_total += eventData[i].availability[j][k] === true ? 1 : 0;
                     }
-                    console.log(availability_total);
                     responsesArray[j][k] = Math.round((availability_total / eventData.length) * 10) / 10;
                 }
             }
             setResponses(responsesArray);
-            console.log("Responses Array");
-            console.log(responsesArray)
             setIsLoading(false);
         }
         else {
@@ -115,7 +109,6 @@ const GroupAvailability = (props) => {
         for (let i = 0; i < availableUsers.length; i++) {
             if (availableUsers[i] === true) availableCount += 1;
         }
-        console.log(availableCount);
         setAvailableUserCount(availableCount);
         handleClick();
     }

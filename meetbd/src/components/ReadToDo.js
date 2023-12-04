@@ -61,7 +61,6 @@ const ReadToDo = (props) => {
 
         if (error) throw error; // check if there was an error fetching the data and move the execution to the catch block
         if (data) setItems(data);
-        console.log(data)
         setIsLoading(false);
     }
 

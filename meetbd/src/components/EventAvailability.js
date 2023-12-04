@@ -3,12 +3,16 @@ import { useState, useEffect } from "react";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "../components/Hours";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const EventAvailability = (props) => {
     const event = props.event
+    const startTime = event.start_time;
+    const endTime = event.end_time;
+    const session = useSession();
     const supabase = useSupabaseClient();
     const [isLoading, setIsLoading] = React.useState(false);
+    const eventsEndpoint = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
     const [dates, setDates] = useState([]);
     const [hours, setHours] = useState([]);
     const [curr, changeCurr] = useState({
@@ -23,8 +27,6 @@ const EventAvailability = (props) => {
     };
     getUserId();
     useEffect(() => {
-        console.log("useEffect")
-        console.log("hi")
         setDates(event.possible_dates);
         const hourArray = [];
         const startHour = new Date(`2000-01-01T${event.start_time}`);
@@ -34,11 +36,9 @@ const EventAvailability = (props) => {
             const formattedHour = currentTime.toLocaleString('en-US', { hour: 'numeric', hour12: true });
             hourArray.push(formattedHour);
         }
-        console.log(hourArray)
         setHours(hourArray)
         //console.log(dates.length)
         const cells = Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
-        console.log(cells)
         changeCurr({ cells })
         readAvailability()
     }, [event.possible_dates, event.start_time, event.end_time]);
@@ -53,15 +53,12 @@ const EventAvailability = (props) => {
             .eq("user_id", [user?.id]);
         if (eventError) {
             //alert(eventError)
-            console.log(eventError)
             throw eventError;
         }
-        console.log("next step")
         if (eventData) {
             if(eventData.length == 0) {
                 return;
             }
-            console.log(eventData[0].availability)
             const cells = eventData[0].availability
             changeCurr({ cells })
             setIsLoading(false);
@@ -73,13 +70,67 @@ const EventAvailability = (props) => {
 
     function handleChange(cells) {
         changeCurr({ cells });
-        console.log(cells);
     }
 
     const handleReset = () => {
         const cells = Array.from({ length: hours.length+1 }, () => Array(dates.length + 1).fill(false));
         changeCurr({ cells });
     };
+
+    const handleGetCalendarAvailability = async () => {
+        const startHour = startTime.split(':')[0];
+        const endHour = endTime.split(':')[0];
+
+        const startDate = new Date(dates[0]);
+        startDate.setHours(startHour);
+
+        const endDate = new Date(dates[dates.length - 1]);
+        endDate.setHours(endHour)
+
+        console.log(endDate);
+
+        fetch(`${eventsEndpoint}?timeMin=${startDate.toISOString()}&timeMax=${endDate.toISOString()}`, {
+            method: "GET",
+            headers: {
+              'Authorization': 'Bearer ' + session.provider_token,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              // Process the retrieved events data
+              if (data.items) {
+                // Iterate over each event and print its information
+                data.items.forEach((googleEvent) => {
+                    const startDateTime = new Date(googleEvent.start.dateTime || googleEvent.start.date);
+
+                    const endDateTime = new Date(googleEvent.end.dateTime || googleEvent.end.date);
+
+                    const updatedCells = [...curr.cells];
+
+                    for (let currentDate = startDateTime; currentDate <= endDateTime; currentDate = new Date(currentDate.setHours(currentDate.getHours() + 1))) {
+                        const daysDifference = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24));
+
+                        const timeDifference = currentDate.getHours() - parseInt(hours[0]);
+                        
+                        updatedCells[timeDifference + 1][daysDifference + 1] = true;  
+                    }
+                    changeCurr({ cells: updatedCells });
+                });
+              } else {
+                console.log('No events found.');
+              }
+            })
+            .catch((error) => {
+              console.error('Error fetching events:', error);
+            });
+    }
 
     const handleSubmit = async () => {
         try {
@@ -171,7 +222,7 @@ const EventAvailability = (props) => {
             </TableDragSelect>
             <div className="table-form-buttons-container" style={tableFormButtonStyles}>
                 <button onClick={handleReset} style={buttonStyles}>Reset</button>
-                <button style={buttonStyles}>Get Availability </button>
+                <button onClick={handleGetCalendarAvailability} style={buttonStyles}>Get Availability </button>
                 <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
             </div>
         </div>

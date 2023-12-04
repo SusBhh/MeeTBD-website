@@ -3,7 +3,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
 
 const GroupMember = ({ handleDelete, member, isOwner, isSelf }) => {
-  console.log(member);
+  
   return (
     <div className="group-around">
           <div className="groupMember">

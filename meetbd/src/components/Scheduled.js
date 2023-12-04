@@ -30,24 +30,17 @@ function Scheduled(props) {
 
     const printDate = (date) => {
         //bug where it is printing a day behind
-        console.log(date)
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         const formattedDate = new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', options);
-        console.log(formattedDate)
         return formattedDate;
     }
     async function handleDelete(day) {
-        console.log(day)
         const dates = event.scheduled_at
-        console.log(dates)
 
         //console.log(JSON.stringify(event.scheduled_at))
         const index = dates.indexOf(day)
-        console.log(index)
         if (index > -1) {
             dates.splice(index, 1)
-            console.log("update")
-            console.log(dates)
         }
 
 

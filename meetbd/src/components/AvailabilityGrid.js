@@ -10,7 +10,6 @@ const AvailabilityGrid = (selectedDate) => {
     const [userId, setUserId] = React.useState(null);
     const [dateRange, setDateRange] = React.useState([])
     useEffect(() => {
-        console.log("hi")
         //console.log(JSON.stringify(selectedDate.selectedDate.startDate))
         const currentDate = selectedDate.selectedDate.startDate
         const endDate = selectedDate.selectedDate.endDate
@@ -23,7 +22,6 @@ const AvailabilityGrid = (selectedDate) => {
             currentDate.setDate(currentDate.getDate() + 1);
         }
         //setDateRange(array)
-        console.log(array)
     }, [selectedDate.selectedDate.startDate, selectedDate.selectedDate.endDate]);
 
     const [curr, changeCurr] = useState({
@@ -83,7 +81,6 @@ const AvailabilityGrid = (selectedDate) => {
 
     function handleChange(cells) {
         changeCurr({ cells });
-        console.log(cells);
     }
 
     const handleReset = () => {
