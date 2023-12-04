@@ -114,12 +114,14 @@ const EventAvailability = (props) => {
 
                     const updatedCells = [...curr.cells];
 
-                    for (let currentDate = startDateTime; currentDate + 1 <= endDateTime + 1; currentDate.setHours(currentDate.getHours() + 1)) {
+                    for (let currentDate = startDateTime; currentDate++ <= endDateTime++; currentDate.setHours(currentDate.getHours() + 1)) {
                         const daysDifference = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24));
 
                         const timeDifference = currentDate.getHours() - parseInt(hours[0]);
                         
                         updatedCells[timeDifference + 1][daysDifference + 1] = true;
+                        endDateTime--;
+                        currentDate--;
                     }
                     changeCurr({ cells: updatedCells });
 
