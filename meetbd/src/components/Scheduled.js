@@ -9,6 +9,15 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 function Scheduled(props) {
     const event = props.event;
     const supabase = useSupabaseClient();
+    const [userId, setUserId] = React.useState(null);
+    const getUserId = async () => {
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+        setUserId(user.id);
+    };
+    getUserId();
+    const isOwner = userId === event.event_owner;
 
     const printTime = (currentHour) => {
         const timeString12hr = new Date('1970-01-01T' + currentHour.toString() + 'Z')
@@ -77,18 +86,27 @@ function Scheduled(props) {
             { 
                 event.scheduled_at.map((day, index) => (
                     <Card sx={{ display: 'flex' }}>
-                        <CardHeader
-                            action={
-                                <Tooltip title="delete event" placement="top" arrow>
-                                    <IconButton onClick={() => handleDelete(day)} disableRipple>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            }
-                            titleTypographyProps={{ variant: 'h9' }}
-                            title={event.name}
-                            subheader={day}
-                        />
+                        {isOwner ? (
+                            <CardHeader
+                                action={
+                                    <Tooltip title="delete event" placement="top" arrow>
+                                        <IconButton onClick={() => handleDelete(day)} disableRipple>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                }
+                                titleTypographyProps={{ variant: 'h9' }}
+                                title={event.name}
+                                subheader={day}
+                            />
+                        ) : (
+                                <CardHeader
+                                    titleTypographyProps={{ variant: 'h9' }}
+                                    title={event.name}
+                                    subheader={day}
+                                />
+                        )}
+                        
                         <CardContent >
                             <Typography variant="subtitle1" color="text.secondary">
                                 {printTime(event.start_time)} - {printTime(event.end_time)}
