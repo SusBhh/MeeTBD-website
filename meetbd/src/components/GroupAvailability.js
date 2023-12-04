@@ -19,14 +19,7 @@ const GroupAvailability = (props) => {
     const [curr, changeCurr] = useState({
         cells: Array.from({ length: 1 }, () => Array(1).fill(false)),
     });
-    const [userId, setUserId] = React.useState(null);
-    const getUserId = async () => {
-        const {
-            data: { user },
-        } = await supabase.auth.getUser();
-        setUserId(user.id);
-    };
-    getUserId();
+
     useEffect(() => {
         setDates(event.possible_dates);
         const hourArray = [];
@@ -54,7 +47,7 @@ const GroupAvailability = (props) => {
             throw eventError;
         }
         if (eventData) {
-            if(eventData.length == 0) {
+            if(eventData.length === 0) {
                 // No responses
                 setIsLoading(false);
                 return;

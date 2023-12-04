@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
 import CardHeader from '@mui/material/CardHeader';
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+
 function Scheduled(props) {
     const event = props.event;
     const supabase = useSupabaseClient();
@@ -37,7 +38,6 @@ function Scheduled(props) {
     async function handleDelete(day) {
         const dates = event.scheduled_at
 
-        //console.log(JSON.stringify(event.scheduled_at))
         const index = dates.indexOf(day)
         if (index > -1) {
             dates.splice(index, 1)

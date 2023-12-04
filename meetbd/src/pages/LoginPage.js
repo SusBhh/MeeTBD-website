@@ -1,16 +1,17 @@
 import React from 'react';
-import GoogleButton from 'react-google-button';
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
+
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
 import Container from "@mui/material/Container";
-import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import GoogleButton from 'react-google-button';
 import google_icon from '../assets/google_icon.png';
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
 
 const LoginPage = () => {
     const session = useSession(); // Contains Tokens
@@ -47,7 +48,7 @@ const LoginPage = () => {
         });
         if (error) {
             alert("Error occurred when logging into Google provider via Supabase");
-            console.log(error);
+            console.error(error);
         }
     }
 

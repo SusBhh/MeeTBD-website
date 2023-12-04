@@ -6,7 +6,6 @@ import Scheduled from "./Scheduled";
 
 const ReadEvents = (groupId) => {
     const [isLoading, setIsLoading] = React.useState(false);
-    const [userId, setUserId] = React.useState(null);
     const [events, setEvents] = React.useState([]);
 
     const supabase = useSupabaseClient();
@@ -57,14 +56,13 @@ const ReadEvents = (groupId) => {
 
     React.useEffect(() => {
         readEvents();
-        //console.log(groupId.groupId)
     }, []);
 
     return (
         <div>
             {isLoading ? (
                 <CircularProgress />
-            ) : events.length == 0 ? (
+            ) : events.length === 0 ? (
                 <p>No Events to Display</p>
             ) : (
                 <div>

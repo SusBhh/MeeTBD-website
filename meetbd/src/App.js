@@ -1,9 +1,8 @@
-import { useEffect, useState} from 'react';
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { lightBlue, purple } from '@mui/material/colors';
-import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
+import { useSession, useSessionContext } from '@supabase/auth-helpers-react';
 import { BrowserRouter as Router, Routes, Route, Switch } from 'react-router-dom';
+
 import NavBar from './components/NavBar';
 import LoginPage from './pages/LoginPage';
 import GroupsPage from './pages/GroupsPage';

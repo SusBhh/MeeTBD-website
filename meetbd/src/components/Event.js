@@ -104,13 +104,8 @@ const Event = (props) => {
             hour12: false, // Use 24-hour format
         });
 
-        console.log(selectedDatesISO[0])
         const calStart = selectedDatesISO[0] + "T" + formattedStart + ":00.000"
         const calEnd = selectedDatesISO[0] + "T" + formattedEnd + ":00.000"
-        console.log(calStart)
-        console.log(calEnd)
-        //console.log(selectedDatesISO[0] + "-" + formattedStart)
-        //console.log(selectedDatesISO[0] + "-" + formattedEnd)
         try {
             console.log("Creating a calendar event");
             const createEvent = {
@@ -127,7 +122,6 @@ const Event = (props) => {
                 'attendees': inviteList
 
             } // The below function defaults to primary calendar. You can replace primary with a calendar ID.
-            //console.log(selectedDatesISO[0] + " " + startTime.toISOString())
             await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
                 method: "POST",
                 headers: {
@@ -177,12 +171,6 @@ const Event = (props) => {
             const dateObject = new Date(timestamp);
             return dateObject.toISOString();
         });
-        //console.log(startTime)
-        //console.log(endTime)
-        //console.log(selectedDatesISO)
-        //console.log(startError)
-        //console.log(startTime)
-        //console.log(selectedDates)
         const formattedStart = startTime.$d.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
