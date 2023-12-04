@@ -20,6 +20,7 @@ import Checkbox from '@mui/material/Checkbox';
 import EventAvailability from "./EventAvailability";
 import DatePicker from 'react-multi-date-picker';
 import GroupAvailability from "./GroupAvailability"
+import CalendarAccess from "./AccessCalendar"
 
 const Event = (props) => {
 
@@ -66,10 +67,10 @@ const Event = (props) => {
             const { data: m, error } = await supabase
                 .from("groups")
                 .select('members')
-                .eq("id", event.group_id )
+                .eq("id", event.group_id)
 
             if (error) throw error;
-         
+
             groupMembers = m[0].members
             console.log(groupMembers)
         } catch (error) {
@@ -87,7 +88,7 @@ const Event = (props) => {
 
         const inviteList = []
         for (let i = 0; i < memberData.length; i++) {
-            inviteList.push({'email': memberData[i].email})
+            inviteList.push({ 'email': memberData[i].email })
         }
         console.log(inviteList)
 
@@ -153,9 +154,9 @@ const Event = (props) => {
         catch (error) {
             alert("failed to add to google calendar")
         }
-        
-        }
-    async function handleSchedule(){
+
+    }
+    async function handleSchedule() {
         //error handling
         let message = ""
         let error = false;
@@ -200,11 +201,11 @@ const Event = (props) => {
             minute: '2-digit',
             hour12: false, // Use 24-hour format
         });
-        const { data: scheduled, error:schedError } = await supabase
+        const { data: scheduled, error: schedError } = await supabase
             .from("events")
-            .update({ scheduled: "true" }, {start_time: startTime})
+            .update({ scheduled: "true" }, { start_time: startTime })
             .eq("id", event.id);
-        const { data:start, error: sError } = await supabase
+        const { data: start, error: sError } = await supabase
             .from("events")
             .update({ start_time: formattedStart })
             .eq("id", event.id);
@@ -216,8 +217,8 @@ const Event = (props) => {
             .from("events")
             .update({ scheduled_at: selectedDatesISO })
             .eq("id", event.id);
-        
-         //, start_time: startTime, end_time: endTime, scheduled_at: selectedDatesISO 
+
+        //, start_time: startTime, end_time: endTime, scheduled_at: selectedDatesISO 
         //console.log(data)
 
 
@@ -242,80 +243,98 @@ const Event = (props) => {
             }
         }
     }, [open]);
-
+    const populate = async () => {
+    }
+    /*
+            // get events
+            gapi.client.calendar.events.list({
+              'calendarId': 'primary',
+              'timeMin': (new Date()).toISOString(),
+              'showDeleted': false,
+              'singleEvents': true,
+              'maxResults': 10,
+              'orderBy': 'startTime'
+            }).then(response => {
+              const events = response.result.items
+              console.log('EVENTS: ', events)
+            })
+            */
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <React.Fragment>
-            <div className="group-around" onClick={handleClickOpen('paper')}>
-                <div className="event" style={{cursor:'pointer'}}>
-                    <div className="text">
-                        <p>{event.name}</p>
-                    </div> 
-                </div> 
-            </div>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                scroll={scroll}
-            >
-                <DialogTitle id="scroll-dialog-title">
-                    {event.name}
-                    {isOwner ? (
-                        <><Tooltip title="edit event" placement="top" arrow>
-                            <IconButton onClick={handleEdit} disableRipple>
-                                <EditIcon />
-                            </IconButton>
-                            </Tooltip>
-                            <Tooltip title="delete event" placement="top" arrow>
-                                <IconButton onClick={() => props.handleDelete(event.id)} disableRipple>
-                                    <DeleteIcon />
+            <React.Fragment>
+                <div className="group-around" onClick={handleClickOpen('paper')}>
+                    <div className="event" style={{ cursor: 'pointer' }}>
+                        <div className="text">
+                            <p>{event.name}</p>
+                        </div>
+                    </div>
+                </div>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    scroll={scroll}
+                >
+                    <DialogTitle id="scroll-dialog-title">
+                        {event.name}
+                        {isOwner ? (
+                            <><Tooltip title="edit event" placement="top" arrow>
+                                <IconButton onClick={handleEdit} disableRipple>
+                                    <EditIcon />
                                 </IconButton>
                             </Tooltip>
+                                <Tooltip title="delete event" placement="top" arrow>
+                                    <IconButton onClick={() => props.handleDelete(event.id)} disableRipple>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </>
-                    ) : (
-                        <></>
-                    )}
-                </DialogTitle>
-                <DialogContent dividers={scroll === 'paper'} >
-                    <Grid container spacing={1}>
-                        <Grid item xs={6} >
-                            <h2>My Availability</h2>
-                            <EventAvailability event={event} />                                
-                        </Grid>
-                        <Grid item xs={ 6 }>
-                            <h2>Group's Availability</h2>
-                            <GroupAvailability event={event} />
-                        </Grid>
-                        <Grid item xs={6}>
-                             <TimePicker
+                        ) : (
+                            <></>
+                        )}
+                    </DialogTitle>
+                    <DialogContent dividers={scroll === 'paper'} >
+                        <Grid container spacing={1}>
+                            <Grid item xs={6} >
+                                <h2>My Availability</h2>
+                                <Button onClick={populate}>Get Availability
+                                    <CalendarAccess></CalendarAccess>
+                                </Button>
+                                <EventAvailability event={event} />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <h2>Group's Availability</h2>
+                                <GroupAvailability event={event} />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TimePicker
                                     label="Start Time:"
                                     value={startTime}
                                     onChange={(newValue) => setStartTime(newValue)}
                                     onError={(newError) => setStartError(newError)}
-                                />      
+                                />
                             </Grid>
-                        <Grid item xs={6}>
+                            <Grid item xs={6}>
                                 <TimePicker
                                     label="End Time:"
                                     value={endTime}
                                     onChange={(newValue) => setEndTime(newValue)}
                                     onError={(newError) => setEndError(newError)}
                                 />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <DatePicker
+                                    label="Selected Date:"
+                                    style={{ width: "155px", height: "55px" }}
+                                    multiple
+                                    value={selectedDates}
+                                    onChange={(selectedDates) => setSelectedDates(selectedDates)}
+                                    color="secondary"
+                                    calendarPosition="right"
+                                />
+                            </Grid>
+                            <br></br>
                         </Grid>
-                        <Grid item xs={6}>
-                            <DatePicker
-                                label="Selected Date:"
-                                style={{ width: "155px", height: "55px" }}
-                                multiple
-                                value={selectedDates}
-                                onChange={(selectedDates) => setSelectedDates(selectedDates)}
-                                color="secondary"
-                                calendarPosition="right"
-                            />
-                        </Grid>
-                        <br></br>
-                        </Grid>
-                </DialogContent>
+                    </DialogContent>
                     <DialogActions>
                         <FormGroup justifyContent="flex-end">
                             <FormControlLabel
@@ -325,11 +344,11 @@ const Event = (props) => {
                                 label="Send email invite"
                             />
                         </FormGroup>
-                         <div style={{flex: '1 0 0'}} />
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSchedule}>Schedule</Button>
-                </DialogActions>
-            </Dialog>
+                        <div style={{ flex: '1 0 0' }} />
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleSchedule}>Schedule</Button>
+                    </DialogActions>
+                </Dialog>
             </React.Fragment>
         </LocalizationProvider>
 

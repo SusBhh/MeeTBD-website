@@ -81,6 +81,23 @@ const EventAvailability = (props) => {
         changeCurr({ cells });
     };
 
+    const populateAvailibility = async () => {
+        /*
+                // get events
+                gapi.client.calendar.events.list({
+                  'calendarId': 'primary',
+                  'timeMin': (new Date()).toISOString(),
+                  'showDeleted': false,
+                  'singleEvents': true,
+                  'maxResults': 10,
+                  'orderBy': 'startTime'
+                }).then(response => {
+                  const events = response.result.items
+                  console.log('EVENTS: ', events)
+                })
+                */
+    }
+
     const handleSubmit = async () => {
         try {
             const { data: { user }, } = await supabase.auth.getUser();

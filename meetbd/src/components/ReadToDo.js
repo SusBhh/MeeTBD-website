@@ -12,6 +12,7 @@ const ReadToDo = (props) => {
     const supabase = useSupabaseClient();
 
     async function handleDelete(id) {
+        console.log("ID!!!!!!!!!",id);
         setIsLoading(true);
         try {
             const { error } = await supabase
