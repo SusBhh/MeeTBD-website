@@ -32,7 +32,7 @@ const EventAvailability = (props) => {
         const startHour = new Date(`2000-01-01T${event.start_time}`);
         const endHour = new Date(`2000-01-01T${event.end_time}`);
 
-        for (let currentTime = startHour; currentTime <= endHour; currentTime.setHours(currentTime.getHours() + 1)) {
+        for (let currentTime = startHour; currentTime <= endHour; currentTime = new Date(currentTime.setHours(currentTime.getHours() + 1))) {
             const formattedHour = currentTime.toLocaleString('en-US', { hour: 'numeric', hour12: true });
             hourArray.push(formattedHour);
         }
