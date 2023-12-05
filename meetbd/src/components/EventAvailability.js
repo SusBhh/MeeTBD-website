@@ -2,7 +2,6 @@ import React from 'react';
 import CircularProgress from "@mui/material/CircularProgress";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
-import hours from "../components/Hours";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const EventAvailability = (props) => {
@@ -15,7 +14,7 @@ const EventAvailability = (props) => {
     const eventsEndpoint = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
     const [dates, setDates] = React.useState([]);
     const [hours, setHours] = React.useState([]);
-    const [curr, changeCurr] = React.useState({
+    const [curr, setCurr] = React.useState({
         cells: Array.from({ length: 1 }, () => Array(1).fill(false)),
     });
     const [userId, setUserId] = React.useState(null);
@@ -38,7 +37,7 @@ const EventAvailability = (props) => {
         }
         setHours(hourArray)
         const cells = Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
-        changeCurr({ cells })
+        setCurr({ cells })
         readAvailability()
     }, [event.possible_dates, event.start_time, event.end_time]);
 
@@ -61,18 +60,18 @@ const EventAvailability = (props) => {
                 return;
             }
             const cells = eventData[0].availability
-            changeCurr({ cells })
+            setCurr({ cells })
         }
         setIsLoading(false);
     }
 
     function handleChange(cells) {
-        changeCurr({ cells });
+        setCurr({ cells });
     }
 
     const handleReset = () => {
         const cells = Array.from({ length: hours.length+1 }, () => Array(dates.length + 1).fill(false));
-        changeCurr({ cells });
+        setCurr({ cells });
     };
 
     const handleGetCalendarAvailability = async () => {
@@ -118,7 +117,7 @@ const EventAvailability = (props) => {
                         
                         updatedCells[timeDifference + 1][daysDifference + 1] = true;  
                     }
-                    changeCurr({ cells: updatedCells });
+                    setCurr({ cells: updatedCells });
                 });
               } else {
                 console.log('No events found.');
@@ -153,7 +152,7 @@ const EventAvailability = (props) => {
                 alert('Updated event availability');
             }
             else {
-                const { data, error } = await supabase.from("event_availability").insert({
+                const { error } = await supabase.from("event_availability").insert({
                     event_id: event.id,
                     user_id: userId,
                     availability: curr.cells,

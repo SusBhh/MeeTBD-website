@@ -27,7 +27,7 @@ const LoginPage = () => {
         event.preventDefault();
         const userData = new FormData(event.currentTarget);
         try {
-            const { data, error } = await supabase.auth.signInWithPassword({
+            await supabase.auth.signInWithPassword({
                 email: userData.get("email"),
                 password: userData.get("password"),        
             })

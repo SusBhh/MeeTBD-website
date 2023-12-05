@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-//import { supabase } from '../index';
+
 export default function SignupPage() {
     const supabase = useSupabaseClient();
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {

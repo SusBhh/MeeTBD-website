@@ -30,12 +30,6 @@ function Scheduled(props) {
         return timeString12hr;
     }
 
-    const printDate = (date) => {
-        //bug where it is printing a day behind
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        const formattedDate = new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', options);
-        return formattedDate;
-    }
     async function handleDelete(day) {
         const dates = event.scheduled_at
 

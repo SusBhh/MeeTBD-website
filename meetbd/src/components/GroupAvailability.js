@@ -1,7 +1,6 @@
 import React from 'react';
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
-import hours from "./Hours";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -60,17 +59,17 @@ const GroupAvailability = (props) => {
     function createResponsesArray(eventData) {
         /* Create list of percentages for users who are available for that cell */
         const responsesArray = [];
-        for (let i = 0; i < eventData[0].availability.length; i++) {
+        for (let i of eventData[0].availability.length) {
             const row = [];
-            for (let j = 0; j < eventData[0].availability[0].length; j++) {
+            for (let j of eventData[0].availability[0].length) {
                 row.push(0.0); // Set initial value as 0 (or any default value)
             }
             responsesArray.push(row);
         }
-        for (let j = 1; j < eventData[0].availability.length; j++) {
-            for (let k = 1; k < eventData[0].availability[0].length; k++) {
+        for (let j of eventData[0].availability.length) {
+            for (let k of eventData[0].availability[0].length) {
                 let availability_total = 0;
-                for (let i = 0; i < eventData.length; i++) {
+                for (let i of eventData.length) {
                     availability_total += eventData[i].availability[j][k] === true ? 1 : 0;
                 }
                 responsesArray[j][k] = Math.round((availability_total / eventData.length) * 10) / 10;
@@ -83,17 +82,18 @@ const GroupAvailability = (props) => {
         setCurr({ cells });
         // Maybe add function here to pull user data for who is available during all those cells++
         let availableUsers = Array.from({ length: eventData.length }, () => true);
-        for (let i = 1; i < eventData[0].availability.length; i++) {
-            for (let j = 1; j < eventData[0].availability[0].length; j++) {
+        for (let i of eventData[0].availability.length) {
+            for (let j of eventData[0].availability[0].length) {
                 if (cells[i][j] === true) {
-                    for (let k = 0; k < availableUsers.length; k++) {
+                    for (let k of availableUsers.length) {
                         if (eventData[k].availability[i][j] === false) availableUsers[k] = false;
                     }
                 }
             }
         }
+
         let availableCount = 0;
-        for (let i = 0; i < availableUsers.length; i++) {
+        for (let i of availableUsers.length) {
             if (availableUsers[i] === true) availableCount += 1;
         }
         setAvailableUserCount(availableCount);
@@ -108,16 +108,6 @@ const GroupAvailability = (props) => {
     const tableDragSelectStyles = {
         width: '80%',
         height: '100px',
-    };
-    
-    const tableFormButtonStyles = {
-        margin: '10px',
-        display: 'flex',
-        justifyContent: 'center',
-    };
-
-    const buttonStyles = {
-        margin: '0 5px',
     };
 
     const printDate = (date) => {
