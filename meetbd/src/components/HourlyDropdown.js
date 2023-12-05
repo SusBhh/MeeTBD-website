@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Menu from '@mui/material/Menu';
 
-
 const HourlyDropdown = ({ updateTime, defaultTime } ) => {
-    const [time, setTime] = useState(defaultTime)
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [time, setTime] = React.useState(defaultTime)
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleOpenMenu = (event) => {
         setAnchorEl(event.currentTarget);

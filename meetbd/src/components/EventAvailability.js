@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from "react";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "../components/Hours";
@@ -13,9 +12,9 @@ const EventAvailability = (props) => {
     const supabase = useSupabaseClient();
     const [isLoading, setIsLoading] = React.useState(false);
     const eventsEndpoint = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
-    const [dates, setDates] = useState([]);
-    const [hours, setHours] = useState([]);
-    const [curr, changeCurr] = useState({
+    const [dates, setDates] = React.useState([]);
+    const [hours, setHours] = React.useState([]);
+    const [curr, changeCurr] = React.useState({
         cells: Array.from({ length: 1 }, () => Array(1).fill(false)),
     });
     const [userId, setUserId] = React.useState(null);
@@ -26,7 +25,7 @@ const EventAvailability = (props) => {
         setUserId(user.id);
     };
     getUserId();
-    useEffect(() => {
+    React.useEffect(() => {
         setDates(event.possible_dates);
         const hourArray = [];
         const startHour = new Date(`2000-01-01T${event.start_time}`);

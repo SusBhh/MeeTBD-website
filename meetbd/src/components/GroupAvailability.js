@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from "react";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "./Hours";
@@ -10,17 +9,17 @@ const GroupAvailability = (props) => {
     const event = props.event
     const supabase = useSupabaseClient();
     const [isLoading, setIsLoading] = React.useState(false);
-    const [dates, setDates] = useState([]);
-    const [hours, setHours] = useState([]);
-    const [respondingUsers, setRespondingUsers] = useState([]);
-    const [responses, setResponses] = useState([]);
-    const [eventData, setEventData] = useState([]);
-    const [availableUserCount, setAvailableUserCount] = useState(-1);
-    const [curr, changeCurr] = useState({
+    const [dates, setDates] = React.useState([]);
+    const [hours, setHours] = React.useState([]);
+    const [respondingUsers, setRespondingUsers] = React.useState([]);
+    const [responses, setResponses] = React.useState([]);
+    const [eventData, setEventData] = React.useState([]);
+    const [availableUserCount, setAvailableUserCount] = React.useState(-1);
+    const [curr, changeCurr] = React.useState({
         cells: Array.from({ length: 1 }, () => Array(1).fill(false)),
     });
 
-    useEffect(() => {
+    React.useEffect(() => {
         setDates(event.possible_dates);
         const hourArray = [];
         const startHour = new Date(`2000-01-01T${event.start_time}`);

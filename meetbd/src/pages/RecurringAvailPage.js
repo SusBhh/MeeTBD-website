@@ -1,21 +1,20 @@
-// TODO: not currently implemented
-import React, { useState, useEffect } from 'react';
-import AvailabilityGrid from '../components/AvailabilityGrid';
-import WeeklyDropdown from '../components/WeeklyDropdown';
-import CalendarSelect from '../components/CalendarSelect';
+import React from 'react';
 import Container from "@mui/material/Container";
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import { styled } from '@mui/system';
-import Box from '@mui/material/Box';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { Portal } from '@mui/base/Portal';
-import HourlyDropdown from '../components/HourlyDropdown';
+
+import AvailabilityGrid from '../components/AvailabilityGrid';
+import WeeklyDropdown from '../components/WeeklyDropdown';
+import CalendarSelect from '../components/CalendarSelect';
+
 const RecurringAvailPage = () => {
     const [anchor, setAnchor] = React.useState(null);
-    const [selectedDate, setSelectedDate] = useState({
+    const [selectedDate, setSelectedDate] = React.useState({
         startDate: new Date(),
         endDate: new Date()
     });

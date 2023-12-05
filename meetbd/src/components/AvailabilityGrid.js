@@ -1,15 +1,13 @@
 import React from 'react';
-import { useState, useEffect } from "react";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "../components/Hours";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const AvailabilityGrid = (selectedDate) => {
-    const [rows, setRows] = useState([new Date()]);
     const [userId, setUserId] = React.useState(null);
-    const [dateRange, setDateRange] = React.useState([])
-    useEffect(() => {
+
+    React.useEffect(() => {
         let currentDate = selectedDate.selectedDate.startDate
         const endDate = selectedDate.selectedDate.endDate
         const array = []
@@ -19,11 +17,11 @@ const AvailabilityGrid = (selectedDate) => {
         }
     }, [selectedDate.selectedDate.startDate, selectedDate.selectedDate.endDate]);
 
-    const [curr, changeCurr] = useState({
+    const [curr, changeCurr] = React.useState({
         cells: Array.from({ length: 26}, () => Array(8).fill(false)),
     });
 
-    useEffect(() => {
+    React.useEffect(() => {
         const fetchData = async () => {
             try {
                 const { data, error } = await supabase
