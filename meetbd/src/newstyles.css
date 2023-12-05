@@ -253,7 +253,7 @@ input {
     display: flex;
     justify-content: space-between;
     margin: auto;
-    max-width: 400px;
+    max-width: 200px;
     padding-left: 10px;
     padding-right: 10px;
     text-align: center;
@@ -266,6 +266,14 @@ input {
 
 .event p {
     color: #FFFF;
+}
+
+.groupMember p {
+    color: #FFFF;
+}
+
+.groupMember .text {
+    width: 100%;
 }
 
 .group .text {

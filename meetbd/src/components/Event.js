@@ -72,7 +72,6 @@ const Event = (props) => {
             if (error) throw error;
 
             groupMembers = m[0].members
-            console.log(groupMembers)
         } catch (error) {
             alert(error.error_description || error.message);
         }
@@ -84,13 +83,11 @@ const Event = (props) => {
         if (memberError) {
             throw memberError;
         }
-        console.log(memberData)
 
         const inviteList = []
         for (let i = 0; i < memberData.length; i++) {
             inviteList.push({ 'email': memberData[i].email })
         }
-        console.log(inviteList)
 
         const selectedDatesISO = selectedDates.map(timestamp => {
             const dateObject = new Date(timestamp);
@@ -108,13 +105,8 @@ const Event = (props) => {
             hour12: false, // Use 24-hour format
         });
 
-        console.log(selectedDatesISO[0])
         const calStart = selectedDatesISO[0] + "T" + formattedStart + ":00.000"
         const calEnd = selectedDatesISO[0] + "T" + formattedEnd + ":00.000"
-        console.log(calStart)
-        console.log(calEnd)
-        //console.log(selectedDatesISO[0] + "-" + formattedStart)
-        //console.log(selectedDatesISO[0] + "-" + formattedEnd)
         try {
             console.log("Creating a calendar event");
             const createEvent = {
@@ -131,7 +123,6 @@ const Event = (props) => {
                 'attendees': inviteList
 
             } // The below function defaults to primary calendar. You can replace primary with a calendar ID.
-            //console.log(selectedDatesISO[0] + " " + startTime.toISOString())
             await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
                 method: "POST",
                 headers: {
@@ -142,11 +133,9 @@ const Event = (props) => {
                 return data.json();
             }).then((data, error) => {
                 if (data.error) {
-                    console.log(data)
                     throw error
                 }
                 else {
-                    console.log(data);
                     alert("Event created, check calendar");
                 }
             })
@@ -183,14 +172,6 @@ const Event = (props) => {
             const dateObject = new Date(timestamp);
             return dateObject.toISOString();
         });
-        console.log("times")
-        //console.log(startTime)
-        //console.log(endTime)
-        //console.log(selectedDatesISO)
-        //console.log(startError)
-        //console.log(startTime)
-        console.log(event.id)
-        //console.log(selectedDates)
         const formattedStart = startTime.$d.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
@@ -261,26 +242,26 @@ const Event = (props) => {
             */
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <React.Fragment>
-                <div className="group-around" onClick={handleClickOpen('paper')}>
-                    <div className="event" style={{ cursor: 'pointer' }}>
-                        <div className="text">
-                            <p>{event.name}</p>
-                        </div>
-                    </div>
-                </div>
-                <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    scroll={scroll}
-                >
-                    <DialogTitle id="scroll-dialog-title">
-                        {event.name}
-                        {isOwner ? (
-                            <><Tooltip title="edit event" placement="top" arrow>
-                                <IconButton onClick={handleEdit} disableRipple>
-                                    <EditIcon />
-                                </IconButton>
+        <React.Fragment>
+            <div className="group-around" onClick={handleClickOpen('paper')} onKeyDown={handleClickOpen('paper')}>
+                <div className="event" style={{cursor:'pointer'}}>
+                    <div className="text">
+                        <p>{event.name}</p>
+                    </div> 
+                </div> 
+            </div>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                scroll={scroll}
+            >
+                <DialogTitle id="scroll-dialog-title">
+                    {event.name}
+                    {isOwner ? (
+                        <><Tooltip title="edit event" placement="top" arrow>
+                            <IconButton onClick={handleEdit} disableRipple>
+                                <EditIcon />
+                            </IconButton>
                             </Tooltip>
                                 <Tooltip title="delete event" placement="top" arrow>
                                     <IconButton onClick={() => props.handleDelete(event.id)} disableRipple>
@@ -314,25 +295,27 @@ const Event = (props) => {
                                 />
                             </Grid>
                             <Grid item xs={6}>
+                              
                                 <TimePicker
                                     label="End Time:"
                                     value={endTime}
                                     onChange={(newValue) => setEndTime(newValue)}
                                     onError={(newError) => setEndError(newError)}
                                 />
-                            </Grid>
+                        </Grid>
                             <Grid item xs={6}>
-                                <DatePicker
-                                    label="Selected Date:"
-                                    style={{ width: "155px", height: "55px" }}
-                                    multiple
-                                    value={selectedDates}
-                                    onChange={(selectedDates) => setSelectedDates(selectedDates)}
-                                    color="secondary"
-                                    calendarPosition="right"
-                                />
-                            </Grid>
-                            <br></br>
+                                <h5>Select scheduled dates below:</h5>
+                            <DatePicker
+                                label="Selected Date:"
+                                style={{ width: "155px", height: "55px" }}
+                                multiple
+                                value={selectedDates}
+                                onChange={(selectedDates) => setSelectedDates(selectedDates)}
+                                color="secondary"
+                                calendarPosition="right"
+                            />
+                        </Grid>
+                        <br></br>
                         </Grid>
                     </DialogContent>
                     <DialogActions>

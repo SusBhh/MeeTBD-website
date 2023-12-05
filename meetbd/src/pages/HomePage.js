@@ -4,19 +4,23 @@ import Container from "@mui/material/Container";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useSession } from "@supabase/auth-helpers-react";
 import { Link } from 'react-router-dom';
 import Scheduled from '../components/Scheduled';
 import Box from '@mui/system/Box';
 import Paper from '@mui/material/Paper';
 import Card from '@mui/material/Card';
+import { format } from 'date-fns';
 const HomePage = () => {
+    const eventsEndpoint = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
+    const session = useSession();
     const [myEvents, setMyEvents] = React.useState([]);
     const [isEventsLoading, setIsEventsLoading] = React.useState(false);
     const [myPending, setMyPending] = React.useState([]);
     const [isPendingLoading, setIsPendingLoading] = React.useState(false);
     const [allEvents, setAllEvents] = React.useState([]);
     const [isScheduled, setIsScheduled] = React.useState(false);
+    const [googleEvents, setGoogleEvents] = React.useState([]);
     const supabase = useSupabaseClient();
     async function loadMyPending() {
         setIsPendingLoading(true);
@@ -93,7 +97,6 @@ const HomePage = () => {
 
             if (error) throw error;
             result = allGroups.map(a => a.id);
-            console.log(result)
         } catch (error) {
             alert(error.error_description || error.message);
         }
@@ -107,7 +110,6 @@ const HomePage = () => {
                 .eq("scheduled", true);
             if (error) throw error;
             if (events) setAllEvents(events);
-            console.log(events)
         } catch (error) {
             alert(error.error_description || error.message);
         }
@@ -120,10 +122,67 @@ const HomePage = () => {
         loadAllEvents();
     }, []);
 
+    const handleGetCalendarAvailability = async () => {
+        const startDate = new Date();
+        startDate.setDate(1);
+        startDate.setHours(0,0,0);
+        console.log(startDate);
+
+        const endDate = new Date();
+        endDate.setMonth(endDate.getMonth() + 1, 1);
+        endDate.setDate(endDate.getDate() - 1);
+        endDate.setHours(23,59,59);
+        console.log(endDate);
+
+        fetch(`${eventsEndpoint}?timeMin=${startDate.toISOString()}&timeMax=${endDate.toISOString()}`, {
+            method: "GET",
+            headers: {
+              'Authorization': 'Bearer ' + session.provider_token,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              // Process the retrieved events data
+              
+              const sortedEvents = data.items.sort((eventA, eventB) => {
+                const dateA = new Date(eventA.start.dateTime || eventA.start.date);
+                const dateB = new Date(eventB.start.dateTime || eventB.start.date);
+                return dateA - dateB;
+              });
+              setGoogleEvents(sortedEvents);
+            })
+            .catch((error) => {
+              console.error('Error fetching events:', error);
+            });
+    }
+
     return (
         <Container>
             <Grid container spacing={5} sx={{ mt: 1 }}>
                 <Grid item xs={12} md={8}>
+                    <button onClick={handleGetCalendarAvailability}>Import Calendar </button>
+                    <div>
+                        <h2>Your Google Events for {format(new Date(), "MMMM")}</h2>
+                            {googleEvents.map((event) => (
+                                <ul key={event.id}>
+                                <b>{event.summary}</b>
+                                <br></br>
+                                {format(new Date(event.start.dateTime || event.start.date), 'MM/dd/yyyy h:mm a')} 
+                                {" - "}
+                                {format(new Date(event.end.dateTime || event.end.date), 'MM/dd/yyyy h:mm a')}
+                                <br></br>
+                                <br></br>
+                                </ul>
+                            ))}
+                    <br></br>
+                    </div>
                     <Typography variant="h6" gutterBottom>
                         Scheduled Events
                     </Typography>

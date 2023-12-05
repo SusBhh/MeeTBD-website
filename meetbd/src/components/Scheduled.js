@@ -6,9 +6,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
 import CardHeader from '@mui/material/CardHeader';
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+
 function Scheduled(props) {
     const event = props.event;
     const supabase = useSupabaseClient();
+    const [userId, setUserId] = React.useState(null);
+    const getUserId = async () => {
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+        setUserId(user.id);
+    };
+    getUserId();
+    const isOwner = userId === event.event_owner;
 
     const printTime = (currentHour) => {
         const timeString12hr = new Date('1970-01-01T' + currentHour.toString() + 'Z')
@@ -21,24 +31,16 @@ function Scheduled(props) {
 
     const printDate = (date) => {
         //bug where it is printing a day behind
-        console.log(date)
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         const formattedDate = new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', options);
-        console.log(formattedDate)
         return formattedDate;
     }
     async function handleDelete(day) {
-        console.log(day)
         const dates = event.scheduled_at
-        console.log(dates)
 
-        //console.log(JSON.stringify(event.scheduled_at))
         const index = dates.indexOf(day)
-        console.log(index)
         if (index > -1) {
             dates.splice(index, 1)
-            console.log("update")
-            console.log(dates)
         }
 
 
@@ -77,18 +79,27 @@ function Scheduled(props) {
             { 
                 event.scheduled_at.map((day, index) => (
                     <Card sx={{ display: 'flex' }}>
-                        <CardHeader
-                            action={
-                                <Tooltip title="delete event" placement="top" arrow>
-                                    <IconButton onClick={() => handleDelete(day)} disableRipple>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            }
-                            titleTypographyProps={{ variant: 'h9' }}
-                            title={event.name}
-                            subheader={day}
-                        />
+                        {isOwner ? (
+                            <CardHeader
+                                action={
+                                    <Tooltip title="delete event" placement="top" arrow>
+                                        <IconButton onClick={() => handleDelete(day)} disableRipple>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                }
+                                titleTypographyProps={{ variant: 'h9' }}
+                                title={event.name}
+                                subheader={day}
+                            />
+                        ) : (
+                                <CardHeader
+                                    titleTypographyProps={{ variant: 'h9' }}
+                                    title={event.name}
+                                    subheader={day}
+                                />
+                        )}
+                        
                         <CardContent >
                             <Typography variant="subtitle1" color="text.secondary">
                                 {printTime(event.start_time)} - {printTime(event.end_time)}

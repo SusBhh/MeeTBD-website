@@ -33,15 +33,11 @@ const WeeklyDropdown = ({ updateDate }) => {
 
     const handleChange = (event) => {
         //setSelectedDate(event.target.value);
-        //console.log(event.currentDate);
-        //console.log(event.endDate)
 
         const options = { weekday: 'short', month: 'short', day: 'numeric' };
         const formattedStartDate = event.currentDate.toLocaleDateString('en-US', options);
         const formattedEndDate = event.endDate.toLocaleDateString('en-US', options);
-        //console.log(JSON.stringify(selectedDate))
         setFormattedDate(`${formattedStartDate} - ${formattedEndDate}`)
-        //console.log(formattedDate)
         updateDate(event.currentDate, event.endDate)
         handleCloseMenu();
     };

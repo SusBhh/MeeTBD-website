@@ -6,13 +6,11 @@ import Event from "./Event";
 
 const ReadEvents = (groupId) => {
     const [isLoading, setIsLoading] = React.useState(false);
-    const [userId, setUserId] = React.useState(null);
     const [events, setEvents] = React.useState([]);
 
     const supabase = useSupabaseClient();
 
     async function handleDelete(event_id) {
-        console.log(event_id)
         setIsLoading(true);
         try {
             const { error } = await supabase
@@ -32,12 +30,6 @@ const ReadEvents = (groupId) => {
     async function readEvents() {
         setIsLoading(true);
 
-        // get user
-        //const {
-        //    data: { user },} = await supabase.auth.getUser();
-
-        // read groups
-
         const { data: eventData, error: eventError } = await supabase
             .from('events')
             .select('*')
@@ -54,14 +46,13 @@ const ReadEvents = (groupId) => {
 
     React.useEffect(() => {
         readEvents();
-        //console.log(groupId.groupId)
     }, []);
 
     return (
         <div>
             {isLoading ? (
                 <CircularProgress />
-            ) : events.length == 0 ? (
+            ) : events.length === 0 ? (
                 <p>No Events to Display</p>
             ) : (
                 <div>

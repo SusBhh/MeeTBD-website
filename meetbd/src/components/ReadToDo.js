@@ -6,7 +6,6 @@ import ToDo from './ToDo';
 
 const ReadToDo = (props) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [userId, setUserId] = useState(null);
     const [items, setItems] = useState([]);
 
     const supabase = useSupabaseClient();
@@ -36,7 +35,6 @@ const ReadToDo = (props) => {
                 .update({ completed: !item.completed })
                 .eq("id", item.id);
             
-
             if (error) throw error;
         } catch (error) {
             alert(error.error_description || error.message);
@@ -62,7 +60,6 @@ const ReadToDo = (props) => {
 
         if (error) throw error; // check if there was an error fetching the data and move the execution to the catch block
         if (data) setItems(data);
-        console.log(data)
         setIsLoading(false);
     }
 
@@ -74,7 +71,7 @@ const ReadToDo = (props) => {
         <div>
             {isLoading ? (
                 <CircularProgress />
-            ) : items.length == 0 ? (
+            ) : items.length === 0 ? (
                 <p>No todo item added yet</p>
             ) : (
                 <div>

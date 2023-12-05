@@ -21,7 +21,6 @@ const HourlyDropdown = ({ updateTime, defaultTime } ) => {
     const handleChange = (event) => {
         setTime(event)
         updateTime(event)
-        //console.log(event)
         handleCloseMenu();
     };
     return (
