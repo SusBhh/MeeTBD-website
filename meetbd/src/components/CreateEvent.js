@@ -76,7 +76,7 @@ const CreateEvent = ({ groupId, onClose }) => {
         }
         forceUpdate();
     };
-    const prevDate = new Date()
+    
     return (
         <Container>
             <Grid container justifyContent="center" spacing={1}>
