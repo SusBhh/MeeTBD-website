@@ -82,8 +82,8 @@ const Event = (props) => {
         }
 
         const inviteList = []
-        for (let i = 0; i < memberData.length; i++) {
-            inviteList.push({'email': memberData[i].email})
+        for (let member of memberData) {
+            inviteList.push({'email': member.email})
         }
 
         const selectedDatesISO = selectedDates.map(timestamp => {
@@ -232,7 +232,7 @@ const Event = (props) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
         <React.Fragment>
-            <div className="group-around" onClick={handleClickOpen('paper')} onKeyDown={handleClickOpen('paper')}>
+            <div className="group-around" onClick={handleClickOpen('paper')} onKeyDown={handleClickOpen('paper')} tabindex="0">
                 <div className="event" style={{cursor:'pointer'}}>
                     <div className="text">
                         <p>{event.name}</p>
