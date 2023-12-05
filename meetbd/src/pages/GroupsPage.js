@@ -9,6 +9,7 @@ import ReadGroups from "../components/ReadGroups";
 import "../newstyles.css";
 
 const GroupsPage = () => {
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   const [isLoading, setIsLoading] = React.useState(false);
   const [groupName, setGroupName] = React.useState("");
   const [joinCode, setJoinCode] = React.useState("");
@@ -25,6 +26,7 @@ const GroupsPage = () => {
 
     if (formJson["joinCode"] === "") {
       // return early if groupName is empty
+      setIsLoading(false);
       return;
     }
 
@@ -54,6 +56,8 @@ const GroupsPage = () => {
       currGroupName = data[0]["name"];
     } else {
       alert("There is no group with that join code.");
+      setJoinCode("");
+      setIsLoading(false);
       return;
     }
 
@@ -62,6 +66,8 @@ const GroupsPage = () => {
       currGroupNameSquish.replace(/\s/g, "") !== currGroupName.replace(/\s/g, "")
     ) {
       alert("There is no group with that join code.");
+      setJoinCode("");
+      setIsLoading(false);
       return;
     }
 
@@ -69,6 +75,7 @@ const GroupsPage = () => {
     if (members.includes(user?.id)) {
       alert("You are already a member of this group!");
       setJoinCode("");
+      setIsLoading(false);
       return;
     }
 
@@ -82,12 +89,9 @@ const GroupsPage = () => {
       .eq("id", currGroupID);
     if (updateError) throw updateError;
 
-    alert("Successfully joined group " + currGroupName + "!");
-
-    setJoinCode("");
-
+    forceUpdate();
     setIsLoading(false);
-    window.location.reload();
+    setJoinCode("");
   }
 
   async function handleCreateGroup(e) {
@@ -100,15 +104,16 @@ const GroupsPage = () => {
 
     if (formJson["groupName"] === "") {
       // return early if groupName is empty
+      setIsLoading(false);
       return;
     }
     // prevent number from starting groupname
     if (!isNaN(formJson["groupName"][0])) {
       alert("Group name cannot start with a number.");
       setGroupName("");
+      setIsLoading(false);
       return;
     }
-    // TODO: more group name validation
 
     // get user
     const {
@@ -122,13 +127,9 @@ const GroupsPage = () => {
       members: [user?.id],
     });
 
-    alert("Successfully created group " + groupName + "!");
-
     setGroupName("");
-
-    // TODO: reload groups (is there a better way?)
+    forceUpdate();
     setIsLoading(false);
-    window.location.reload();
   }
 
   return (
@@ -152,6 +153,7 @@ const GroupsPage = () => {
                 <input
                   type="text"
                   name="joinCode"
+                  value={joinCode}
                   onChange={(e) => setJoinCode(e.target.value)}
                 />
               </label>

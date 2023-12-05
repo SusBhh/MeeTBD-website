@@ -1,9 +1,8 @@
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Tooltip } from "@mui/material";
-import { useSupabaseClient, useSession, useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useSession } from "@supabase/auth-helpers-react";
 import "../newstyles.css";
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -23,8 +22,6 @@ import GroupAvailability from "./GroupAvailability"
 import CalendarAccess from "./AccessCalendar"
 
 const Event = (props) => {
-
-    const [anchor, setAnchor] = React.useState(null);
     const event = props.event;
     const [userId, setUserId] = React.useState(null);
     const [startTime, setStartTime] = React.useState(null);
@@ -85,8 +82,8 @@ const Event = (props) => {
         }
 
         const inviteList = []
-        for (let i = 0; i < memberData.length; i++) {
-            inviteList.push({ 'email': memberData[i].email })
+        for (let member of memberData) {
+            inviteList.push({'email': member.email})
         }
 
         const selectedDatesISO = selectedDates.map(timestamp => {
@@ -182,33 +179,40 @@ const Event = (props) => {
             minute: '2-digit',
             hour12: false, // Use 24-hour format
         });
-        const { data: scheduled, error: schedError } = await supabase
+        const { error:schedError } = await supabase
             .from("events")
             .update({ scheduled: "true" }, { start_time: startTime })
             .eq("id", event.id);
-        const { data: start, error: sError } = await supabase
+        if (schedError) {
+            console.error(schedError);
+        }
+            const { error: sError } = await supabase
             .from("events")
             .update({ start_time: formattedStart })
             .eq("id", event.id);
-        const { data: end, error: eError } = await supabase
+        if (sError) {
+            console.error(sError);
+        }
+            const { error: eError } = await supabase
             .from("events")
             .update({ end_time: formattedEnd })
             .eq("id", event.id);
-        const { data: at, error: atError } = await supabase
+        if (eError) {
+            console.error(eError);
+        }
+            const { error: atError } = await supabase
             .from("events")
             .update({ scheduled_at: selectedDatesISO })
             .eq("id", event.id);
-
-        //, start_time: startTime, end_time: endTime, scheduled_at: selectedDatesISO 
-        //console.log(data)
-
-
+        if (atError) {
+            console.error(atError);
+        }
+        
         //Send email invite stuff
         if (checked) {
             createCalendarEvent()
         }
         setOpen(false);
-        //window.location.reload();
     };
 
     const handleEdit = async () => {
@@ -243,7 +247,7 @@ const Event = (props) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
         <React.Fragment>
-            <div className="group-around" onClick={handleClickOpen('paper')} onKeyDown={handleClickOpen('paper')}>
+            <div className="group-around" onClick={handleClickOpen('paper')} onKeyDown={handleClickOpen('paper') } >
                 <div className="event" style={{cursor:'pointer'}}>
                     <div className="text">
                         <p>{event.name}</p>

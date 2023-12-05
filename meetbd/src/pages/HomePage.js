@@ -11,6 +11,7 @@ import Box from '@mui/system/Box';
 import Paper from '@mui/material/Paper';
 import Card from '@mui/material/Card';
 import { format } from 'date-fns';
+
 const HomePage = () => {
     const eventsEndpoint = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
     const session = useSession();
@@ -170,7 +171,8 @@ const HomePage = () => {
                     <button onClick={handleGetCalendarAvailability}>Import Calendar </button>
                     <div>
                         <h2>Your Google Events for {format(new Date(), "MMMM")}</h2>
-                            {googleEvents.map((event) => (
+                        {googleEvents.length > 0 ? (
+                                googleEvents.map((event) => (
                                 <ul key={event.id}>
                                 <b>{event.summary}</b>
                                 <br></br>
@@ -180,7 +182,10 @@ const HomePage = () => {
                                 <br></br>
                                 <br></br>
                                 </ul>
-                            ))}
+                            ))
+                        ) : (
+                            <p>No events available for this month.</p>
+                        )}
                     <br></br>
                     </div>
                     <Typography variant="h6" gutterBottom>
@@ -222,7 +227,7 @@ const HomePage = () => {
                                 <CircularProgress />
                             ) : (
                                 myEvents.map((event) => (
-                                    <div>
+                                    <div key={event.id}> 
                                         <Divider />
                                         <Typography variant="h9" sx={{ mr: 1 }} align="left" >
                                             Group:
@@ -257,9 +262,9 @@ const HomePage = () => {
                         <CircularProgress />
                     ) : (
                         myPending.map((event) => (
-                            <div>
+                            <div key={event.id}>
                                 {event.events.map((e) => (
-                                    <div>
+                                    <div key={e.id}>
                                         <Divider />
                                         <Typography variant="h9" sx={{ mr: 1 }} align="left" >
                                             Group:

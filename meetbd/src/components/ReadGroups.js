@@ -31,7 +31,7 @@ const ReadGroups = () => {
     } catch (error) {
       alert(error.error_description || error.message);
     }
-    await readGroups();
+    await getGroups();
     setIsLoading(false);
   }
 
@@ -54,11 +54,11 @@ const ReadGroups = () => {
     } catch (error) {
       alert(error.error_description || error.message);
     }
-    await readGroups();
+    await getGroups();
     setIsLoading(false);
   }
 
-  async function readGroups() {
+  async function getGroups() {
     setIsLoading(true);
 
     // get user
@@ -80,7 +80,7 @@ const ReadGroups = () => {
   }
 
   React.useEffect(() => {
-    readGroups();
+    getGroups();
   }, []);
 
   return (

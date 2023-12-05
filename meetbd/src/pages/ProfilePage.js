@@ -4,12 +4,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useState } from "react";
 
 const ProfilePage = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [userID, setUserID] = React.useState(null);
-  const [displayName, setDisplayName] = useState("");
+  const [displayName, setDisplayName] = React.useState("");
   const supabase = useSupabaseClient();
 
   const getProfile = async () => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
@@ -23,14 +23,13 @@ const GroupDetails = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { groupId } = useParams();
   const [anchor, setAnchor] = React.useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = React.useState(false);
 
   const [userId, setUserId] = React.useState(null);
   const [isOwner, setIsOwner] = React.useState(false);
-  const [group, setGroup] = useState(null);
-  const [groupName, setGroupName] = useState(null);
-  const [events, setEvents] = useState(null);
-  const [members, setMembers] = useState([]);
+  const [group, setGroup] = React.useState(null);
+  const [groupName, setGroupName] = React.useState(null);
+  const [members, setMembers] = React.useState([]);
 
   const supabase = useSupabaseClient();
 
@@ -117,14 +116,13 @@ const GroupDetails = () => {
       setIsOwner(user.id === groupData.owner);
 
       // get events data
-      const { data: eventData, error: eventError } = await supabase
+      const { error: eventError } = await supabase
         .from("events")
         .select("*")
         .eq("group_id", groupId);
       if (eventError) {
         throw eventError;
       }
-      setEvents(eventData);
 
       // get member data
       const { data: memberData, error: memberError } = await supabase
@@ -140,7 +138,7 @@ const GroupDetails = () => {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     setIsLoading(true);
     fetchGroup();
     setIsLoading(false);

@@ -34,12 +34,6 @@ const ReadEvents = (groupId) => {
     async function readEvents() {
         setIsLoading(true);
 
-        // get user
-        //const {
-        //    data: { user },} = await supabase.auth.getUser();
-
-        // read groups
-
         const { data: eventData, error: eventError } = await supabase
             .from('events')
             .select('*')

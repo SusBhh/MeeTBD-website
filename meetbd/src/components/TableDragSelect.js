@@ -95,6 +95,7 @@ export default class TableDragSelect extends React.Component {
         );
     };
 
+
     renderRows = () =>
         React.Children.map(this.props.children, (tr, i) => {
             return (
@@ -134,28 +135,29 @@ export default class TableDragSelect extends React.Component {
     };
 
     handleTouchMoveCell = (e) => {
-        if (this.state.selectionStarted) {
-            e.preventDefault();
-            const { row, column } = eventToCellLocation(e);
-            const { startRow, startColumn, endRow, endColumn } = this.state;
+        if (!this.state.selectionStarted) {
+            return;
+        }
+        e.preventDefault();
+        const { row, column } = eventToCellLocation(e);
+        const { startRow, startColumn, endRow, endColumn } = this.state;
 
-            if (endRow !== row || endColumn !== column) {
-                const nextRowCount =
-                    startRow === null && endRow === null
-                        ? 0
-                        : Math.abs(row - startRow) + 1;
-                const nextColumnCount =
-                    startColumn === null && endColumn === null
-                        ? 0
-                        : Math.abs(column - startColumn) + 1;
+        if (endRow !== row || endColumn !== column) {
+            const nextRowCount =
+                startRow === null && endRow === null
+                    ? 0
+                    : Math.abs(row - startRow) + 1;
+            const nextColumnCount =
+                startColumn === null && endColumn === null
+                    ? 0
+                    : Math.abs(column - startColumn) + 1;
 
-                if (nextRowCount <= this.props.maxRows) {
-                    this.setState({ endRow: row });
-                }
+            if (nextRowCount <= this.props.maxRows) {
+                this.setState({ endRow: row });
+            }
 
-                if (nextColumnCount <= this.props.maxColumns) {
-                    this.setState({ endColumn: column });
-                }
+            if (nextColumnCount <= this.props.maxColumns) {
+                this.setState({ endColumn: column });
             }
         }
     };
