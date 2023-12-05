@@ -17,7 +17,7 @@ const AvailabilityGrid = (selectedDate) => {
         }
     }, [selectedDate.selectedDate.startDate, selectedDate.selectedDate.endDate]);
 
-    const [curr, changeCurr] = React.useState({
+    const [curr, setCurr] = React.useState({
         cells: Array.from({ length: 26}, () => Array(8).fill(false)),
     });
 
@@ -32,7 +32,7 @@ const AvailabilityGrid = (selectedDate) => {
                     console.error('Error fetching data from Supabase:', error);
                 } else {
                     if (data.length > 0 && data[0].availability_grid) {
-                        changeCurr({
+                        setCurr({
                             cells: data[0].availability_grid,
                         });
                     }
@@ -73,12 +73,12 @@ const AvailabilityGrid = (selectedDate) => {
     insertBooleanArray();
 
     function handleChange(cells) {
-        changeCurr({ cells });
+        setCurr({ cells });
     }
 
     const handleReset = () => {
         const cells = Array.from({ length: 28 }, () => Array(7).fill(false));
-        changeCurr({ cells });
+        setCurr({ cells });
     };
 
     const handleSubmit = () => {
