@@ -61,7 +61,7 @@ function Scheduled(props) {
         }
         else {
             try {
-                const { data: at, error: atError } = await supabase
+                const { error: atError } = await supabase
                     .from("events")
                     .update({ scheduled_at: dates })
                     .eq("id", event.id);

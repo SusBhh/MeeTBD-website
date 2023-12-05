@@ -9,7 +9,7 @@ const ForgotPassowrdPage = () => {
 
     const handlePasswordRecovery = async () => {
         try {
-            const {error} = await supabase.auth.resetPasswordForEmail(email, {
+            await supabase.auth.resetPasswordForEmail(email, {
                 redirectTo: 'http://localhost:3000/resetPassword',
             })
         } catch (error) {
