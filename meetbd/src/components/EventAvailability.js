@@ -36,8 +36,7 @@ const EventAvailability = (props) => {
             hourArray.push(formattedHour);
         }
         setHours(hourArray)
-        const cells = Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
-        setCurr({ cells })
+        setCurr(Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false)))
         readAvailability()
     }, [event.possible_dates, event.start_time, event.end_time]);
 
@@ -59,8 +58,7 @@ const EventAvailability = (props) => {
                 setIsLoading(false);
                 return;
             }
-            const cells = eventData[0].availability
-            setCurr({ cells })
+            setCurr(eventData[0].availability);
         }
         setIsLoading(false);
     }
@@ -70,8 +68,7 @@ const EventAvailability = (props) => {
     }
 
     const handleReset = () => {
-        const cells = Array.from({ length: hours.length+1 }, () => Array(dates.length + 1).fill(false));
-        setCurr({ cells });
+        setCurr(Array.from({ length: hours.length+1 }, () => Array(dates.length + 1).fill(false)));
     };
 
     const handleGetCalendarAvailability = async () => {
@@ -117,7 +114,7 @@ const EventAvailability = (props) => {
                         
                         updatedCells[timeDifference + 1][daysDifference + 1] = true;  
                     }
-                    setCurr({ cells: updatedCells });
+                    setCurr({updatedCells});
                 });
               } else {
                 console.log('No events found.');
