@@ -59,17 +59,17 @@ const GroupAvailability = (props) => {
     function createResponsesArray(eventData) {
         /* Create list of percentages for users who are available for that cell */
         const responsesArray = [];
-        for (let i of eventData[0].availability.length) {
+        for (const availabilityRow of eventData[0].availability) {
             const row = [];
-            for (let j of eventData[0].availability[0].length) {
+            for (const _ of availabilityRow) {
                 row.push(0.0); // Set initial value as 0 (or any default value)
             }
             responsesArray.push(row);
         }
-        for (let j of eventData[0].availability.length) {
-            for (let k of eventData[0].availability[0].length) {
+        for (let j of eventData[0].availability) {
+            for (let k of eventData[0].availability[0]) {
                 let availability_total = 0;
-                for (let i of eventData.length) {
+                for (let i of eventData) {
                     availability_total += eventData[i].availability[j][k] === true ? 1 : 0;
                 }
                 responsesArray[j][k] = Math.round((availability_total / eventData.length) * 10) / 10;
@@ -82,10 +82,10 @@ const GroupAvailability = (props) => {
         setCurr({ cells });
         // Maybe add function here to pull user data for who is available during all those cells++
         let availableUsers = Array.from({ length: eventData.length }, () => true);
-        for (let i of eventData[0].availability.length) {
-            for (let j of eventData[0].availability[0].length) {
+        for (let i of eventData[0].availability) {
+            for (let j of eventData[0].availability[0]) {
                 if (cells[i][j] === true) {
-                    for (let k of availableUsers.length) {
+                    for (let k of availableUsers) {
                         if (eventData[k].availability[i][j] === false) availableUsers[k] = false;
                     }
                 }
@@ -93,7 +93,7 @@ const GroupAvailability = (props) => {
         }
 
         let availableCount = 0;
-        for (let i of availableUsers.length) {
+        for (let i of availableUsers) {
             if (availableUsers[i] === true) availableCount += 1;
         }
         setAvailableUserCount(availableCount);
