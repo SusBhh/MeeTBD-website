@@ -50,13 +50,11 @@ const EventAvailability = (props) => {
             .select('availability')
             .eq('event_id', event.id)
             .eq("user_id", [user?.id]);
-
         if (eventError) {
             setIsLoading(false);
             console.error(eventError);
             throw eventError;
         }
-
         if (eventData) {
             if(eventData.length === 0) {
                 setIsLoading(false);
