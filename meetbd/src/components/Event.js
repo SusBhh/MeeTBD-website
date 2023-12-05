@@ -203,7 +203,6 @@ const Event = (props) => {
             createCalendarEvent()
         }
         setOpen(false);
-        //window.location.reload();
     };
 
     const handleEdit = async () => {

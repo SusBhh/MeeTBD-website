@@ -9,6 +9,7 @@ import HourlyDropdown from './HourlyDropdown';
 import Typography from '@mui/material/Typography';
 
 const CreateEvent = ({ groupId, onClose }) => {
+    const [, forceUpdate] = React.useReducer(x => x + 1, 0);
     const [eventName, setEventName] = React.useState('');
     const [selectedDates, setSelectedDates] = React.useState([]);
     const [startTime, setStartTime] = React.useState('9:00 AM');
@@ -73,7 +74,7 @@ const CreateEvent = ({ groupId, onClose }) => {
             console.error('Error creating event:', error);
             // Handle error scenarios (e.g., show an error message)
         }
-        window.location.reload();
+        forceUpdate();
     };
     const prevDate = new Date()
     return (

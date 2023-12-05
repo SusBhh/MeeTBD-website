@@ -105,12 +105,14 @@ const GroupsPage = () => {
 
     if (formJson["groupName"] === "") {
       // return early if groupName is empty
+      setIsLoading(false);
       return;
     }
     // prevent number from starting groupname
     if (!isNaN(formJson["groupName"][0])) {
       alert("Group name cannot start with a number.");
       setGroupName("");
+      setIsLoading(false);
       return;
     }
 

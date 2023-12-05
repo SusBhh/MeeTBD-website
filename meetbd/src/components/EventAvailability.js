@@ -133,7 +133,6 @@ const EventAvailability = (props) => {
     }
 
     const handleSubmit = async () => {
-        console.log("handleSubmit");
         setIsLoading(true);
         try {
             const { data: { user }, } = await supabase.auth.getUser();
