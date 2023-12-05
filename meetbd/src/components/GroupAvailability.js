@@ -42,37 +42,41 @@ const GroupAvailability = (props) => {
             .select('availability, user_id')
             .eq('event_id', event.id)
         if (eventError) {
+            setIsLoading(false);
             throw eventError;
         }
+        if (eventData && eventData.length === 0) {
+            // No responses
+            setIsLoading(false);
+            return;
+        }
         if (eventData) {
-            if(eventData.length === 0) {
-                // No responses
-                setIsLoading(false);
-                return;
-            }
             setEventData(eventData);
-
-            /* Create list of percentages for users who are available for that cell */
-            const responsesArray = [];
-            for (let i = 0; i < eventData[0].availability.length; i++) {
-                const row = [];
-                for (let j = 0; j < eventData[0].availability[0].length; j++) {
-                    row.push(0.0); // Set initial value as 0 (or any default value)
-                }
-                responsesArray.push(row);
-            }
-            for (let j = 1; j < eventData[0].availability.length; j++) {
-                for (let k = 1; k < eventData[0].availability[0].length; k++) {
-                    let availability_total = 0;
-                    for (let i = 0; i < eventData.length; i++) {
-                        availability_total += eventData[i].availability[j][k] === true ? 1 : 0;
-                    }
-                    responsesArray[j][k] = Math.round((availability_total / eventData.length) * 10) / 10;
-                }
-            }
-            setResponses(responsesArray);
+            createResponsesArray(eventData)
         }
         setIsLoading(false);
+    }
+
+    function createResponsesArray(eventData) {
+        /* Create list of percentages for users who are available for that cell */
+        const responsesArray = [];
+        for (let i = 0; i < eventData[0].availability.length; i++) {
+            const row = [];
+            for (let j = 0; j < eventData[0].availability[0].length; j++) {
+                row.push(0.0); // Set initial value as 0 (or any default value)
+            }
+            responsesArray.push(row);
+        }
+        for (let j = 1; j < eventData[0].availability.length; j++) {
+            for (let k = 1; k < eventData[0].availability[0].length; k++) {
+                let availability_total = 0;
+                for (let i = 0; i < eventData.length; i++) {
+                    availability_total += eventData[i].availability[j][k] === true ? 1 : 0;
+                }
+                responsesArray[j][k] = Math.round((availability_total / eventData.length) * 10) / 10;
+            }
+        }
+        setResponses(responsesArray);
     }
 
     function handleChange(cells) {
