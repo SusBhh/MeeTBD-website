@@ -1,7 +1,7 @@
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useSession, useSessionContext } from '@supabase/auth-helpers-react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Switch } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
 import LoginPage from './pages/LoginPage';

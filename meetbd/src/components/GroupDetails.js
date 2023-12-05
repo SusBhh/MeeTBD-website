@@ -29,6 +29,7 @@ const GroupDetails = () => {
   const [isOwner, setIsOwner] = React.useState(false);
   const [group, setGroup] = useState(null);
   const [groupName, setGroupName] = useState(null);
+  const [events, setEvents] = useState(null);
   const [members, setMembers] = useState([]);
 
   const supabase = useSupabaseClient();
@@ -123,6 +124,7 @@ const GroupDetails = () => {
       if (eventError) {
         throw eventError;
       }
+      setEvents(eventData);
 
       // get member data
       const { data: memberData, error: memberError } = await supabase

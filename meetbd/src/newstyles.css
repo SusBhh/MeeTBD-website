@@ -95,6 +95,8 @@ input {
     overflow: hidden;
     /* Make transparent gaps between cells. Better than relying on margin
     * because clicking an element's margin doesn't trigger events */
+    /* border: 0.7rem solid transparent; */
+    /* border-radius: 5px; */
     background-clip: padding-box;
     /* Make cells reasonable size */
     line-height: 1rem;
@@ -110,6 +112,7 @@ input {
     border-top: 0.1px solid;
     border-bottom: 0.1px solid;
     /* Make the cursor a + symbol */
+    /* cursor: cell; */
 }
 
 /* Cells that cannot be interacted with */

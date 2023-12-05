@@ -75,6 +75,7 @@ const CreateEvent = ({ groupId, onClose }) => {
         }
         window.location.reload();
     };
+    const prevDate = new Date()
     return (
         <Container>
             <Grid container justifyContent="center" spacing={1}>

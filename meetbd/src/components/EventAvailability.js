@@ -150,7 +150,7 @@ const EventAvailability = (props) => {
                 alert('Updated event availability');
             }
             else {
-                const { error } = await supabase.from("event_availability").insert({
+                const { data, error } = await supabase.from("event_availability").insert({
                     event_id: event.id,
                     user_id: userId,
                     availability: curr.cells,
