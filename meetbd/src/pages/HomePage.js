@@ -222,7 +222,7 @@ const HomePage = () => {
                                 <CircularProgress />
                             ) : (
                                 myEvents.map((event) => (
-                                    <div>
+                                    <div> key={event.id}
                                         <Divider />
                                         <Typography variant="h9" sx={{ mr: 1 }} align="left" >
                                             Group:
@@ -257,9 +257,9 @@ const HomePage = () => {
                         <CircularProgress />
                     ) : (
                         myPending.map((event) => (
-                            <div>
+                            <div key={event.id}>
                                 {event.events.map((e) => (
-                                    <div>
+                                    <div key={e.id}>
                                         <Divider />
                                         <Typography variant="h9" sx={{ mr: 1 }} align="left" >
                                             Group:

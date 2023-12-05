@@ -212,14 +212,14 @@ const EventAvailability = (props) => {
                     <tr>
                         <td disabled />
                         {dates.map((date, index) => (
-                            <td key={index} disabled>{ printDate(date) } </td>
+                            <td key={date} disabled>{ printDate(date) } </td>
                         ))}
                     </tr>
                     {hours.map((hour, index) => (
-                        <tr>
+                        <tr key={hour}>
                             <td disabled>{ hour }</td>
                             {dates.map((date, index) => (
-                                <td className="date" />
+                                <td key={date} className="date" />
                             ))}
                         </tr>
                     )) }

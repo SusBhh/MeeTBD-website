@@ -95,6 +95,7 @@ export default class TableDragSelect extends React.Component {
         );
     };
 
+
     renderRows = () =>
         React.Children.map(this.props.children, (tr, i) => {
             return (

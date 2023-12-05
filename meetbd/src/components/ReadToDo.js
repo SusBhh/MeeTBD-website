@@ -76,6 +76,7 @@ const ReadToDo = (props) => {
                 <div>
                     {items.map((item, i) => (
                         <ToDo
+                            key={item.id}
                             name={item.name} 
                             completed={item.completed} 
                             item={item}

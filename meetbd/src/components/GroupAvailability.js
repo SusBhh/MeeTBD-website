@@ -146,15 +146,15 @@ const GroupAvailability = (props) => {
                         <tr>
                             <td disabled />
                             {dates.map((date, index) => (
-                                <td key={index} disabled>{printDate(date)}</td>
+                                <td key={date} disabled>{printDate(date)}</td>
                             ))}
                         </tr>
                         {hours.map((hour, index1) => (
-                            <tr>
+                            <tr key={hour}>
                                 <td disabled>{hour}</td>
                                 {dates.map((date, index2) => (
                                     <td
-                                        key={index2}
+                                        key={date}
                                         className={`date cell-selected-${responses[index1 + 1][index2 + 1] * 100}`}
                                     />
                                 ))}

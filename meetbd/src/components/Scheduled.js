@@ -79,7 +79,7 @@ function Scheduled(props) {
         <div>
             { 
                 event.scheduled_at.map((day, index) => (
-                    <Card sx={{ display: 'flex' }}>
+                    <Card key={day} sx={{ display: 'flex' }}>
                         {isOwner ? (
                             <CardHeader
                                 action={
