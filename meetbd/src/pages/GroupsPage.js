@@ -56,6 +56,7 @@ const GroupsPage = () => {
       currGroupName = data[0]["name"];
     } else {
       alert("There is no group with that join code.");
+      setJoinCode("");
       setIsLoading(false);
       return;
     }
@@ -65,6 +66,7 @@ const GroupsPage = () => {
       currGroupNameSquish.replace(/\s/g, "") !== currGroupName.replace(/\s/g, "")
     ) {
       alert("There is no group with that join code.");
+      setJoinCode("");
       setIsLoading(false);
       return;
     }
@@ -87,12 +89,9 @@ const GroupsPage = () => {
       .eq("id", currGroupID);
     if (updateError) throw updateError;
 
-    alert("Successfully joined group " + currGroupName + "!");
-
-    setJoinCode("");
-
-    setIsLoading(false);
     forceUpdate();
+    setIsLoading(false);
+    setJoinCode("");
   }
 
   async function handleCreateGroup(e) {
@@ -128,12 +127,9 @@ const GroupsPage = () => {
       members: [user?.id],
     });
 
-    alert("Successfully created group " + groupName + "!");
-
     setGroupName("");
-
-    setIsLoading(false);
     forceUpdate();
+    setIsLoading(false);
   }
 
   return (
@@ -157,6 +153,7 @@ const GroupsPage = () => {
                 <input
                   type="text"
                   name="joinCode"
+                  value={joinCode}
                   onChange={(e) => setJoinCode(e.target.value)}
                 />
               </label>
