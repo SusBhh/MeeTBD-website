@@ -9,6 +9,7 @@ import ReadGroups from "../components/ReadGroups";
 import "../newstyles.css";
 
 const GroupsPage = () => {
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   const [isLoading, setIsLoading] = React.useState(false);
   const [groupName, setGroupName] = React.useState("");
   const [joinCode, setJoinCode] = React.useState("");
@@ -25,6 +26,7 @@ const GroupsPage = () => {
 
     if (formJson["joinCode"] === "") {
       // return early if groupName is empty
+      setIsLoading(false);
       return;
     }
 
@@ -54,6 +56,7 @@ const GroupsPage = () => {
       currGroupName = data[0]["name"];
     } else {
       alert("There is no group with that join code.");
+      setIsLoading(false);
       return;
     }
 
@@ -62,6 +65,7 @@ const GroupsPage = () => {
       currGroupNameSquish.replace(/\s/g, "") !== currGroupName.replace(/\s/g, "")
     ) {
       alert("There is no group with that join code.");
+      setIsLoading(false);
       return;
     }
 
@@ -69,6 +73,7 @@ const GroupsPage = () => {
     if (members.includes(user?.id)) {
       alert("You are already a member of this group!");
       setJoinCode("");
+      setIsLoading(false);
       return;
     }
 
@@ -87,7 +92,7 @@ const GroupsPage = () => {
     setJoinCode("");
 
     setIsLoading(false);
-    window.location.reload();
+    forceUpdate();
   }
 
   async function handleCreateGroup(e) {
@@ -108,7 +113,6 @@ const GroupsPage = () => {
       setGroupName("");
       return;
     }
-    // TODO: more group name validation
 
     // get user
     const {
@@ -126,9 +130,8 @@ const GroupsPage = () => {
 
     setGroupName("");
 
-    // TODO: reload groups (is there a better way?)
     setIsLoading(false);
-    window.location.reload();
+    forceUpdate();
   }
 
   return (

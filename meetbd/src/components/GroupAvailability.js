@@ -76,11 +76,8 @@ const GroupAvailability = (props) => {
                 }
             }
             setResponses(responsesArray);
-            setIsLoading(false);
         }
-        else {
-            setIsLoading(false);
-        }
+        setIsLoading(false);
     }
 
     function handleChange(cells) {

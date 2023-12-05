@@ -1,4 +1,5 @@
 import React from 'react';
+import CircularProgress from "@mui/material/CircularProgress";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "../components/Hours";
@@ -49,20 +50,22 @@ const EventAvailability = (props) => {
             .select('availability')
             .eq('event_id', event.id)
             .eq("user_id", [user?.id]);
+
         if (eventError) {
+            setIsLoading(false);
+            console.error(eventError);
             throw eventError;
         }
+
         if (eventData) {
             if(eventData.length === 0) {
+                setIsLoading(false);
                 return;
             }
             const cells = eventData[0].availability
             changeCurr({ cells })
-            setIsLoading(false);
         }
-        else {
-            setIsLoading(false);
-        }
+        setIsLoading(false);
     }
 
     function handleChange(cells) {
@@ -75,6 +78,7 @@ const EventAvailability = (props) => {
     };
 
     const handleGetCalendarAvailability = async () => {
+        isLoading(true);
         const startHour = startTime.split(':')[0];
         const endHour = endTime.split(':')[0];
 
@@ -125,9 +129,12 @@ const EventAvailability = (props) => {
             .catch((error) => {
               console.error('Error fetching events:', error);
             });
+        isLoading(false);
     }
 
     const handleSubmit = async () => {
+        console.log("handleSubmit");
+        setIsLoading(true);
         try {
             const { data: { user }, } = await supabase.auth.getUser();
             const { data: eventData, error: eventError } = await supabase
@@ -165,6 +172,7 @@ const EventAvailability = (props) => {
             console.error('Error creating event:', error);
             // Handle error scenarios (e.g., show an error message)
         }
+        setIsLoading(false);
     };
 
     const tableDragSelectStyles = {
@@ -199,27 +207,33 @@ const EventAvailability = (props) => {
 
     return (
         <div>
-            <TableDragSelect value={curr.cells} onChange={handleChange} style={tableDragSelectStyles}>
-                <tr>
-                    <td disabled />
-                    {dates.map((date, index) => (
-                        <td key={index} disabled>{ printDate(date) } </td>
-                    ))}
-                </tr>
-                {hours.map((hour, index) => (
+            {isLoading ? (
+                <CircularProgress />
+            ) : (
+              <div>
+                <TableDragSelect value={curr.cells} onChange={handleChange} style={tableDragSelectStyles}>
                     <tr>
-                        <td disabled>{ hour }</td>
+                        <td disabled />
                         {dates.map((date, index) => (
-                            <td className="date" />
+                            <td key={index} disabled>{ printDate(date) } </td>
                         ))}
                     </tr>
-                )) }
-            </TableDragSelect>
-            <div className="table-form-buttons-container" style={tableFormButtonStyles}>
-                <button onClick={handleReset} style={buttonStyles}>Reset</button>
-                <button onClick={handleGetCalendarAvailability} style={buttonStyles}>Get Availability </button>
-                <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
-            </div>
+                    {hours.map((hour, index) => (
+                        <tr>
+                            <td disabled>{ hour }</td>
+                            {dates.map((date, index) => (
+                                <td className="date" />
+                            ))}
+                        </tr>
+                    )) }
+                </TableDragSelect>
+                <div className="table-form-buttons-container" style={tableFormButtonStyles}>
+                    <button onClick={handleReset} style={buttonStyles}>Reset</button>
+                    <button onClick={handleGetCalendarAvailability} style={buttonStyles}>Get Availability </button>
+                    <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
+                </div>
+              </div>
+            )}
         </div>
     );
 };

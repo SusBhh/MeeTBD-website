@@ -198,10 +198,6 @@ const Event = (props) => {
             .update({ scheduled_at: selectedDatesISO })
             .eq("id", event.id);
         
-         //, start_time: startTime, end_time: endTime, scheduled_at: selectedDatesISO 
-        //console.log(data)
-
-
         //Send email invite stuff
         if (checked) {
             createCalendarEvent()
