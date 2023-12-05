@@ -37,7 +37,6 @@ const GroupAvailability = (props) => {
 
     async function readAvailability() {
         setIsLoading(true);
-        const { data: { user }, } = await supabase.auth.getUser();
         const { data: eventData, error: eventError } = await supabase
             .from('event_availability')
             .select('availability, user_id')
