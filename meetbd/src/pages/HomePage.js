@@ -222,7 +222,7 @@ const HomePage = () => {
                                 <CircularProgress />
                             ) : (
                                 myEvents.map((event) => (
-                                    <div> key={event.id}
+                                    <div key={event.id}> 
                                         <Divider />
                                         <Typography variant="h9" sx={{ mr: 1 }} align="left" >
                                             Group:
