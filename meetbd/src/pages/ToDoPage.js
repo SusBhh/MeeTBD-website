@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../components/ToDo.css';
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -7,11 +7,11 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import ReadToDo from '../components/ReadToDo';
 
 const ToDoPage = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [itemName, setItemName] = useState('');
-    const [completed, setCompleted] = useState(false);
-    const [userId, setUserId] = useState('');
-    const [filter, setFilter] = useState(null);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [itemName, setItemName] = React.useState('');
+    const [completed, setCompleted] = React.useState(false);
+    const [userId, setUserId] = React.useState('');
+    const [filter, setFilter] = React.useState(null);
 
     const supabase = useSupabaseClient();
 

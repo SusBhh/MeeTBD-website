@@ -8,6 +8,7 @@ import CardHeader from '@mui/material/CardHeader';
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 function Scheduled(props) {
+    const [, forceUpdate] = React.useReducer(x => x + 1, 0);
     const event = props.event;
     const supabase = useSupabaseClient();
     const [userId, setUserId] = React.useState(null);
@@ -53,19 +54,19 @@ function Scheduled(props) {
                     .eq("id", event.id);
 
                 if (error) throw error;
-                window.location.reload();
+                forceUpdate();
             } catch (error) {
                 alert(error.error_description || error.message);
             }
         }
         else {
             try {
-                const { data: at, error: atError } = await supabase
+                const { error: atError } = await supabase
                     .from("events")
                     .update({ scheduled_at: dates })
                     .eq("id", event.id);
                 if (atError) throw atError;
-                window.location.reload();
+                forceUpdate();
             }
             catch (atError) {
                 alert(atError.error_description || atError.message);
@@ -78,7 +79,7 @@ function Scheduled(props) {
         <div>
             { 
                 event.scheduled_at.map((day, index) => (
-                    <Card sx={{ display: 'flex' }}>
+                    <Card key={day} sx={{ display: 'flex' }}>
                         {isOwner ? (
                             <CardHeader
                                 action={

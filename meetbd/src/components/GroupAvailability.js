@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from "react";
 import TableDragSelect from "react-table-drag-select";
 import "../newstyles.css";
 import hours from "./Hours";
@@ -10,17 +9,16 @@ const GroupAvailability = (props) => {
     const event = props.event
     const supabase = useSupabaseClient();
     const [isLoading, setIsLoading] = React.useState(false);
-    const [dates, setDates] = useState([]);
-    const [hours, setHours] = useState([]);
-    const [respondingUsers, setRespondingUsers] = useState([]);
-    const [responses, setResponses] = useState([]);
-    const [eventData, setEventData] = useState([]);
-    const [availableUserCount, setAvailableUserCount] = useState(-1);
-    const [curr, changeCurr] = useState({
+    const [dates, setDates] = React.useState([]);
+    const [hours, setHours] = React.useState([]);
+    const [responses, setResponses] = React.useState([]);
+    const [eventData, setEventData] = React.useState([]);
+    const [availableUserCount, setAvailableUserCount] = React.useState(-1);
+    const [curr, setCurr] = React.useState({
         cells: Array.from({ length: 1 }, () => Array(1).fill(false)),
     });
 
-    useEffect(() => {
+    React.useEffect(() => {
         setDates(event.possible_dates);
         const hourArray = [];
         const startHour = new Date(`2000-01-01T${event.start_time}`);
@@ -32,61 +30,57 @@ const GroupAvailability = (props) => {
         }
         setHours(hourArray)
         const cells = Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
-        changeCurr({ cells })
+        setCurr({ cells })
         readAvailability()
     }, [event.possible_dates, event.start_time, event.end_time]);
 
+    // TODO: update availability after eventavailability has been updated
     async function readAvailability() {
         setIsLoading(true);
-        const { data: { user }, } = await supabase.auth.getUser();
         const { data: eventData, error: eventError } = await supabase
             .from('event_availability')
             .select('availability, user_id')
             .eq('event_id', event.id)
         if (eventError) {
+            setIsLoading(false);
             throw eventError;
         }
+        if (eventData && eventData.length === 0) {
+            // No responses
+            setIsLoading(false);
+            return;
+        }
         if (eventData) {
-            if(eventData.length === 0) {
-                // No responses
-                setIsLoading(false);
-                return;
-            }
             setEventData(eventData);
-            /* Create list of everyone who has responded */
-            const respondingUsers = {};
-            for (let i = 0; i < eventData.length; i++) {
-                respondingUsers[i] = eventData[i].user_id;; 
-            }
-            setRespondingUsers(respondingUsers);
-            /* Create list of percentages for users who are available for that cell */
-            const responsesArray = [];
-            for (let i = 0; i < eventData[0].availability.length; i++) {
-                const row = [];
-                for (let j = 0; j < eventData[0].availability[0].length; j++) {
-                    row.push(0.0); // Set initial value as 0 (or any default value)
-                }
-                responsesArray.push(row);
-            }
-            for (let j = 1; j < eventData[0].availability.length; j++) {
-                for (let k = 1; k < eventData[0].availability[0].length; k++) {
-                    let availability_total = 0;
-                    for (let i = 0; i < eventData.length; i++) {
-                        availability_total += eventData[i].availability[j][k] === true ? 1 : 0;
-                    }
-                    responsesArray[j][k] = Math.round((availability_total / eventData.length) * 10) / 10;
-                }
-            }
-            setResponses(responsesArray);
-            setIsLoading(false);
+            createResponsesArray(eventData)
         }
-        else {
-            setIsLoading(false);
+        setIsLoading(false);
+    }
+
+    function createResponsesArray(eventData) {
+        /* Create list of percentages for users who are available for that cell */
+        const responsesArray = [];
+        for (let i = 0; i < eventData[0].availability.length; i++) {
+            const row = [];
+            for (let j = 0; j < eventData[0].availability[0].length; j++) {
+                row.push(0.0); // Set initial value as 0 (or any default value)
+            }
+            responsesArray.push(row);
         }
+        for (let j = 1; j < eventData[0].availability.length; j++) {
+            for (let k = 1; k < eventData[0].availability[0].length; k++) {
+                let availability_total = 0;
+                for (let i = 0; i < eventData.length; i++) {
+                    availability_total += eventData[i].availability[j][k] === true ? 1 : 0;
+                }
+                responsesArray[j][k] = Math.round((availability_total / eventData.length) * 10) / 10;
+            }
+        }
+        setResponses(responsesArray);
     }
 
     function handleChange(cells) {
-        changeCurr({ cells });
+        setCurr({ cells });
         // Maybe add function here to pull user data for who is available during all those cells++
         let availableUsers = Array.from({ length: eventData.length }, () => true);
         for (let i = 1; i < eventData[0].availability.length; i++) {
@@ -108,7 +102,7 @@ const GroupAvailability = (props) => {
 
     function handleClick() {
         const cells = Array.from({ length: hours.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
-        changeCurr({ cells });
+        setCurr({ cells });
       };
 
     const tableDragSelectStyles = {
@@ -152,15 +146,15 @@ const GroupAvailability = (props) => {
                         <tr>
                             <td disabled />
                             {dates.map((date, index) => (
-                                <td key={index} disabled>{printDate(date)}</td>
+                                <td key={date} disabled>{printDate(date)}</td>
                             ))}
                         </tr>
                         {hours.map((hour, index1) => (
-                            <tr>
+                            <tr key={hour}>
                                 <td disabled>{hour}</td>
                                 {dates.map((date, index2) => (
                                     <td
-                                        key={index2}
+                                        key={date}
                                         className={`date cell-selected-${responses[index1 + 1][index2 + 1] * 100}`}
                                     />
                                 ))}

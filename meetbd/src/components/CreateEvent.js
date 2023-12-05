@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import DatePicker from 'react-multi-date-picker';
@@ -9,10 +9,11 @@ import HourlyDropdown from './HourlyDropdown';
 import Typography from '@mui/material/Typography';
 
 const CreateEvent = ({ groupId, onClose }) => {
-    const [eventName, setEventName] = useState('');
-    const [selectedDates, setSelectedDates] = useState([]);
-    const [startTime, setStartTime] = useState('9:00 AM');
-    const [endTime, setEndTime] = useState('5:00 PM');
+    const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+    const [eventName, setEventName] = React.useState('');
+    const [selectedDates, setSelectedDates] = React.useState([]);
+    const [startTime, setStartTime] = React.useState('9:00 AM');
+    const [endTime, setEndTime] = React.useState('5:00 PM');
     const [userId, setUserId] = React.useState(null);
 
     const updateStartTime = (time) => {
@@ -45,7 +46,7 @@ const CreateEvent = ({ groupId, onClose }) => {
         });
 
         try {
-            const { data, error } = await supabase
+            const { error } = await supabase
             .from('events')
             .insert([
                 {
@@ -73,7 +74,7 @@ const CreateEvent = ({ groupId, onClose }) => {
             console.error('Error creating event:', error);
             // Handle error scenarios (e.g., show an error message)
         }
-        window.location.reload();
+        forceUpdate();
     };
     const prevDate = new Date()
     return (

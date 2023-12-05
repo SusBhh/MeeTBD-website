@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
@@ -6,10 +6,10 @@ import FormControl from '@mui/material/FormControl';
 import Menu from '@mui/material/Menu';
 
 const WeeklyDropdown = ({ updateDate }) => {
-    const [formattedDate, setFormattedDate] = useState('')
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [formattedDate, setFormattedDate] = React.useState('')
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
-    useEffect(() => {
+    React.useEffect(() => {
         const defaultDate = new Date();
         defaultDate.setDate(defaultDate.getDate());
 

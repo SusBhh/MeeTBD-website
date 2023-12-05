@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import ToDo from './ToDo';
 
 const ReadToDo = (props) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [items, setItems] = useState([]);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [items, setItems] = React.useState([]);
 
     const supabase = useSupabaseClient();
 
@@ -76,6 +76,7 @@ const ReadToDo = (props) => {
                 <div>
                     {items.map((item, i) => (
                         <ToDo
+                            key={item.id}
                             name={item.name} 
                             completed={item.completed} 
                             item={item}
