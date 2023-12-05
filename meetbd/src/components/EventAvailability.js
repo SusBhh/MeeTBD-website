@@ -78,7 +78,7 @@ const EventAvailability = (props) => {
     };
 
     const handleGetCalendarAvailability = async () => {
-        isLoading(true);
+        setIsLoading(true);
         const startHour = startTime.split(':')[0];
         const endHour = endTime.split(':')[0];
 
@@ -129,7 +129,7 @@ const EventAvailability = (props) => {
             .catch((error) => {
               console.error('Error fetching events:', error);
             });
-        isLoading(false);
+        setIsLoading(false);
     }
 
     const handleSubmit = async () => {
