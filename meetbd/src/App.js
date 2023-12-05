@@ -9,7 +9,6 @@ import GroupsPage from './pages/GroupsPage';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ToDoPage from './pages/ToDoPage';
-import TasksPage from './pages/TasksPage';
 import SignupPage from './pages/SignupPage';
 import WelcomePage from './pages/WelcomePage';
 import ProfilePage from './pages/ProfilePage';
@@ -49,7 +48,6 @@ function App() {
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/groups" element={session ? (<GroupsPage />) : (<LoginPage />)} />
                         <Route path="/todo" element={session ? (<ToDoPage />) : (<LoginPage />)} />
-                        <Route path="/tasks" element={session ? (<TasksPage />) : (<LoginPage />)} />
                         <Route path="/about" element={<AboutPage />} />
                         <Route path="/groups/:groupId" element={session ? (<GroupDetails />) : (<LoginPage />)}/>
                         <Route path="/profile" element={<ProfilePage />} />
