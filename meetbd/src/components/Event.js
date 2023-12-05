@@ -1,9 +1,8 @@
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Tooltip } from "@mui/material";
-import { useSupabaseClient, useSession, useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useSession } from "@supabase/auth-helpers-react";
 import "../newstyles.css";
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

@@ -30,7 +30,6 @@ export default class TableDragSelect extends React.Component {
         maxRows: PropTypes.number,
         maxColumns: PropTypes.number,
         onSelectionStart: PropTypes.func,
-        onInput: PropTypes.func,
         onChange: PropTypes.func,
         children: (props) => {
             if (TableDragSelect.propTypes.value(props)) {
@@ -64,7 +63,6 @@ export default class TableDragSelect extends React.Component {
         maxRows: Infinity,
         maxColumns: Infinity,
         onSelectionStart: () => { },
-        onInput: () => { },
         onChange: () => { }
     };
 

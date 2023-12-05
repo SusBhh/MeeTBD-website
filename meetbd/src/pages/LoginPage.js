@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import Container from "@mui/material/Container";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import GoogleButton from 'react-google-button';
 import google_icon from '../assets/google_icon.png';
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
@@ -14,7 +13,6 @@ import Typography from "@mui/material/Typography";
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
 
 const LoginPage = () => {
-    const session = useSession(); // Contains Tokens
     const supabase = useSupabaseClient();
     const { isLoading } = useSessionContext();
 
@@ -27,7 +25,7 @@ const LoginPage = () => {
         event.preventDefault();
         const userData = new FormData(event.currentTarget);
         try {
-            const { data, error } = await supabase.auth.signInWithPassword({
+            const {} = await supabase.auth.signInWithPassword({
                 email: userData.get("email"),
                 password: userData.get("password"),        
             })
