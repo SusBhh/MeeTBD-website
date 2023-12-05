@@ -11,7 +11,6 @@ const GroupAvailability = (props) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [dates, setDates] = React.useState([]);
     const [hours, setHours] = React.useState([]);
-    const [respondingUsers, setRespondingUsers] = React.useState([]);
     const [responses, setResponses] = React.useState([]);
     const [eventData, setEventData] = React.useState([]);
     const [availableUserCount, setAvailableUserCount] = React.useState(-1);
@@ -52,12 +51,7 @@ const GroupAvailability = (props) => {
                 return;
             }
             setEventData(eventData);
-            /* Create list of everyone who has responded */
-            const respondingUsers = {};
-            for (let i = 0; i < eventData.length; i++) {
-                respondingUsers[i] = eventData[i].user_id;; 
-            }
-            setRespondingUsers(respondingUsers);
+
             /* Create list of percentages for users who are available for that cell */
             const responsesArray = [];
             for (let i = 0; i < eventData[0].availability.length; i++) {
