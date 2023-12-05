@@ -40,7 +40,7 @@ const Group = (props) => {
   };
 
   return (
-    <div className="group-around" onClick={handleGroupClick}>
+    <div className="group-around" onClick={handleGroupClick} role="button">
       <Link to={`/groups/${group.id}`} onClick={(e) => e.preventDefault()}>
         <div className="group">
           <div className="text">
