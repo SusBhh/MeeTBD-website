@@ -62,6 +62,8 @@ const GroupAvailability = (props) => {
         for (let i of eventData[0].availability.length) {
             const row = [];
             for (let j of eventData[0].availability[0].length) {
+                i;
+                j;
                 row.push(0.0); // Set initial value as 0 (or any default value)
             }
             responsesArray.push(row);
