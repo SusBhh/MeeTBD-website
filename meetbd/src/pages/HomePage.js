@@ -125,8 +125,6 @@ const HomePage = () => {
 
     const handleGetCalendarAvailability = async () => {
         const startDate = new Date();
-        startDate.setDate(1);
-        startDate.setHours(0,0,0);
         console.log(startDate);
 
         const endDate = new Date();
@@ -156,7 +154,7 @@ const HomePage = () => {
                 const dateA = new Date(eventA.start.dateTime || eventA.start.date);
                 const dateB = new Date(eventB.start.dateTime || eventB.start.date);
                 return dateA - dateB;
-              });
+              }).slice(0, 5);
               setGoogleEvents(sortedEvents);
             })
             .catch((error) => {
@@ -170,7 +168,7 @@ const HomePage = () => {
                 <Grid item xs={12} md={8}>
                     <button onClick={handleGetCalendarAvailability}>Import Calendar </button>
                     <div>
-                        <h2>Your Google Events for {format(new Date(), "MMMM")}</h2>
+                        <h2>Upcoming Google Events for {format(new Date(), "MMMM")}</h2>
                         {googleEvents.length > 0 ? (
                                 googleEvents.map((event) => (
                                 <ul key={event.id}>
