@@ -14,7 +14,7 @@ const GroupAvailability = (props) => {
     const [responses, setResponses] = React.useState([]);
     const [eventData, setEventData] = React.useState([]);
     const [availableUserCount, setAvailableUserCount] = React.useState(-1);
-    const [curr, changeCurr] = React.useState({
+    const [curr, setCurr] = React.useState({
         cells: Array.from({ length: 1 }, () => Array(1).fill(false)),
     });
 
@@ -30,7 +30,7 @@ const GroupAvailability = (props) => {
         }
         setHours(hourArray)
         const cells = Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
-        changeCurr({ cells })
+        setCurr({ cells })
         readAvailability()
     }, [event.possible_dates, event.start_time, event.end_time]);
 
@@ -76,7 +76,7 @@ const GroupAvailability = (props) => {
     }
 
     function handleChange(cells) {
-        changeCurr({ cells });
+        setCurr({ cells });
         // Maybe add function here to pull user data for who is available during all those cells++
         let availableUsers = Array.from({ length: eventData.length }, () => true);
         for (let i = 1; i < eventData[0].availability.length; i++) {
@@ -98,7 +98,7 @@ const GroupAvailability = (props) => {
 
     function handleClick() {
         const cells = Array.from({ length: hours.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
-        changeCurr({ cells });
+        setCurr({ cells });
       };
 
     const tableDragSelectStyles = {
