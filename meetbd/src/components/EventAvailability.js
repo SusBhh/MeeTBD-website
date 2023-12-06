@@ -36,7 +36,8 @@ const EventAvailability = (props) => {
             hourArray.push(formattedHour);
         }
         setHours(hourArray)
-        setCurr(Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false)))
+        const empty = Array.from({ length: hourArray.length + 1 }, () => Array(event.possible_dates.length + 1).fill(false))
+        setCurr({ cells: empty })
         readAvailability()
     }, [event.possible_dates, event.start_time, event.end_time]);
 
@@ -58,17 +59,19 @@ const EventAvailability = (props) => {
                 setIsLoading(false);
                 return;
             }
-            setCurr(eventData[0].availability);
+            const availability = eventData[0].availability
+            setCurr({ cells: availability })
         }
         setIsLoading(false);
     }
 
-    function handleChange(cells) {
-        setCurr({ cells });
+    function handleChange(change) {
+        setCurr({ cells: change });
     }
 
     const handleReset = () => {
-        setCurr(Array.from({ length: hours.length+1 }, () => Array(dates.length + 1).fill(false)));
+        const reset = Array.from({ length: hours.length + 1}, () => Array(dates.length + 1).fill(false));
+        setCurr({ cells: reset });
     };
 
     const handleGetCalendarAvailability = async () => {
@@ -114,7 +117,8 @@ const EventAvailability = (props) => {
                         
                         updatedCells[timeDifference + 1][daysDifference + 1] = true;  
                     }
-                    setCurr({updatedCells});
+                    setCurr({cells : updatedCells});
+                    console.log(curr.cells);
                 });
               } else {
                 console.log('No events found.');
