@@ -242,13 +242,11 @@ const Event = (props) => {
                 <DialogTitle id="scroll-dialog-title">
                     {event.name}
                     {isOwner ? (
-                        <>
-                            <Tooltip title="delete event" placement="top" arrow>
-                                <IconButton onClick={() => props.handleDelete(event.id)} disableRipple>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </>
+                        <Tooltip title="delete event" placement="top" arrow>
+                            <IconButton onClick={() => props.handleDelete(event.id)} disableRipple>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
                     ) : (
                         <></>
                     )}
