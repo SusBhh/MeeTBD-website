@@ -1,6 +1,5 @@
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Tooltip } from "@mui/material";
 import { useSupabaseClient, useSession } from "@supabase/auth-helpers-react";
 import "../newstyles.css";
@@ -211,11 +210,8 @@ const Event = (props) => {
         if (checked) {
             createCalendarEvent()
         }
+        window.location.reload();
         setOpen(false);
-    };
-
-    const handleEdit = async () => {
-        // TODO: edit group name
     };
 
     const descriptionElementRef = React.useRef(null);
@@ -246,17 +242,11 @@ const Event = (props) => {
                 <DialogTitle id="scroll-dialog-title">
                     {event.name}
                     {isOwner ? (
-                        <><Tooltip title="edit event" placement="top" arrow>
-                            <IconButton onClick={handleEdit} disableRipple>
-                                <EditIcon />
+                        <Tooltip title="delete event" placement="top" arrow>
+                            <IconButton onClick={() => props.handleDelete(event.id)} disableRipple>
+                                <DeleteIcon />
                             </IconButton>
-                            </Tooltip>
-                            <Tooltip title="delete event" placement="top" arrow>
-                                <IconButton onClick={() => props.handleDelete(event.id)} disableRipple>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Tooltip>
-                            </>
+                        </Tooltip>
                     ) : (
                         <></>
                     )}

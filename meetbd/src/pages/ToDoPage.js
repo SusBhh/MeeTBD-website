@@ -34,7 +34,6 @@ const ToDoPage = () => {
     }
 
     async function handleCreateToDo(e) {
-        // TODO: make this faster, super slow rn
         setIsLoading(true);
         e.preventDefault();
 
