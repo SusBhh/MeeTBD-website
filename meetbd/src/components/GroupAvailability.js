@@ -33,7 +33,6 @@ const GroupAvailability = (props) => {
         readAvailability()
     }, [event.possible_dates, event.start_time, event.end_time]);
 
-    // TODO: update availability after eventavailability has been updated
     async function readAvailability() {
         setIsLoading(true);
         const { data: eventData, error: eventError } = await supabase

@@ -1,6 +1,5 @@
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Tooltip } from "@mui/material";
 import { useSupabaseClient, useSession } from "@supabase/auth-helpers-react";
 import "../newstyles.css";
@@ -214,10 +213,6 @@ const Event = (props) => {
         setOpen(false);
     };
 
-    const handleEdit = async () => {
-        // TODO: edit group name
-    };
-
     const descriptionElementRef = React.useRef(null);
     React.useEffect(() => {
         if (open) {
@@ -246,17 +241,13 @@ const Event = (props) => {
                 <DialogTitle id="scroll-dialog-title">
                     {event.name}
                     {isOwner ? (
-                        <><Tooltip title="edit event" placement="top" arrow>
-                            <IconButton onClick={handleEdit} disableRipple>
-                                <EditIcon />
-                            </IconButton>
-                            </Tooltip>
+                        <>
                             <Tooltip title="delete event" placement="top" arrow>
                                 <IconButton onClick={() => props.handleDelete(event.id)} disableRipple>
                                     <DeleteIcon />
                                 </IconButton>
                             </Tooltip>
-                            </>
+                        </>
                     ) : (
                         <></>
                     )}
