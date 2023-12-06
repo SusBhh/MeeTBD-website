@@ -16,7 +16,7 @@ const ToDo = (props) => {
                     </label>
                     <Tooltip title="delete item" placement="top" arrow>
                         <IconButton
-                            onClick={() => props.handleDelete(props.item)}
+                            onClick={() => props.handleDelete(props.id)}
                             disableRipple
                         >
                             <DeleteIcon />
