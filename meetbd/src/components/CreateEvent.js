@@ -75,6 +75,7 @@ const CreateEvent = ({ groupId, onClose }) => {
             // Handle error scenarios (e.g., show an error message)
         }
         forceUpdate();
+        window.location.reload();
     };
     
     return (
