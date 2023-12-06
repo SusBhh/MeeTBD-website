@@ -210,6 +210,7 @@ const Event = (props) => {
         if (checked) {
             createCalendarEvent()
         }
+        window.location.reload();
         setOpen(false);
     };
 
